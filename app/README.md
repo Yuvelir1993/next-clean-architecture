@@ -1,0 +1,1 @@
+Everything Next.js - related.
