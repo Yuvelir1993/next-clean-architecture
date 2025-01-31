@@ -1,3 +1,5 @@
+import { Input } from "../_components/input";
+
 export default function Login() {
   return (
     <div className="grid min-h-screen place-items-center p-8 sm:p-20">
@@ -9,20 +11,12 @@ export default function Login() {
         <form className="flex flex-col w-full gap-4">
           <label className="flex flex-col">
             <span className="font-medium">Email</span>
-            <input
-              className="border border-black/20 dark:border-white/20 rounded p-2 text-black dark:text-white"
-              type="email"
-              required
-            />
+            <Input id="email" type="email" name="email" required />
           </label>
 
           <label className="flex flex-col">
             <span className="font-medium">Password</span>
-            <input
-              className="border border-black/20 dark:border-white/20 rounded p-2 text-black dark:text-white"
-              type="password"
-              required
-            />
+            <Input id="password" type="password" name="password" required />
           </label>
 
           <button
