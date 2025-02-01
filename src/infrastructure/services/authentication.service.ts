@@ -44,7 +44,7 @@ export class AuthenticationService implements IAuthenticationService {
       throw new UnauthenticatedError("Unauthenticated");
     }
 
-    const user = await this._usersRepository.getUser(result.user.id);
+    const user = await this._usersRepository.getUserById(result.user.id);
     if (!user) {
       throw new UnauthenticatedError("User doesn't exist");
     }

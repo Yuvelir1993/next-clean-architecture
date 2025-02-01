@@ -20,6 +20,8 @@ export const signUpUseCase =
     cookie: Cookie;
     user: Pick<User, "id" | "username">;
   }> => {
+    console.log("Executing sign-up use case...");
+
     const existingUser = await usersRepository.getUserByUsername(
       input.username
     );

@@ -3,13 +3,17 @@ import { ITransaction } from "@/src/entities/models/transaction.interface";
 import { User, CreateUser } from "@/src/entities/models/user";
 
 export class UsersRepository implements IUsersRepository {
-  getUser(id: string): Promise<User | undefined> {
+  getUserById(id: string): Promise<User | undefined> {
     console.log("Getting user with id " + id);
     throw new Error("Method not implemented.");
   }
   getUserByUsername(username: string): Promise<User | undefined> {
     console.log("Getting user with username " + username);
-    throw new Error("Method not implemented.");
+    return Promise.resolve({
+      id: "12345678910",
+      username: username,
+      password_hash: "mock-password-hash",
+    });
   }
   createUser(input: CreateUser, tx?: ITransaction): Promise<User> {
     try {

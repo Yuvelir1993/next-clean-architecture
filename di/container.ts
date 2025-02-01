@@ -16,5 +16,6 @@ ApplicationContainer.load(Symbol("UsersModule"), createUsersModule());
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
   symbol: K
 ): DI_RETURN_TYPES[K] {
+  console.log("Getting injection...");
   return ApplicationContainer.get(DI_SYMBOLS[symbol]);
 }

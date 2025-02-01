@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signUp } from "../actions";
+import { signUpAction } from "../actions";
 import { Input } from "../_components/input";
 
 export default function SignUp() {
@@ -25,7 +25,7 @@ export default function SignUp() {
     }
 
     setLoading(true);
-    const res = await signUp(formData);
+    const res = await signUpAction(formData);
 
     if (res && res.error) {
       setError(res.error);

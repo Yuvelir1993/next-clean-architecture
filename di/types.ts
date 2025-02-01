@@ -14,34 +14,34 @@ export const DI_SYMBOLS = {
   // Services
   IAuthenticationService: Symbol.for("IAuthenticationService"),
 
-  // Repositories
-  IUsersRepository: Symbol.for("IUsersRepository"),
+  // Controllers
+  ISignInController: Symbol.for("ISignInController"),
+  ISignOutController: Symbol.for("ISignOutController"),
+  ISignUpController: Symbol.for("ISignUpController"),
 
   // Use Cases
   ISignInUseCase: Symbol.for("ISignInUseCase"),
   ISignOutUseCase: Symbol.for("ISignOutUseCase"),
   ISignUpUseCase: Symbol.for("ISignUpUseCase"),
 
-  // Controllers
-  ISignInController: Symbol.for("ISignInController"),
-  ISignOutController: Symbol.for("ISignOutController"),
-  ISignUpController: Symbol.for("ISignUpController"),
+  // Repositories
+  IUsersRepository: Symbol.for("IUsersRepository"),
 };
 
 export interface DI_RETURN_TYPES {
   // Services
   IAuthenticationService: IAuthenticationService;
 
-  // Repositories
-  IUsersRepository: IUsersRepository;
+  // Controllers
+  ISignInController: ISignInController;
+  ISignOutController: ISignOutController;
+  ISignUpController: ISignUpController;
 
   // Use Cases
   ISignInUseCase: ISignInUseCase;
   ISignOutUseCase: ISignOutUseCase;
   ISignUpUseCase: ISignUpUseCase;
 
-  // Controllers
-  ISignInController: ISignInController;
-  ISignOutController: ISignOutController;
-  ISignUpController: ISignUpController;
+  // Repositories
+  IUsersRepository: IUsersRepository;
 }

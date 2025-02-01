@@ -9,7 +9,7 @@ import { getInjection } from "@/di/container";
 import { Cookie } from "@/src/entities/models/cookie";
 import { InputParseError } from "@/src/entities/errors/common";
 
-export async function signUp(formData: FormData) {
+export async function signUpAction(formData: FormData) {
   const username = formData.get("username")?.toString();
   const password = formData.get("password")?.toString();
   const confirmPassword = formData.get("confirm_password")?.toString();
@@ -22,9 +22,10 @@ export async function signUp(formData: FormData) {
       password: formData.get("password"),
     });
 
-    console.log(validatedFields);
+    console.log("Validating fields");
 
     if (!validatedFields.success) {
+      console.error("Error validating fields");
       return {
         errors: validatedFields.error.flatten().fieldErrors,
       };

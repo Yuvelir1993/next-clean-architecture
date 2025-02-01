@@ -31,6 +31,7 @@ export const signUpController =
   async (
     input: Partial<z.infer<typeof inputSchema>>
   ): Promise<ReturnType<typeof signUpUseCase>> => {
+    console.log("Entered sign-up controller...");
     const { data, error: inputParseError } = inputSchema.safeParse(input);
 
     if (inputParseError) {
