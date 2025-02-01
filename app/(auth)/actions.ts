@@ -1,4 +1,5 @@
 "use server";
+
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -13,6 +14,7 @@ export async function signUpAction(formData: FormData) {
   const username = formData.get("username")?.toString();
   const password = formData.get("password")?.toString();
   const confirmPassword = formData.get("confirm_password")?.toString();
+  console.log("Sign-up action (UI)");
   console.log(formData);
   let sessionCookie: Cookie;
   try {
@@ -55,6 +57,36 @@ export async function signUpAction(formData: FormData) {
       error:
         "An error happened. The developers have been notified. Please try again later. Message: " +
         (err as Error).message,
+    };
+  }
+
+  (await cookies()).set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+
+  redirect("/");
+}
+
+export async function signInAction(formData: FormData) {
+  console.log("Sign-in action (UI)");
+  const email = formData.get("email")?.toString();
+  const password = formData.get("password")?.toString();
+
+  let sessionCookie: Cookie;
+  try {
+    const signInController = getInjection("ISignInController");
+    sessionCookie = await signInController({ email, password });
+  } catch (err) {
+    if (err instanceof InputParseError || err instanceof AuthenticationError) {
+      return {
+        error: "Incorrect username or password",
+      };
+    }
+    return {
+      error:
+        "An error happened. The developers have been notified. Please try again later.",
     };
   }
 

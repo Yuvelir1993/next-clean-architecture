@@ -55,6 +55,8 @@ export class AuthenticationService implements IAuthenticationService {
   async createSession(
     user: User
   ): Promise<{ session: Session; cookie: Cookie }> {
+    console.log("Creating session for logged in user");
+
     const mockedSessionData = {
       id: "mock-session-id",
       userId: user.id,

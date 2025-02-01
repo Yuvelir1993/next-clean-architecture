@@ -12,25 +12,29 @@ export const signInUseCase =
     authenticationService: IAuthenticationService
   ) =>
   async (input: {
-    username: string;
+    email: string;
     password: string;
   }): Promise<{ session: Session; cookie: Cookie }> => {
-    const existingUser = await usersRepository.getUserByUsername(
-      input.username
-    );
+    console.log("Executing sign-in use case...");
+
+    const existingUser = await usersRepository.getUserByEmail(input.email);
 
     if (!existingUser) {
+      console.error("Error in sign-in use case! User does not exist.");
       throw new AuthenticationError("User does not exist");
     }
 
+    console.log("Sign-in use case: start validating user passwords...");
     const validPassword = await authenticationService.validatePasswords(
       input.password,
       existingUser.password_hash
     );
 
     if (!validPassword) {
-      throw new AuthenticationError("Incorrect username or password");
+      console.error("Error in sign-in use case! Incorrect email or password.");
+      throw new AuthenticationError("Incorrect email or password");
     }
 
+    console.log("Sign-in use case: start preparing user session...");
     return await authenticationService.createSession(existingUser);
   };

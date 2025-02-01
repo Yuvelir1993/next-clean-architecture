@@ -42,8 +42,9 @@ export default function SignUp() {
         <h1 className="text-2xl sm:text-4xl font-semibold">
           Create an Account
         </h1>
-        {error && <p className="text-destructive">{error}</p>}
+
         <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
+          {error && <p className="text-destructive">{error}</p>}
           <label className="flex flex-col">
             <span className="font-medium">Username</span>
             <Input
