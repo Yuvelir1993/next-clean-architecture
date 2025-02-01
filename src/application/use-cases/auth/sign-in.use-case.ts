@@ -1,11 +1,13 @@
 import { AuthenticationError } from "@/src/entities/errors/auth";
 import { Cookie } from "@/src/entities/models/cookie";
 import { Session } from "@/src/entities/models/session";
-import type { IUsersRepository } from "@/src/application/repositories/users.repository.interface";
-import type { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
+import type { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
+import type { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 
 export type ISignInUseCase = ReturnType<typeof signInUseCase>;
 
+// TODO: use @injectable class instead like in https://www.youtube.com/watch?v=2NVYG5VDmwQ
+// Then you can use all 'auth' use cases in 1 class
 export const signInUseCase =
   (
     usersRepository: IUsersRepository,

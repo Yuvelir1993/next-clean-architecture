@@ -1,1 +1,3 @@
 The entry point is a **use-cases**. Each use case represents some business-relevant action. To realize this action it groups necessary services and repositories logics invocations.
+
+"interfaces" is a communication point from our "use-cases" with the external world.

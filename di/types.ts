@@ -1,6 +1,6 @@
-import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
+import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 
-import { IUsersRepository } from "@/src/application/repositories/users.repository.interface";
+import { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
 
 import { ISignInUseCase } from "@/src/application/use-cases/auth/sign-in.use-case";
 import { ISignUpUseCase } from "@/src/application/use-cases/auth/sign-up.use-case";

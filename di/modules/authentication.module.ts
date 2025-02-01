@@ -19,6 +19,14 @@ export function createAuthenticationModule() {
     .bind(DI_SYMBOLS.IAuthenticationService)
     .toClass(AuthenticationService, [DI_SYMBOLS.IUsersRepository]);
 
+  // use cases
+  authenticationModule
+    .bind(DI_SYMBOLS.ISignUpUseCase)
+    .toHigherOrderFunction(signUpUseCase, [
+      DI_SYMBOLS.IAuthenticationService,
+      DI_SYMBOLS.IUsersRepository,
+    ]);
+
   authenticationModule
     .bind(DI_SYMBOLS.ISignInUseCase)
     .toHigherOrderFunction(signInUseCase, [
@@ -30,12 +38,10 @@ export function createAuthenticationModule() {
     .bind(DI_SYMBOLS.ISignOutUseCase)
     .toHigherOrderFunction(signOutUseCase, [DI_SYMBOLS.IAuthenticationService]);
 
+  // controllers
   authenticationModule
-    .bind(DI_SYMBOLS.ISignUpUseCase)
-    .toHigherOrderFunction(signUpUseCase, [
-      DI_SYMBOLS.IAuthenticationService,
-      DI_SYMBOLS.IUsersRepository,
-    ]);
+    .bind(DI_SYMBOLS.ISignUpController)
+    .toHigherOrderFunction(signUpController, [DI_SYMBOLS.ISignUpUseCase]);
 
   authenticationModule
     .bind(DI_SYMBOLS.ISignInController)
@@ -47,10 +53,6 @@ export function createAuthenticationModule() {
       DI_SYMBOLS.IAuthenticationService,
       DI_SYMBOLS.ISignOutUseCase,
     ]);
-
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignUpController)
-    .toHigherOrderFunction(signUpController, [DI_SYMBOLS.ISignUpUseCase]);
 
   return authenticationModule;
 }

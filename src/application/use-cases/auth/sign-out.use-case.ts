@@ -1,5 +1,5 @@
 import { Cookie } from "@/src/entities/models/cookie";
-import type { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
+import type { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 
 export type ISignOutUseCase = ReturnType<typeof signOutUseCase>;
 
