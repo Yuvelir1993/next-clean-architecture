@@ -6,9 +6,15 @@ import { Session, sessionSchema } from "@/src/entities/models/session";
 import { Cookie } from "@/src/entities/models/cookie";
 import { User } from "@/src/entities/models/user";
 import { UnauthenticatedError } from "@/src/entities/errors/auth";
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/di/types";
 
+@injectable()
 export class AuthenticationService implements IAuthenticationService {
-  constructor(private readonly _usersRepository: IUsersRepository) {
+  constructor(
+    @inject(DI_SYMBOLS.IUsersRepository)
+    private readonly _usersRepository: IUsersRepository
+  ) {
     console.log("Called AuthenticationService");
   }
 

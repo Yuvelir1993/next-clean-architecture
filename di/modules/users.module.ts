@@ -1,13 +1,10 @@
-import { createModule } from "@evyweb/ioctopus";
-
+import { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
 import { UsersRepository } from "@/src/infrastructure/repositories/users.repository";
 
 import { DI_SYMBOLS } from "@/di/types";
+import { ContainerModule, interfaces } from "inversify";
 
-export function createUsersModule() {
-  const usersModule = createModule();
-
-  usersModule.bind(DI_SYMBOLS.IUsersRepository).toClass(UsersRepository, []);
-
-  return usersModule;
-}
+const initializeModule = (bind: interfaces.Bind) => {
+  bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository).to(UsersRepository);
+};
+export const UsersModule = new ContainerModule(initializeModule);

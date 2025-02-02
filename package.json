@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.734.0",
-    "@evyweb/ioctopus": "^1.2.0",
     "bcrypt-ts": "^5.0.3",
     "clsx": "^2.1.1",
+    "inversify": "^6.2.2",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "reflect-metadata": "^0.2.2",
     "tailwind-merge": "^3.0.1",
     "zod": "^3.24.1"
   },

@@ -1,28 +1,19 @@
 import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 
 import { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
+import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
+import { IAuthenticationUseCases } from "@/src/application/interfaces/use-cases/authentication.use-cases.interface";
 
-import { ISignInUseCase } from "@/src/application/use-cases/auth/sign-in.use-case";
-import { ISignUpUseCase } from "@/src/application/use-cases/auth/sign-up.use-case";
-import { ISignOutUseCase } from "@/src/application/use-cases/auth/sign-out.use-case";
-
-import { ISignInController } from "@/src/interface-adapters/controllers/auth/sign-in.controller";
-import { ISignOutController } from "@/src/interface-adapters/controllers/auth/sign-out.controller";
-import { ISignUpController } from "@/src/interface-adapters/controllers/auth/sign-up.controller";
-
+// Symbols are guaranteed to be unique, preventing accidental name collisions.
 export const DI_SYMBOLS = {
   // Services
   IAuthenticationService: Symbol.for("IAuthenticationService"),
 
   // Controllers
-  ISignInController: Symbol.for("ISignInController"),
-  ISignOutController: Symbol.for("ISignOutController"),
-  ISignUpController: Symbol.for("ISignUpController"),
+  IAuthenticationController: Symbol.for("IAuthenticationController"),
 
   // Use Cases
-  ISignInUseCase: Symbol.for("ISignInUseCase"),
-  ISignOutUseCase: Symbol.for("ISignOutUseCase"),
-  ISignUpUseCase: Symbol.for("ISignUpUseCase"),
+  IAuthenticationUseCases: Symbol.for("IAuthenticationUseCases"),
 
   // Repositories
   IUsersRepository: Symbol.for("IUsersRepository"),
@@ -33,14 +24,10 @@ export interface DI_RETURN_TYPES {
   IAuthenticationService: IAuthenticationService;
 
   // Controllers
-  ISignInController: ISignInController;
-  ISignOutController: ISignOutController;
-  ISignUpController: ISignUpController;
+  IAuthenticationController: IAuthenticationController;
 
   // Use Cases
-  ISignInUseCase: ISignInUseCase;
-  ISignOutUseCase: ISignOutUseCase;
-  ISignUpUseCase: ISignUpUseCase;
+  IAuthenticationUseCases: IAuthenticationUseCases;
 
   // Repositories
   IUsersRepository: IUsersRepository;

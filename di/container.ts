@@ -1,21 +1,17 @@
-import { createContainer } from "@evyweb/ioctopus";
+import { BindingScopeEnum, Container } from "inversify";
 
-import { DI_RETURN_TYPES, DI_SYMBOLS } from "@/di/types";
+import { AuthenticationModule } from "@/di/modules/authentication.module";
+import { UsersModule } from "@/di/modules/users.module";
 
-import { createAuthenticationModule } from "@/di/modules/authentication.module";
-import { createUsersModule } from "@/di/modules/users.module";
+const ApplicationContainer = new Container({
+  defaultScope: BindingScopeEnum.Singleton,
+});
+ApplicationContainer.load(AuthenticationModule);
+ApplicationContainer.load(UsersModule);
 
-const ApplicationContainer = createContainer();
+export const getInjection = <T>(symbol: symbol) => {
+  console.debug(`Getting injection for ${String(symbol)}`);
+  return ApplicationContainer.get<T>(symbol);
+};
 
-ApplicationContainer.load(
-  Symbol("AuthenticationModule"),
-  createAuthenticationModule()
-);
-ApplicationContainer.load(Symbol("UsersModule"), createUsersModule());
-
-export function getInjection<K extends keyof typeof DI_SYMBOLS>(
-  symbol: K
-): DI_RETURN_TYPES[K] {
-  console.debug(`Getting injection for ${symbol}`);
-  return ApplicationContainer.get(DI_SYMBOLS[symbol]);
-}
+export { ApplicationContainer };

@@ -1,58 +1,24 @@
-import { createModule } from "@evyweb/ioctopus";
+import { IAuthenticationUseCases } from "@/src/application/interfaces/use-cases/authentication.use-cases.interface";
+import { AuthenticationUseCases } from "@/src/application/use-cases/auth.use-cases";
 
+import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 import { AuthenticationService } from "@/src/infrastructure/services/authentication.service";
 
-import { signInUseCase } from "@/src/application/use-cases/auth/sign-in.use-case";
-import { signUpUseCase } from "@/src/application/use-cases/auth/sign-up.use-case";
-import { signOutUseCase } from "@/src/application/use-cases/auth/sign-out.use-case";
-
-import { signInController } from "@/src/interface-adapters/controllers/auth/sign-in.controller";
-import { signOutController } from "@/src/interface-adapters/controllers/auth/sign-out.controller";
-import { signUpController } from "@/src/interface-adapters/controllers/auth/sign-up.controller";
-
 import { DI_SYMBOLS } from "@/di/types";
+import { ContainerModule, interfaces } from "inversify";
+import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
+import { AuthenticationController } from "@/src/interface-adapters/controllers/auth.controller";
 
-export function createAuthenticationModule() {
-  const authenticationModule = createModule();
+const initializeModule = (bind: interfaces.Bind) => {
+  bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
+    AuthenticationUseCases
+  );
+  bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
+    AuthenticationService
+  );
+  bind<IAuthenticationController>(DI_SYMBOLS.IAuthenticationController).to(
+    AuthenticationController
+  );
+};
 
-  authenticationModule
-    .bind(DI_SYMBOLS.IAuthenticationService)
-    .toClass(AuthenticationService, [DI_SYMBOLS.IUsersRepository]);
-
-  // use cases
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignUpUseCase)
-    .toHigherOrderFunction(signUpUseCase, [
-      DI_SYMBOLS.IAuthenticationService,
-      DI_SYMBOLS.IUsersRepository,
-    ]);
-
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignInUseCase)
-    .toHigherOrderFunction(signInUseCase, [
-      DI_SYMBOLS.IUsersRepository,
-      DI_SYMBOLS.IAuthenticationService,
-    ]);
-
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignOutUseCase)
-    .toHigherOrderFunction(signOutUseCase, [DI_SYMBOLS.IAuthenticationService]);
-
-  // controllers
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignUpController)
-    .toHigherOrderFunction(signUpController, [DI_SYMBOLS.ISignUpUseCase]);
-
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignInController)
-    .toHigherOrderFunction(signInController, [DI_SYMBOLS.ISignInUseCase]);
-
-  authenticationModule
-    .bind(DI_SYMBOLS.ISignOutController)
-    .toHigherOrderFunction(signOutController, [
-      DI_SYMBOLS.IAuthenticationService,
-      DI_SYMBOLS.ISignOutUseCase,
-    ]);
-
-  return authenticationModule;
-}
+export const AuthenticationModule = new ContainerModule(initializeModule);
