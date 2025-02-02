@@ -1,6 +1,7 @@
-import type { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
-import type { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
-import { IAuthenticationUseCases } from "./auth.use-cases.interface";
+import type { IAuthenticationUseCases } from "./auth.use-cases.interface";
+import type { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
+import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
+
 import { injectable, inject } from "inversify";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { Cookie } from "@/src/business/entities/models/cookie";
