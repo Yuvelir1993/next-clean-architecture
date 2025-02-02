@@ -1,4 +1,4 @@
-import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
+import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { ITransaction } from "@/src/business/entities/models/transaction.interface";
 import { User, CreateUser } from "@/src/business/entities/models/user";
 

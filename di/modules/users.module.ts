@@ -1,4 +1,4 @@
-import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
+import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { UsersRepository } from "@/src/infrastructure/repositories/users.repository";
 
 import { DI_SYMBOLS } from "@/di/types";
