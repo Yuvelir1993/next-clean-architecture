@@ -2,10 +2,10 @@ import { compare } from "bcrypt-ts";
 
 import { type IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
 import { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
-import { Session, sessionSchema } from "@/src/entities/models/session";
-import { Cookie } from "@/src/entities/models/cookie";
-import { User } from "@/src/entities/models/user";
-import { UnauthenticatedError } from "@/src/entities/errors/auth";
+import { Session, sessionSchema } from "@/src/business/entities/models/session";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { User } from "@/src/business/entities/models/user";
+import { UnauthenticatedError } from "@/src/business/entities/errors/auth";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 

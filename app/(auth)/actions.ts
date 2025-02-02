@@ -3,12 +3,12 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { AuthenticationError } from "@/src/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { SignupFormSchema } from "../lib/definitions";
 import { getInjection } from "@/di/container";
 
-import { Cookie } from "@/src/entities/models/cookie";
-import { InputParseError } from "@/src/entities/errors/common";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { InputParseError } from "@/src/business/entities/errors/common";
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 

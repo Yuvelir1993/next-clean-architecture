@@ -1,6 +1,6 @@
 import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
-import { ITransaction } from "@/src/entities/models/transaction.interface";
-import { User, CreateUser } from "@/src/entities/models/user";
+import { ITransaction } from "@/src/business/entities/models/transaction.interface";
+import { User, CreateUser } from "@/src/business/entities/models/user";
 
 export class UsersRepository implements IUsersRepository {
   getUserByEmail(email: string): Promise<User | undefined> {

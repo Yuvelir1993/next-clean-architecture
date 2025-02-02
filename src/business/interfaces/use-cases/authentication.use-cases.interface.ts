@@ -1,6 +1,6 @@
-import { Session } from "@/src/entities/models/session";
-import { Cookie } from "@/src/entities/models/cookie";
-import { User } from "@/src/entities/models/user";
+import { Session } from "@/src/business/entities/models/session";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { User } from "@/src/business/entities/models/user";
 
 export interface IAuthenticationUseCases {
   /**

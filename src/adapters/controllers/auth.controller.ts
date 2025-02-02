@@ -10,10 +10,10 @@ import {
 import type { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
 import type { IAuthenticationUseCases } from "@/src/business/interfaces/use-cases/authentication.use-cases.interface";
 
-import { User } from "@/src/entities/models/user";
-import { Cookie } from "@/src/entities/models/cookie";
-import { Session } from "@/src/entities/models/session";
-import { InputParseError } from "@/src/entities/errors/common";
+import { User } from "@/src/business/entities/models/user";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { Session } from "@/src/business/entities/models/session";
+import { InputParseError } from "@/src/business/entities/errors/common";
 
 /**
  * AuthController consolidates sign-in, sign-out, and sign-up controllers.

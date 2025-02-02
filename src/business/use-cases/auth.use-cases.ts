@@ -2,11 +2,11 @@ import type { IUsersRepository } from "@/src/application/interfaces/repositories
 import type { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 import { IAuthenticationUseCases } from "../interfaces/use-cases/authentication.use-cases.interface";
 import { injectable, inject } from "inversify";
-import { AuthenticationError } from "@/src/entities/errors/auth";
-import { Cookie } from "@/src/entities/models/cookie";
-import { Session } from "@/src/entities/models/session";
+import { AuthenticationError } from "@/src/business/entities/errors/auth";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { Session } from "@/src/business/entities/models/session";
 import { DI_SYMBOLS } from "@/di/types";
-import { User } from "@/src/entities/models/user";
+import { User } from "@/src/business/entities/models/user";
 
 @injectable()
 export class AuthenticationUseCases implements IAuthenticationUseCases {

@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { Cookie } from "@/src/entities/models/cookie";
-import { Session } from "@/src/entities/models/session";
-import { User } from "@/src/entities/models/user";
+import { Cookie } from "@/src/business/entities/models/cookie";
+import { Session } from "@/src/business/entities/models/session";
+import { User } from "@/src/business/entities/models/user";
 
 // Zod schema for sign-in input validation
 export const signInInputSchema = z.object({
