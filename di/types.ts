@@ -2,7 +2,7 @@ import { IAuthenticationService } from "@/src/infrastructure/services/authentica
 
 import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
-import { IAuthenticationUseCases } from "@/src/business/interfaces/use-cases/authentication.use-cases.interface";
+import { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
 
 // Symbols are guaranteed to be unique, preventing accidental name collisions.
 export const DI_SYMBOLS = {
