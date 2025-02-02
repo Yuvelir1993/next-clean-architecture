@@ -9,6 +9,8 @@ import { getInjection } from "@/di/container";
 
 import { Cookie } from "@/src/entities/models/cookie";
 import { InputParseError } from "@/src/entities/errors/common";
+import { DI_SYMBOLS } from "@/di/types";
+import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
 
 export async function signUpAction(formData: FormData) {
   const username = formData.get("username")?.toString();
@@ -33,8 +35,10 @@ export async function signUpAction(formData: FormData) {
       };
     }
 
-    const signUpController = getInjection("ISignUpController");
-    const { cookie } = await signUpController({
+    const authController = getInjection<IAuthenticationController>(
+      DI_SYMBOLS.IAuthenticationController
+    );
+    const { cookie } = await authController.signUp({
       username,
       password,
       confirm_password: confirmPassword,
@@ -76,8 +80,10 @@ export async function signInAction(formData: FormData) {
 
   let sessionCookie: Cookie;
   try {
-    const signInController = getInjection("ISignInController");
-    sessionCookie = await signInController({ email, password });
+    const authController = getInjection<IAuthenticationController>(
+      DI_SYMBOLS.IAuthenticationController
+    );
+    sessionCookie = await authController.signIn({ email, password });
   } catch (err) {
     if (err instanceof InputParseError || err instanceof AuthenticationError) {
       return {
