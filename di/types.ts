@@ -1,4 +1,4 @@
-import { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
+import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 
 import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";

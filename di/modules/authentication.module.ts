@@ -1,7 +1,7 @@
 import { IAuthenticationUseCases } from "@/src/business/interfaces/use-cases/authentication.use-cases.interface";
 import { AuthenticationUseCases } from "@/src/application/use-cases/auth.use-cases";
 
-import { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
+import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import { AuthenticationService } from "@/src/infrastructure/services/authentication.service";
 
 import { DI_SYMBOLS } from "@/di/types";
