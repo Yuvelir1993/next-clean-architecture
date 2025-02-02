@@ -11,16 +11,13 @@ import { User } from "@/src/business/entities/models/user";
 
 @injectable()
 export class AuthenticationUseCases implements IAuthenticationUseCases {
-  private usersRepository: IUsersRepository;
-  private authenticationService: IAuthenticationService;
-
   constructor(
-    @inject(DI_SYMBOLS.IUsersRepository) usersRepository: IUsersRepository,
+    @inject(DI_SYMBOLS.IUsersRepository)
+    private readonly _usersRepository: IUsersRepository,
     @inject(DI_SYMBOLS.IAuthenticationService)
-    authenticationService: IAuthenticationService
+    private readonly _authenticationService: IAuthenticationService
   ) {
-    this.usersRepository = usersRepository;
-    this.authenticationService = authenticationService;
+    console.log("Entered AuthenticationUseCases...");
   }
 
   // Sign-In business logic
@@ -30,7 +27,9 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }): Promise<{ session: Session; cookie: Cookie }> {
     console.log("Executing sign-in use case...");
 
-    const existingUser = await this.usersRepository.getUserByEmail(input.email);
+    const existingUser = await this._usersRepository.getUserByEmail(
+      input.email
+    );
 
     if (!existingUser) {
       console.error("Error in sign-in use case! User does not exist.");
@@ -38,7 +37,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     }
 
     console.log("Sign-in use case: start validating user passwords...");
-    const validPassword = await this.authenticationService.validatePasswords(
+    const validPassword = await this._authenticationService.validatePasswords(
       input.password,
       existingUser.password_hash
     );
@@ -49,12 +48,12 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     }
 
     console.log("Sign-in use case: start preparing user session...");
-    return await this.authenticationService.createSession(existingUser);
+    return await this._authenticationService.createSession(existingUser);
   }
 
   // Sign-Out business logic
   public async signOut(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    return await this.authenticationService.invalidateSession(sessionId);
+    return await this._authenticationService.invalidateSession(sessionId);
   }
 
   // Sign-Up business logic
@@ -65,22 +64,22 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }> {
     console.log("Executing sign-up use case...");
 
-    const existingUser = await this.usersRepository.getUserByUsername(
+    const existingUser = await this._usersRepository.getUserByUsername(
       input.username
     );
     if (existingUser) {
       throw new AuthenticationError("Username taken");
     }
 
-    const userId = this.authenticationService.generateUserId();
+    const userId = this._authenticationService.generateUserId();
 
-    const newUser = await this.usersRepository.createUser({
+    const newUser = await this._usersRepository.createUser({
       id: userId,
       username: input.username,
       password: input.password,
     });
 
-    const { cookie, session } = await this.authenticationService.createSession(
+    const { cookie, session } = await this._authenticationService.createSession(
       newUser
     );
 
