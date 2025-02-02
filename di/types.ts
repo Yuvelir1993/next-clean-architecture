@@ -1,8 +1,8 @@
-import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
+import { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
 
-import { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
+import { IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
-import { IAuthenticationUseCases } from "@/src/application/interfaces/use-cases/authentication.use-cases.interface";
+import { IAuthenticationUseCases } from "@/src/business/interfaces/use-cases/authentication.use-cases.interface";
 
 // Symbols are guaranteed to be unique, preventing accidental name collisions.
 export const DI_SYMBOLS = {

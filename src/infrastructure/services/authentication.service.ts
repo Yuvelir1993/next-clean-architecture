@@ -1,7 +1,7 @@
 import { compare } from "bcrypt-ts";
 
-import { type IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
-import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
+import { type IUsersRepository } from "@/src/business/interfaces/repositories/users.repository.interface";
+import { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
 import { Session, sessionSchema } from "@/src/entities/models/session";
 import { Cookie } from "@/src/entities/models/cookie";
 import { User } from "@/src/entities/models/user";

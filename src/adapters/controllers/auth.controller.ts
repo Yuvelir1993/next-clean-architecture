@@ -7,8 +7,8 @@ import {
   signInInputSchema,
   signUpInputSchema,
 } from "./auth.controller.interface";
-import type { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
-import type { IAuthenticationUseCases } from "@/src/application/interfaces/use-cases/authentication.use-cases.interface";
+import type { IAuthenticationService } from "@/src/business/interfaces/services/authentication.service.interface";
+import type { IAuthenticationUseCases } from "@/src/business/interfaces/use-cases/authentication.use-cases.interface";
 
 import { User } from "@/src/entities/models/user";
 import { Cookie } from "@/src/entities/models/cookie";
