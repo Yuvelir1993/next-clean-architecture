@@ -10,7 +10,7 @@ import { getInjection } from "@/di/container";
 import { Cookie } from "@/src/entities/models/cookie";
 import { InputParseError } from "@/src/entities/errors/common";
 import { DI_SYMBOLS } from "@/di/types";
-import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
+import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 
 export async function signUpAction(formData: FormData) {
   const username = formData.get("username")?.toString();

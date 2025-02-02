@@ -1,7 +1,7 @@
 import { IAuthenticationService } from "@/src/application/interfaces/services/authentication.service.interface";
 
 import { IUsersRepository } from "@/src/application/interfaces/repositories/users.repository.interface";
-import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
+import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { IAuthenticationUseCases } from "@/src/application/interfaces/use-cases/authentication.use-cases.interface";
 
 // Symbols are guaranteed to be unique, preventing accidental name collisions.

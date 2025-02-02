@@ -6,8 +6,8 @@ import { AuthenticationService } from "@/src/infrastructure/services/authenticat
 
 import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
-import { IAuthenticationController } from "@/src/interface-adapters/controllers/auth.controller.interface";
-import { AuthenticationController } from "@/src/interface-adapters/controllers/auth.controller";
+import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
+import { AuthenticationController } from "@/src/adapters/controllers/auth.controller";
 
 const initializeModule = (bind: interfaces.Bind) => {
   bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
