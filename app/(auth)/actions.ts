@@ -3,37 +3,28 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { getInjection } from "@/di/container";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { SignupFormSchema } from "../lib/definitions";
-import { getInjection } from "@/di/container";
 
-import { Cookie } from "@/src/business/entities/models/cookie";
-import { InputParseError } from "@/src/business/entities/errors/common";
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
+import { InputParseError } from "@/src/business/entities/errors/common";
+import { Cookie } from "@/src/business/entities/models/cookie";
 
 export async function signUpAction(formData: FormData) {
-  const username = formData.get("username")?.toString();
-  const password = formData.get("password")?.toString();
-  const confirmPassword = formData.get("confirm_password")?.toString();
-  console.log("Sign-up action (UI)");
-  console.log(formData);
   let sessionCookie: Cookie;
   try {
-    const validatedFields = SignupFormSchema.safeParse({
-      name: formData.get("username"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    });
-
-    console.log("Validating fields");
-
-    if (!validatedFields.success) {
-      console.error("Error validating fields");
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-      };
+    const validationError = validateFormInput(formData);
+    if (validationError) {
+      return validationError;
     }
+
+    const username = formData.get("username")?.toString();
+    const password = formData.get("password")?.toString();
+    const confirmPassword = formData.get("confirm_password")?.toString();
+    console.log("Sign-up action (UI)");
+    console.log(formData);
 
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
@@ -103,4 +94,21 @@ export async function signInAction(formData: FormData) {
   );
 
   redirect("/");
+}
+
+function validateFormInput(formData: FormData) {
+  console.log("Validating fields");
+
+  const validatedFields = SignupFormSchema.safeParse({
+    name: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    console.error("Error validating fields");
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
 }
