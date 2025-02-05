@@ -5,19 +5,29 @@ import { redirect } from "next/navigation";
 
 import { getInjection } from "@/di/container";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
-import { SignupFormSchema } from "../lib/definitions";
+import { FormState, SignupFormSchema } from "../lib/definitions";
 
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { InputParseError } from "@/src/business/entities/errors/common";
 import { Cookie } from "@/src/business/entities/models/cookie";
 
-export async function signUpAction(formData: FormData) {
+export async function signUpAction(
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
+  console.log(`Action state is ${prevState}`);
   let sessionCookie: Cookie;
   try {
     const validationError = validateFormInput(formData);
     if (validationError) {
-      return validationError;
+      return {
+        errors: {
+          name: validationError.errors.name,
+          email: validationError.errors.email,
+          password: validationError.errors.password,
+        },
+      };
     }
 
     const username = formData.get("username")?.toString();
@@ -38,20 +48,22 @@ export async function signUpAction(formData: FormData) {
   } catch (err) {
     if (err instanceof InputParseError) {
       return {
-        error:
+        errors: [
           "Invalid data. Make sure the Password and Confirm Password match.",
+        ],
       };
     }
     if (err instanceof AuthenticationError) {
       return {
-        error: err.message,
+        errors: [err.message],
       };
     }
 
     return {
-      error:
+      errors: [
         "An error happened. The developers have been notified. Please try again later. Message: " +
-        (err as Error).message,
+          (err as Error).message,
+      ],
     };
   }
 

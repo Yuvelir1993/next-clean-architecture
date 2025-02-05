@@ -1,40 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { signUpAction } from "../actions";
-import { Input } from "../_components/input";
+import { useActionState } from "react";
+import { signUpAction } from "@/app/(auth)/actions";
+import { Input } from "@/app/(auth)/_components/input";
 
-export default function SignUp() {
-  const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (loading) return;
-
-    const formData = new FormData(event.currentTarget);
-
-    console.log(formData);
-
-    const password = formData.get("password")!.toString();
-    const confirmPassword = formData.get("confirm_password")!.toString();
-
-    if (password !== confirmPassword) {
-      setError("Passwords must match");
-      return;
-    }
-
-    setLoading(true);
-    const res = await signUpAction(formData);
-
-    if (res && res.error) {
-      setError(res.error);
-    }
-    if (res && res.error) {
-      setError(res.error);
-    }
-    setLoading(false);
-  };
+export default function SignUpForm() {
+  const [state, formAction, pending] = useActionState(signUpAction, undefined);
 
   return (
     <div className="grid min-h-screen place-items-center p-8 sm:p-20">
@@ -43,8 +14,7 @@ export default function SignUp() {
           Create an Account
         </h1>
 
-        <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
-          {error && <p className="text-destructive">{error}</p>}
+        <form className="flex flex-col w-full gap-4" action={formAction}>
           <label className="flex flex-col">
             <span className="font-medium">Username</span>
             <Input
@@ -55,16 +25,35 @@ export default function SignUp() {
               required
             />
           </label>
+          {state?.errors &&
+            !Array.isArray(state.errors) &&
+            state.errors.name && <p>{state.errors.name.join(", ")}</p>}
 
           <label className="flex flex-col">
             <span className="font-medium">Email</span>
             <Input id="email" type="email" name="email" required />
           </label>
+          {state?.errors &&
+            !Array.isArray(state.errors) &&
+            state.errors.email && <p>{state.errors.email.join(", ")}</p>}
 
           <label className="flex flex-col">
             <span className="font-medium">Password</span>
             <Input id="password" type="password" name="password" required />
           </label>
+
+          {state?.errors &&
+            !Array.isArray(state.errors) &&
+            state.errors.password && (
+              <div>
+                <p>Password must:</p>
+                <ul>
+                  {state.errors.password.map((error) => (
+                    <li key={error}>- {error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
           <label className="flex flex-col">
             <span className="font-medium">Confirm password</span>
@@ -77,6 +66,7 @@ export default function SignUp() {
           </label>
 
           <button
+            disabled={pending}
             type="submit"
             className="mt-2 rounded-full border border-transparent 
                          bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] 
