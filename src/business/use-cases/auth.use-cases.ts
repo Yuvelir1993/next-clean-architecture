@@ -69,7 +69,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       input.username
     );
     if (existingUser) {
-      throw new AuthenticationError("Username taken");
+      throw new AuthenticationError(`User ${input.username} already exists!`);
     }
 
     const userId = this._authenticationService.generateUserId();

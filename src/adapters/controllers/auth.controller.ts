@@ -1,12 +1,12 @@
-import { injectable, inject } from "inversify";
 import { z } from "zod";
+import { injectable, inject } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 
 import {
   IAuthenticationController,
   signInInputSchema,
   signUpInputSchema,
-} from "./auth.controller.interface";
+} from "@/src/adapters/controllers/auth.controller.interface";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import type { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
 

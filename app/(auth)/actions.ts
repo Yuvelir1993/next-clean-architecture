@@ -16,7 +16,7 @@ export async function signUpAction(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
-  console.log(`Action state is ${prevState}`);
+  console.log(`Action previous state is ${prevState}`);
   let sessionCookie: Cookie;
   try {
     const validationError = validateFormInput(formData);
