@@ -21,42 +21,6 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     console.log("Entered AuthenticationUseCases...");
   }
 
-  // Sign-In business logic
-  public async signIn(input: {
-    email: string;
-    password: string;
-  }): Promise<{ session: Session; cookie: Cookie }> {
-    console.log("Executing sign-in use case...");
-
-    const existingUser = await this._usersRepository.getUserByEmail(
-      input.email
-    );
-
-    if (!existingUser) {
-      console.error("Error in sign-in use case! User does not exist.");
-      throw new AuthenticationError("User does not exist");
-    }
-
-    console.log("Sign-in use case: start validating user passwords...");
-    const validPassword = await this._authenticationService.validatePasswords(
-      input.password,
-      existingUser.password_hash
-    );
-
-    if (!validPassword) {
-      console.error("Error in sign-in use case! Incorrect email or password.");
-      throw new AuthenticationError("Incorrect email or password");
-    }
-
-    console.log("Sign-in use case: start preparing user session...");
-    return await this._authenticationService.createSession(existingUser);
-  }
-
-  // Sign-Out business logic
-  public async signOut(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    return await this._authenticationService.invalidateSession(sessionId);
-  }
-
   // Sign-Up business logic
   public async signUp(input: { username: string; password: string }): Promise<{
     session: Session;
@@ -92,5 +56,41 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
         username: newUser.username,
       },
     };
+  }
+
+  // Sign-In business logic
+  public async signIn(input: {
+    email: string;
+    password: string;
+  }): Promise<{ session: Session; cookie: Cookie }> {
+    console.log("Executing sign-in use case...");
+
+    const existingUser = await this._usersRepository.getUserByEmail(
+      input.email
+    );
+
+    if (!existingUser) {
+      console.error("Error in sign-in use case! User does not exist.");
+      throw new AuthenticationError("User does not exist");
+    }
+
+    console.log("Sign-in use case: start validating user passwords...");
+    const validPassword = await this._authenticationService.validatePasswords(
+      input.password,
+      existingUser.password_hash
+    );
+
+    if (!validPassword) {
+      console.error("Error in sign-in use case! Incorrect email or password.");
+      throw new AuthenticationError("Incorrect email or password");
+    }
+
+    console.log("Sign-in use case: start preparing user session...");
+    return await this._authenticationService.createSession(existingUser);
+  }
+
+  // Sign-Out business logic
+  public async signOut(sessionId: string): Promise<{ blankCookie: Cookie }> {
+    return await this._authenticationService.invalidateSession(sessionId);
   }
 }
