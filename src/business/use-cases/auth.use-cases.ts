@@ -18,7 +18,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     @inject(DI_SYMBOLS.IAuthenticationService)
     private readonly _authenticationService: IAuthenticationService
   ) {
-    console.log("Entered AuthenticationUseCases...");
+    console.log("Instantiated 'AuthenticationUseCases'");
   }
 
   // Sign-Up business logic
@@ -33,6 +33,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       input.username
     );
     if (existingUser) {
+      console.error(`User ${input.username} already exists!`);
       throw new AuthenticationError(`User ${input.username} already exists!`);
     }
 

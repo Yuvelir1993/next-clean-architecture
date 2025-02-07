@@ -104,6 +104,7 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   generateUserId(): string {
+    console.log(`Generated random user id`);
     return "RandomUserId123456";
   }
 }

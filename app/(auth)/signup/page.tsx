@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { signUpAction } from "@/app/(auth)/actions";
 import { Input } from "@/app/(auth)/_components/input";
+import UIError from "../_components/UIErrors";
 
 export default function SignUpForm() {
   const [state, formAction, pending] = useActionState(signUpAction, undefined);
@@ -25,35 +26,16 @@ export default function SignUpForm() {
               required
             />
           </label>
-          {state?.errors &&
-            !Array.isArray(state.errors) &&
-            state.errors.name && <p>{state.errors.name.join(", ")}</p>}
 
           <label className="flex flex-col">
             <span className="font-medium">Email</span>
             <Input id="email" type="email" name="email" required />
           </label>
-          {state?.errors &&
-            !Array.isArray(state.errors) &&
-            state.errors.email && <p>{state.errors.email.join(", ")}</p>}
 
           <label className="flex flex-col">
             <span className="font-medium">Password</span>
             <Input id="password" type="password" name="password" required />
           </label>
-
-          {state?.errors &&
-            !Array.isArray(state.errors) &&
-            state.errors.password && (
-              <div>
-                <p>Password must:</p>
-                <ul>
-                  {state.errors.password.map((error) => (
-                    <li key={error}>- {error}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
           <label className="flex flex-col">
             <span className="font-medium">Confirm password</span>
@@ -64,6 +46,8 @@ export default function SignUpForm() {
               required
             />
           </label>
+
+          {state?.errors && <UIError errors={state.errors} />}
 
           <button
             disabled={pending}

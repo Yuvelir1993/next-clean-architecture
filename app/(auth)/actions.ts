@@ -50,6 +50,7 @@ export async function signUpAction(
       };
     }
     if (err instanceof AuthenticationError) {
+      console.error(`Failed authenticate user!`);
       return {
         errors: [err.message],
       };

@@ -26,7 +26,8 @@ export class UsersRepository implements IUsersRepository {
   createUser(input: CreateUser, tx?: ITransaction): Promise<User> {
     try {
       console.log(
-        "Creating user with input " + input + " and having transaction " + tx
+        `Creating user ${input.username} with input and having transaction ` +
+          tx
       );
 
       const mockedUser: User = {
