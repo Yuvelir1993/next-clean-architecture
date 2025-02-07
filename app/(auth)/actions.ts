@@ -22,11 +22,7 @@ export async function signUpAction(
     const validationError = validateFormInput(formData);
     if (validationError) {
       return {
-        errors: {
-          name: validationError.errors.name,
-          email: validationError.errors.email,
-          password: validationError.errors.password,
-        },
+        errors: validationError.errors,
       };
     }
 
