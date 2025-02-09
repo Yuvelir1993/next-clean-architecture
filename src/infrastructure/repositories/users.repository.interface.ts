@@ -5,5 +5,10 @@ export interface IUsersRepository {
   getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  /**
+   * Persisting user in users directory.
+   * @param input - user schema for users creation
+   * @param tx
+   */
   createUser(input: CreateUser, tx?: ITransaction): Promise<User>;
 }

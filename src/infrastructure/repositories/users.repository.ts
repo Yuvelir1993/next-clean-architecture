@@ -4,7 +4,6 @@ import { User, CreateUser } from "@/src/business/entities/models/user";
 import {
   CognitoIdentityProviderClient,
   AdminCreateUserCommand,
-  // AdminConfirmSignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 
@@ -41,7 +40,7 @@ export class UsersRepository implements IUsersRepository {
 
       const client = new CognitoIdentityProviderClient();
       const command = new AdminCreateUserCommand({
-        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
         Username: input.username,
         UserAttributes: [
           {
@@ -49,7 +48,7 @@ export class UsersRepository implements IUsersRepository {
             Value: input.username,
           },
         ],
-        TemporaryPassword: "HardcodedTempPass34-+",
+        TemporaryPassword: process.env.AWS_COGNITO_USER_TEMP_PASSWORD!,
         MessageAction: "SUPPRESS",
       });
       const response = await client.send(command);
@@ -62,12 +61,6 @@ export class UsersRepository implements IUsersRepository {
           "Username is missing from the AWS Cognito response!"
         );
       }
-
-      // Do not know if necessary
-      // const confirm = new AdminConfirmSignUpCommand({
-      //   UserPoolId: "eu-central-1_ASJS74A9U",
-      //   Username: input.username,
-      // });
 
       return Promise.resolve({
         id: input.id,

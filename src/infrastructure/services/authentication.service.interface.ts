@@ -11,6 +11,10 @@ export interface IAuthenticationService {
     inputPassword: string,
     usersHashedPassword: string
   ): Promise<boolean>;
-  createSession(user: User): Promise<{ session: Session; cookie: Cookie }>;
+  /**
+   * Authenticating a user and creating an active session.
+   * @param user - user schema for authentication and obtaining a session data
+   */
+  createSession(input: User): Promise<{ session: Session; cookie: Cookie }>;
   invalidateSession(sessionId: Session["id"]): Promise<{ blankCookie: Cookie }>;
 }
