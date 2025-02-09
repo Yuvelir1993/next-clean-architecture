@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.734.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.744.0",
     "bcrypt-ts": "^5.0.3",
     "clsx": "^2.1.1",
     "inversify": "^6.2.2",
