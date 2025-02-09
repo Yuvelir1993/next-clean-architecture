@@ -41,7 +41,7 @@ export class UsersRepository implements IUsersRepository {
 
       const client = new CognitoIdentityProviderClient();
       const command = new AdminCreateUserCommand({
-        UserPoolId: "eu-central-1_ASJS74A9U",
+        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
         Username: input.username,
         UserAttributes: [
           {
