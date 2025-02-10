@@ -78,7 +78,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     console.log("Sign-in use case: start validating user passwords...");
     const validPassword = await this._authenticationService.validatePasswords(
       input.password,
-      existingUser.password_hash
+      existingUser.password
     );
 
     if (!validPassword) {

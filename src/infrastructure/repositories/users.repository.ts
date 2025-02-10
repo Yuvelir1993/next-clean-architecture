@@ -13,7 +13,7 @@ export class UsersRepository implements IUsersRepository {
     return Promise.resolve({
       id: "12345678910",
       username: "Mock username",
-      password_hash: "JustAPassword11++",
+      password: "JustAPassword11++",
     });
   }
   getUserById(id: string): Promise<User | undefined> {
@@ -26,46 +26,46 @@ export class UsersRepository implements IUsersRepository {
       return Promise.resolve({
         id: "12345678910",
         username: username,
-        password_hash: "JustAPassword11++",
+        password: "JustAPassword11++",
       });
     }
     return Promise.resolve(undefined);
   }
-  async createUser(input: CreateUser, tx?: ITransaction): Promise<User> {
+  async createUser(userInput: CreateUser, tx?: ITransaction): Promise<User> {
     try {
       console.log(
-        `Creating user ${input.username} with input and having transaction ` +
+        `Creating user ${userInput.username} with id ${userInput.id} and having transaction ` +
           tx
       );
 
       const client = new CognitoIdentityProviderClient();
       const command = new AdminCreateUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
-        Username: input.username,
+        Username: userInput.username,
         UserAttributes: [
           {
             Name: "name",
-            Value: input.username,
+            Value: userInput.username,
           },
         ],
         TemporaryPassword: process.env.AWS_COGNITO_USER_TEMP_PASSWORD!,
         MessageAction: "SUPPRESS",
       });
-      const response = await client.send(command);
+      const userResponse = await client.send(command);
 
       console.log("AWS Cognito response");
-      console.log(response);
+      console.log(userResponse);
 
-      if (!response.User?.Username) {
+      if (!userResponse.User?.Username) {
         throw new AuthenticationError(
           "Username is missing from the AWS Cognito response!"
         );
       }
 
       return Promise.resolve({
-        id: input.id,
-        username: response.User.Username,
-        password_hash: input.password,
+        id: userInput.id,
+        username: userResponse.User.Username,
+        password: userInput.password,
       });
     } catch (error) {
       throw new Error("Error creating user in AWS Cognito!" + error);

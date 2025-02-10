@@ -5,7 +5,10 @@ import { IAuthenticationService } from "@/src/infrastructure/services/authentica
 import { Session, sessionSchema } from "@/src/business/entities/models/session";
 import { Cookie } from "@/src/business/entities/models/cookie";
 import { User } from "@/src/business/entities/models/user";
-import { UnauthenticatedError } from "@/src/business/entities/errors/auth";
+import {
+  AuthenticationError,
+  UnauthenticatedError,
+} from "@/src/business/entities/errors/auth";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 import {
@@ -64,9 +67,10 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   async createSession(
-    input: User
+    userInput: User
   ): Promise<{ session: Session; cookie: Cookie }> {
     console.log("Creating session for logged in user");
+    let awsCognitoResponse;
 
     const client = new CognitoIdentityProviderClient();
     const initiateAuthCommand = new AdminInitiateAuthCommand({
@@ -74,7 +78,7 @@ export class AuthenticationService implements IAuthenticationService {
       ClientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID!,
       AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
       AuthParameters: {
-        USERNAME: input.username,
+        USERNAME: userInput.username,
         PASSWORD: process.env.AWS_COGNITO_USER_TEMP_PASSWORD!,
       },
     });
@@ -87,35 +91,55 @@ export class AuthenticationService implements IAuthenticationService {
         ChallengeName: "NEW_PASSWORD_REQUIRED",
         Session: authResponse.Session,
         ChallengeResponses: {
-          USERNAME: input.username,
-          NEW_PASSWORD: input.password_hash,
+          USERNAME: userInput.username,
+          NEW_PASSWORD: userInput.password,
         },
       });
-      const finalResponse = await client.send(respondCommand);
-      console.log("Tokens:", finalResponse.AuthenticationResult);
+      awsCognitoResponse = await client.send(respondCommand);
+      const authenticationResult = awsCognitoResponse.AuthenticationResult;
+
+      if (
+        !authenticationResult ||
+        !authenticationResult.IdToken ||
+        !authenticationResult.AccessToken ||
+        !authenticationResult.RefreshToken
+      ) {
+        throw new AuthenticationError(
+          "Failed to authenticate: Missing tokens from AWS Cognito response..."
+        );
+      }
+
+      const { IdToken, AccessToken, RefreshToken } = authenticationResult;
+
+      console.log("Tokens:", IdToken, AccessToken, RefreshToken);
+
+      const session = sessionSchema.parse({
+        id: awsCognitoResponse?.AuthenticationResult?.IdToken,
+        userId: userInput.id,
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+      });
+
+      console.log("Session data validation successful");
+
+      const cookie: Cookie = {
+        name: "session",
+        value: "mock-cookie-value",
+        attributes: {
+          secure: true,
+          path: "/",
+          sameSite: "strict",
+          httpOnly: true,
+          maxAge: 3600,
+          expires: new Date(Date.now() + 60 * 60 * 1000),
+        },
+      };
+
+      return { session, cookie };
+    } else {
+      throw new AuthenticationError(
+        `Unsupported challenge from aWS Cognito ${authResponse.ChallengeName}`
+      );
     }
-
-    const mockedSessionData = {
-      id: "mock-session-id",
-      userId: input.id,
-      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-    };
-    const session = sessionSchema.parse(mockedSessionData);
-
-    const cookie: Cookie = {
-      name: "session",
-      value: "mock-cookie-value",
-      attributes: {
-        secure: true,
-        path: "/",
-        sameSite: "strict",
-        httpOnly: true,
-        maxAge: 3600,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
-      },
-    };
-
-    return { session, cookie };
   }
 
   async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
@@ -135,8 +159,13 @@ export class AuthenticationService implements IAuthenticationService {
     return { blankCookie };
   }
 
+  /**
+   * Generates random 6-digit numeric ID
+   * @returns random 6-digit ID
+   */
   generateUserId(): string {
-    console.log(`Generated random user id`);
-    return "RandomUserId123456";
+    const randomId = crypto.randomUUID().replace(/\D/g, "").slice(0, 6);
+    console.log(`Generated random user id ${randomId}`);
+    return randomId;
   }
 }
