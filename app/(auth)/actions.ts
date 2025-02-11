@@ -87,6 +87,7 @@ export async function signInAction(
 
   let sessionCookie: Cookie;
   try {
+    // TODO: add validation like 'validateFormInput'
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );

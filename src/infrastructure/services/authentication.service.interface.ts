@@ -7,6 +7,7 @@ export interface IAuthenticationService {
   validateSession(
     sessionId: Session["id"]
   ): Promise<{ user: User; session: Session }>;
+  invalidateSession(sessionId: Session["id"]): Promise<{ blankCookie: Cookie }>;
   validatePasswords(
     inputPassword: string,
     usersHashedPassword: string
@@ -16,5 +17,4 @@ export interface IAuthenticationService {
    * @param user - user schema for authentication and obtaining a session data
    */
   createSession(input: User): Promise<{ session: Session; cookie: Cookie }>;
-  invalidateSession(sessionId: Session["id"]): Promise<{ blankCookie: Cookie }>;
 }
