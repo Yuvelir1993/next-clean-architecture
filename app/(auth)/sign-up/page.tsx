@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { signUpAction } from "@/app/(auth)/actions";
 import { Input } from "@/app/(auth)/_components/input";
-import UIError from "../_components/UIErrors";
+import UIError from "@/app/(auth)/_components/UIErrors";
 
 export default function SignUpForm() {
   const [state, formAction, pending] = useActionState(signUpAction, undefined);
@@ -62,7 +62,7 @@ export default function SignUpForm() {
 
         <div className="text-sm">
           Already have an account?{" "}
-          <a href="/login" className="underline hover:no-underline">
+          <a href="/sign-in" className="underline hover:no-underline">
             Log in
           </a>
         </div>

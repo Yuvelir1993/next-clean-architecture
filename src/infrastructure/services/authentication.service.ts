@@ -111,26 +111,29 @@ export class AuthenticationService implements IAuthenticationService {
 
       const { IdToken, AccessToken, RefreshToken } = authenticationResult;
 
-      console.log("Tokens:", IdToken, AccessToken, RefreshToken);
+      console.log("IdToken:", IdToken);
+      console.log("AccessToken:", AccessToken);
+      console.log("RefreshToken:", RefreshToken);
 
+      const oneHour = new Date(Date.now() + 60 * 60 * 1000);
       const session = sessionSchema.parse({
         id: awsCognitoResponse?.AuthenticationResult?.IdToken,
         userId: userInput.id,
-        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+        expiresAt: oneHour,
       });
 
       console.log("Session data validation successful");
 
       const cookie: Cookie = {
-        name: "session",
-        value: "mock-cookie-value",
+        name: "AwsCognitoSession",
+        value: IdToken,
         attributes: {
-          secure: true,
+          secure: false,
           path: "/",
           sameSite: "strict",
           httpOnly: true,
           maxAge: 3600,
-          expires: new Date(Date.now() + 60 * 60 * 1000),
+          expires: oneHour,
         },
       };
 

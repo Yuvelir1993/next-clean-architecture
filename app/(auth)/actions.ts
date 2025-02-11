@@ -64,16 +64,23 @@ export async function signUpAction(
     };
   }
 
-  (await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
+  const cookieStore = await cookies();
+
+  cookieStore.set("session", sessionCookie.value, {
+    httpOnly: sessionCookie.attributes.httpOnly,
+    secure: sessionCookie.attributes.secure,
+    expires: sessionCookie.attributes.expires,
+    sameSite: sessionCookie.attributes.sameSite,
+    path: sessionCookie.attributes.path,
+  });
 
   redirect("/");
 }
 
-export async function signInAction(formData: FormData) {
+export async function signInAction(
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   console.log("Sign-in action (UI)");
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
@@ -87,12 +94,13 @@ export async function signInAction(formData: FormData) {
   } catch (err) {
     if (err instanceof InputParseError || err instanceof AuthenticationError) {
       return {
-        error: "Incorrect username or password",
+        errors: ["Incorrect username or password"],
       };
     }
     return {
-      error:
+      errors: [
         "An error happened. The developers have been notified. Please try again later.",
+      ],
     };
   }
 

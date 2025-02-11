@@ -1,32 +1,12 @@
 "use client";
 
-import { Input } from "../_components/input";
-import { useState } from "react";
-import { signInAction } from "../actions";
+import { Input } from "@/app/(auth)/_components/input";
+import { useActionState } from "react";
+import { signInAction } from "@/app/(auth)/actions";
+import UIError from "@/app/(auth)/_components/UIErrors";
 
-export default function Login() {
-  const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (loading) return;
-
-    const formData = new FormData(event.currentTarget);
-
-    console.log(formData);
-
-    setLoading(true);
-    const res = await signInAction(formData);
-
-    if (res && res.error) {
-      setError(res.error);
-    }
-    if (res && res.error) {
-      setError(res.error);
-    }
-    setLoading(false);
-  };
+export default function SignInForm() {
+  const [state, formAction, pending] = useActionState(signInAction, undefined);
 
   return (
     <div className="grid min-h-screen place-items-center p-8 sm:p-20">
@@ -35,8 +15,7 @@ export default function Login() {
           Login to Project Hub
         </h1>
 
-        <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
-          {error && <p className="text-destructive">{error}</p>}
+        <form className="flex flex-col w-full gap-4" action={formAction}>
           <label className="flex flex-col">
             <span className="font-medium">Email</span>
             <Input id="email" type="email" name="email" required />
@@ -47,7 +26,10 @@ export default function Login() {
             <Input id="password" type="password" name="password" required />
           </label>
 
+          {state?.errors && <UIError errors={state.errors} />}
+
           <button
+            disabled={pending}
             type="submit"
             className="mt-2 rounded-full border border-transparent 
                          bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc] 
@@ -59,7 +41,7 @@ export default function Login() {
 
         <div className="text-sm">
           Don’t have an account?{" "}
-          <a href="/signup" className="underline hover:no-underline">
+          <a href="/sign-up" className="underline hover:no-underline">
             Sign up
           </a>
         </div>
