@@ -5,10 +5,7 @@ import { IAuthenticationService } from "@/src/infrastructure/services/authentica
 import { Session, sessionSchema } from "@/src/business/entities/models/session";
 import { Cookie } from "@/src/business/entities/models/cookie";
 import { User } from "@/src/business/entities/models/user";
-import {
-  AuthenticationError,
-  UnauthenticatedError,
-} from "@/src/business/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 import {
@@ -16,6 +13,7 @@ import {
   AdminRespondToAuthChallengeCommand,
   CognitoIdentityProviderClient,
 } from "@aws-sdk/client-cognito-identity-provider";
+import { CognitoJwtVerifier } from "aws-jwt-verify";
 
 @injectable()
 export class AuthenticationService implements IAuthenticationService {
@@ -33,37 +31,22 @@ export class AuthenticationService implements IAuthenticationService {
     return compare(inputPassword, usersHashedPassword);
   }
 
-  async validateSession(
-    sessionId: string
-  ): Promise<{ user: User; session: Session }> {
-    const result: {
-      user: {
-        name: string;
-        id: string;
-      };
-      session: Session;
-    } = {
-      user: {
-        name: "Pavlo",
-        id: "12345",
-      },
-      session: {
-        id: sessionId,
-        userId: "12345",
-        expiresAt: new Date(),
-      },
-    };
+  async validateSession(sessionId: string): Promise<boolean> {
+    console.log("Validating user's session...");
+    const verifier = CognitoJwtVerifier.create({
+      userPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
+      tokenUse: "id",
+      clientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID!,
+    });
 
-    if (!result.user || !result.session) {
-      throw new UnauthenticatedError("Unauthenticated");
+    try {
+      const payload = await verifier.verify(sessionId);
+      console.log("Token is valid. Payload:", payload);
+      return true;
+    } catch {
+      console.log("Token not valid!");
+      return false;
     }
-
-    const user = await this._usersRepository.getUserById(result.user.id);
-    if (!user) {
-      throw new UnauthenticatedError("User doesn't exist");
-    }
-
-    return { user, session: result.session };
   }
 
   async createSession(

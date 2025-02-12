@@ -49,6 +49,11 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       newUser
     );
 
+    const isSessionValid = await this._authenticationService.validateSession(
+      session.id
+    );
+    console.log(`Validated session: ${isSessionValid}`);
+
     return {
       cookie,
       session,
