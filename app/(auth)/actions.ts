@@ -17,7 +17,6 @@ export async function signUpAction(
   formData: FormData
 ): Promise<FormState> {
   console.log(`Action previous state is ${prevState}`);
-  let sessionCookie: Cookie;
   try {
     const validationError = validateFormInput(formData);
     if (validationError) {
@@ -35,12 +34,30 @@ export async function signUpAction(
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );
-    const { cookie } = await authController.signUp({
+    const { cookie, user } = await authController.signUp({
       username,
       password,
       confirm_password: confirmPassword,
     });
-    sessionCookie = cookie;
+
+    console.log("Session cookie to be set:");
+    console.log(cookie);
+
+    const sessionCookie: Cookie = cookie;
+
+    const cookieStore = await cookies();
+
+    cookieStore.set(
+      "session",
+      JSON.stringify({ session: sessionCookie.value, userId: user.id }),
+      {
+        httpOnly: true, // Prevents JavaScript access (protects against XSS)
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 3600, // 1 hour
+      }
+    );
   } catch (err) {
     if (err instanceof InputParseError) {
       return {
@@ -63,16 +80,6 @@ export async function signUpAction(
       ],
     };
   }
-
-  const cookieStore = await cookies();
-
-  cookieStore.set("session", sessionCookie.value, {
-    httpOnly: sessionCookie.attributes.httpOnly,
-    secure: sessionCookie.attributes.secure,
-    expires: sessionCookie.attributes.expires,
-    sameSite: sessionCookie.attributes.sameSite,
-    path: sessionCookie.attributes.path,
-  });
 
   redirect("/");
 }
