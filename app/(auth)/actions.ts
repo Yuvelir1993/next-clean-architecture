@@ -81,7 +81,7 @@ export async function signUpAction(
     };
   }
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function signInAction(
