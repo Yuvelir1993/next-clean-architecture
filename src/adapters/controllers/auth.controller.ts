@@ -58,7 +58,7 @@ export class AuthenticationController implements IAuthenticationController {
   ): Promise<{
     session: Session;
     cookie: Cookie;
-    user: Pick<User, "id" | "username">;
+    user: Pick<User, "id" | "email" | "username">;
   }> {
     console.log("Entered sign-up controller...");
     const result = signUpInputSchema.safeParse(input);

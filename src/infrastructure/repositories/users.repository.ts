@@ -1,6 +1,6 @@
 import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { ITransaction } from "@/src/business/entities/models/transaction.interface";
-import { User, CreateUser } from "@/src/business/entities/models/user";
+import { User, SignUpUser } from "@/src/business/entities/models/user";
 import {
   CognitoIdentityProviderClient,
   AdminCreateUserCommand,
@@ -13,6 +13,7 @@ export class UsersRepository implements IUsersRepository {
     return Promise.resolve({
       id: "12345678910",
       username: "Mock username",
+      email: "email@gmail.com",
       password: "JustAPassword11++",
     });
   }
@@ -26,12 +27,13 @@ export class UsersRepository implements IUsersRepository {
       return Promise.resolve({
         id: "12345678910",
         username: username,
+        email: "email@gmail.com",
         password: "JustAPassword11++",
       });
     }
     return Promise.resolve(undefined);
   }
-  async createUser(userInput: CreateUser, tx?: ITransaction): Promise<User> {
+  async createUser(userInput: SignUpUser, tx?: ITransaction): Promise<User> {
     try {
       console.log(
         `Creating user ${userInput.username} with id ${userInput.id} and having transaction ` +
@@ -46,6 +48,10 @@ export class UsersRepository implements IUsersRepository {
           {
             Name: "name",
             Value: userInput.username,
+          },
+          {
+            Name: "email",
+            Value: userInput.email,
           },
         ],
         TemporaryPassword: process.env.AWS_COGNITO_USER_TEMP_PASSWORD!,
@@ -64,6 +70,7 @@ export class UsersRepository implements IUsersRepository {
 
       return Promise.resolve({
         id: userInput.id,
+        email: userInput.email,
         username: userResponse.User.Username,
         password: userInput.password,
       });

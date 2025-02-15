@@ -1,4 +1,4 @@
-import type { User, CreateUser } from "@/src/business/entities/models/user";
+import type { User, SignUpUser } from "@/src/business/entities/models/user";
 import type { ITransaction } from "@/src/business/entities/models/transaction.interface";
 
 export interface IUsersRepository {
@@ -10,5 +10,5 @@ export interface IUsersRepository {
    * @param input - user schema for users creation
    * @param tx
    */
-  createUser(input: CreateUser, tx?: ITransaction): Promise<User>;
+  createUser(input: SignUpUser, tx?: ITransaction): Promise<User>;
 }

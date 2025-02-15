@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-export const SignupFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters long." })
-    .trim(),
+export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
     .string()
@@ -14,6 +10,17 @@ export const SignupFormSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Contain at least one special character.",
     })
+    .trim(),
+});
+
+// Sign-in schema (same as AuthSchema)
+export const SignInFormSchema = AuthSchema;
+
+// Sign-up schema (extends AuthSchema with name field)
+export const SignupFormSchema = AuthSchema.extend({
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long." })
     .trim(),
 });
 

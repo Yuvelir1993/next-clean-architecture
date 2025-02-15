@@ -26,11 +26,11 @@ export interface IAuthenticationUseCases {
    * Sign up a new user.
    *
    * @param input - An object containing the new user's username and password.
-   * @returns A Promise resolving to an object with a session, cookie, and a user object containing the id and username.
+   * @returns A Promise resolving to an object with a session, cookie, and a user object containing only safe info without any passwords.
    */
   signUp(input: { username: string; password: string }): Promise<{
     session: Session;
     cookie: Cookie;
-    user: Pick<User, "id" | "username">;
+    user: Pick<User, "id" | "email" | "username">;
   }>;
 }

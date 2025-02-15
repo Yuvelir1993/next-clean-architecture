@@ -22,10 +22,14 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }
 
   // Sign-Up business logic
-  public async signUp(input: { username: string; password: string }): Promise<{
+  public async signUp(input: {
+    username: string;
+    password: string;
+    email: string;
+  }): Promise<{
     session: Session;
     cookie: Cookie;
-    user: Pick<User, "id" | "username">;
+    user: Pick<User, "id" | "email" | "username">;
   }> {
     console.log("Executing sign-up use case...");
 
@@ -41,6 +45,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
 
     const newUser = await this._usersRepository.createUser({
       id: userId,
+      email: input.email,
       username: input.username,
       password: input.password,
     });
@@ -59,6 +64,7 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       session,
       user: {
         id: newUser.id,
+        email: newUser.email,
         username: newUser.username,
       },
     };
@@ -71,28 +77,28 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }): Promise<{ session: Session; cookie: Cookie }> {
     console.log("Executing sign-in use case...");
 
-    const existingUser = await this._usersRepository.getUserByEmail(
-      input.email
-    );
-
-    if (!existingUser) {
-      console.error("Error in sign-in use case! User does not exist.");
-      throw new AuthenticationError("User does not exist");
-    }
-
-    console.log("Sign-in use case: start validating user passwords...");
-    const validPassword = await this._authenticationService.validatePasswords(
-      input.password,
-      existingUser.password
-    );
-
-    if (!validPassword) {
-      console.error("Error in sign-in use case! Incorrect email or password.");
-      throw new AuthenticationError("Incorrect email or password");
-    }
-
     console.log("Sign-in use case: start preparing user session...");
-    return await this._authenticationService.createSession(existingUser);
+    const { cookie, session } = await this._authenticationService.createSession(
+      {
+        email: input.email,
+        password: input.password,
+      }
+    );
+
+    const isSessionValid = await this._authenticationService.validateSession(
+      session.id
+    );
+    console.log(`Validated session: ${isSessionValid}`);
+
+    return {
+      cookie,
+      session,
+      user: {
+        id: newUser.id,
+        email: newUser.email,
+        username: newUser.username,
+      },
+    };
   }
 
   // Sign-Out business logic

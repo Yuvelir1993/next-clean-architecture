@@ -4,7 +4,12 @@ import { type IUsersRepository } from "@/src/infrastructure/repositories/users.r
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import { Session, sessionSchema } from "@/src/business/entities/models/session";
 import { Cookie } from "@/src/business/entities/models/cookie";
-import { User } from "@/src/business/entities/models/user";
+import {
+  SignUpUser,
+  signUpUserSchema,
+  signInUserSchema,
+  User,
+} from "@/src/business/entities/models/user";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
@@ -53,9 +58,99 @@ export class AuthenticationService implements IAuthenticationService {
     userInput: User
   ): Promise<{ session: Session; cookie: Cookie }> {
     console.log("Creating session for logged in user");
-    let awsCognitoResponse;
 
     const client = new CognitoIdentityProviderClient();
+    let IdToken: string | undefined;
+    let AccessToken: string | undefined;
+    let RefreshToken: string | undefined;
+
+    try {
+      if (signUpUserSchema.safeParse(userInput).success) {
+        console.log("Detected CreateUser flow (new account setup)");
+        ({ IdToken, AccessToken, RefreshToken } =
+          await this.initiateAuthForNewUser(userInput, client));
+      } else if (signInUserSchema.safeParse(userInput).success) {
+        console.log("Detected SignInUser flow (normal login)");
+        ({ IdToken, AccessToken, RefreshToken } =
+          await this.initiateAuthForExistingUser(userInput, client));
+      } else {
+        throw new AuthenticationError("Invalid user type provided");
+      }
+
+      if (!IdToken || !AccessToken || !RefreshToken) {
+        throw new Error("Authentication failed: Missing one or more tokens.");
+      }
+
+      console.log("IdToken:", IdToken);
+      console.log("AccessToken:", AccessToken);
+      console.log("RefreshToken:", RefreshToken);
+
+      const oneHour = new Date(Date.now() + 60 * 60 * 1000);
+      const session = sessionSchema.parse({
+        id: IdToken,
+        userId: userInput.id,
+        expiresAt: oneHour,
+      });
+
+      console.log("Session data validation successful");
+
+      const cookie: Cookie = {
+        name: "AwsCognitoSession",
+        value: IdToken,
+        attributes: {
+          secure: false,
+          path: "/",
+          sameSite: "strict",
+          httpOnly: true,
+          maxAge: 3600,
+          expires: oneHour,
+        },
+      };
+
+      return { session, cookie };
+    } catch (error) {
+      console.error("Authentication failed:", error);
+      throw new AuthenticationError(
+        "Invalid credentials or authentication failed."
+      );
+    }
+  }
+
+  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
+    console.log("Invalidating session " + sessionId);
+    const blankCookie: Cookie = {
+      name: "session",
+      value: "mock-cookie-value",
+      attributes: {
+        secure: true,
+        path: "/",
+        sameSite: "strict",
+        httpOnly: true,
+        maxAge: 3600,
+        expires: new Date(Date.now() + 60 * 60 * 1000),
+      },
+    };
+    return { blankCookie };
+  }
+
+  /**
+   * Generates random 6-digit numeric ID
+   * @returns random 6-digit ID
+   */
+  generateUserId(): string {
+    const randomId = crypto.randomUUID().replace(/\D/g, "").slice(0, 6);
+    console.log(`Generated random user id ${randomId}`);
+    return randomId;
+  }
+
+  /**
+   * Private functions
+   */
+  async initiateAuthForNewUser(
+    userInput: SignUpUser,
+    client: CognitoIdentityProviderClient
+  ): Promise<{ IdToken: string; AccessToken: string; RefreshToken: string }> {
+    let awsCognitoResponse;
     const initiateAuthCommand = new AdminInitiateAuthCommand({
       UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
       ClientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID!,
@@ -92,66 +187,49 @@ export class AuthenticationService implements IAuthenticationService {
         );
       }
 
-      const { IdToken, AccessToken, RefreshToken } = authenticationResult;
-
-      console.log("IdToken:", IdToken);
-      console.log("AccessToken:", AccessToken);
-      console.log("RefreshToken:", RefreshToken);
-
-      const oneHour = new Date(Date.now() + 60 * 60 * 1000);
-      const session = sessionSchema.parse({
-        id: awsCognitoResponse?.AuthenticationResult?.IdToken,
-        userId: userInput.id,
-        expiresAt: oneHour,
-      });
-
-      console.log("Session data validation successful");
-
-      const cookie: Cookie = {
-        name: "AwsCognitoSession",
-        value: IdToken,
-        attributes: {
-          secure: false,
-          path: "/",
-          sameSite: "strict",
-          httpOnly: true,
-          maxAge: 3600,
-          expires: oneHour,
-        },
+      return {
+        IdToken: authenticationResult.IdToken,
+        AccessToken: authenticationResult.AccessToken,
+        RefreshToken: authenticationResult.RefreshToken,
       };
-
-      return { session, cookie };
     } else {
       throw new AuthenticationError(
-        `Unsupported challenge from aWS Cognito ${authResponse.ChallengeName}`
+        `Unsupported challenge from AWS Cognito ${authResponse.ChallengeName}`
       );
     }
   }
 
-  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    console.log("Invalidating session " + sessionId);
-    const blankCookie: Cookie = {
-      name: "session",
-      value: "mock-cookie-value",
-      attributes: {
-        secure: true,
-        path: "/",
-        sameSite: "strict",
-        httpOnly: true,
-        maxAge: 3600,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
+  async initiateAuthForExistingUser(
+    userInput: SignUpUser,
+    client: CognitoIdentityProviderClient
+  ): Promise<{ IdToken: string; AccessToken: string; RefreshToken: string }> {
+    const initiateAuthCommand = new AdminInitiateAuthCommand({
+      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
+      ClientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID!,
+      AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+      AuthParameters: {
+        USERNAME: userInput.username,
+        PASSWORD: userInput.password,
       },
-    };
-    return { blankCookie };
-  }
+    });
+    const awsCognitoResponse = await client.send(initiateAuthCommand);
+    const authenticationResult = awsCognitoResponse.AuthenticationResult;
 
-  /**
-   * Generates random 6-digit numeric ID
-   * @returns random 6-digit ID
-   */
-  generateUserId(): string {
-    const randomId = crypto.randomUUID().replace(/\D/g, "").slice(0, 6);
-    console.log(`Generated random user id ${randomId}`);
-    return randomId;
+    if (
+      !authenticationResult ||
+      !authenticationResult.IdToken ||
+      !authenticationResult.AccessToken ||
+      !authenticationResult.RefreshToken
+    ) {
+      throw new AuthenticationError(
+        "Failed to authenticate: Missing tokens from AWS Cognito response..."
+      );
+    }
+
+    return {
+      IdToken: authenticationResult.IdToken,
+      AccessToken: authenticationResult.AccessToken,
+      RefreshToken: authenticationResult.RefreshToken,
+    };
   }
 }
