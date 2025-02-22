@@ -134,16 +134,6 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   /**
-   * Generates random 6-digit numeric ID
-   * @returns random 6-digit ID
-   */
-  generateUserId(): string {
-    const randomId = crypto.randomUUID().replace(/\D/g, "").slice(0, 6);
-    console.log(`Generated random user id ${randomId}`);
-    return randomId;
-  }
-
-  /**
    * Private functions
    */
   async initiateAuthForNewUser(

@@ -56,8 +56,7 @@ export class UsersRepository implements IUsersRepository {
   async createUser(userInput: SignUpUser, tx?: ITransaction): Promise<User> {
     try {
       console.log(
-        `Creating user ${userInput.username} with id ${userInput.id} and having transaction ` +
-          tx
+        `Creating user ${userInput.username} and having transaction ` + tx
       );
 
       const client = new CognitoIdentityProviderClient();
@@ -106,8 +105,16 @@ export class UsersRepository implements IUsersRepository {
         );
       }
 
+      const userSub = userResponse.User?.Attributes?.find(
+        (attr) => attr.Name === "sub"
+      )?.Value;
+
+      if (!userSub) {
+        throw new AuthenticationError("Failed to get user id on creation!");
+      }
+
       return Promise.resolve({
-        id: userInput.id,
+        id: userSub,
         email: userInput.email,
         username: userResponse.User.Username,
         password: userInput.password,

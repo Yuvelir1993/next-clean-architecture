@@ -3,7 +3,6 @@ import { Session } from "@/src/business/entities/models/session";
 import { User } from "@/src/business/entities/models/user";
 
 export interface IAuthenticationService {
-  generateUserId(): string;
   validateSession(sessionId: Session["id"]): Promise<boolean>;
   invalidateSession(sessionId: Session["id"]): Promise<{ blankCookie: Cookie }>;
   validatePasswords(

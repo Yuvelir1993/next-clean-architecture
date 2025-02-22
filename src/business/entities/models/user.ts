@@ -10,7 +10,7 @@ export const userSchema = z.object({
 export type User = z.infer<typeof userSchema>;
 
 export const signUpUserSchema = userSchema
-  .pick({ id: true, username: true, email: true })
+  .pick({ username: true, email: true })
   .merge(z.object({ password: z.string().min(6).max(255) }));
 
 export type SignUpUser = z.infer<typeof signUpUserSchema>;

@@ -41,20 +41,15 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       throw new AuthenticationError(`User ${input.username} already exists!`);
     }
 
-    const userId = this._authenticationService.generateUserId();
-
     const usersWithSuchEmail = await this._usersRepository.getUsersByEmail(
       input.email
     );
 
     if (usersWithSuchEmail && usersWithSuchEmail.length > 0) {
-      throw new AuthenticationError(
-        `Email '${input.email}' is already in use`
-      );
+      throw new AuthenticationError(`Email '${input.email}' is already in use`);
     }
 
     const newUser = await this._usersRepository.createUser({
-      id: userId,
       email: input.email,
       username: input.username,
       password: input.password,
