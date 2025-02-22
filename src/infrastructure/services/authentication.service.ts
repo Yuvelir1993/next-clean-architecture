@@ -9,6 +9,7 @@ import {
   signUpUserSchema,
   signInUserSchema,
   User,
+  SignInUser,
 } from "@/src/business/entities/models/user";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { inject, injectable } from "inversify";
@@ -137,7 +138,7 @@ export class AuthenticationService implements IAuthenticationService {
    * Private functions
    */
   async initiateAuthForNewUser(
-    userInput: SignUpUser,
+    userInput: Pick<SignUpUser, "email" | "username" | "password">,
     client: CognitoIdentityProviderClient
   ): Promise<{ IdToken: string; AccessToken: string; RefreshToken: string }> {
     let awsCognitoResponse;
@@ -190,7 +191,7 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   async initiateAuthForExistingUser(
-    userInput: SignUpUser,
+    userInput: Pick<SignInUser, "email" | "username" | "password">,
     client: CognitoIdentityProviderClient
   ): Promise<{ IdToken: string; AccessToken: string; RefreshToken: string }> {
     const initiateAuthCommand = new AdminInitiateAuthCommand({

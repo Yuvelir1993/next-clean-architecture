@@ -2,11 +2,11 @@ import { z } from "zod";
 import { injectable, inject } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 
+import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import {
-  IAuthenticationController,
   signInInputSchema,
   signUpInputSchema,
-} from "@/src/adapters/controllers/auth.controller.interface";
+} from "./auth.controller.inputSchemas";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import type { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
 
@@ -33,13 +33,18 @@ export class AuthenticationController implements IAuthenticationController {
     input: Partial<z.infer<typeof signInInputSchema>>
   ): Promise<Cookie> {
     console.log("Entered sign-in controller...");
-    const result = signInInputSchema.safeParse(input);
-    if (!result.success) {
-      console.error("Error during parsing sign-in input:", result.error);
-      throw new InputParseError("Invalid data", { cause: result.error });
+    const validationResult = signInInputSchema.safeParse(input);
+    if (!validationResult.success) {
+      console.error(
+        "Error during parsing sign-in input:",
+        validationResult.error
+      );
+      throw new InputParseError("Invalid data", {
+        cause: validationResult.error,
+      });
     }
     // Call the aggregated signIn use case and return the cookie from the result
-    const { cookie } = await this._authUseCases.signIn(result.data);
+    const { cookie } = await this._authUseCases.signIn(validationResult.data);
     return cookie;
   }
 

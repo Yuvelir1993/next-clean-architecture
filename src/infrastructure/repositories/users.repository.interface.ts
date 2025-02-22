@@ -10,5 +10,8 @@ export interface IUsersRepository {
    * @param input - user schema for users creation
    * @param tx
    */
-  createUser(input: SignUpUser, tx?: ITransaction): Promise<User>;
+  createUser(
+    input: Pick<SignUpUser, "email" | "username" | "password">,
+    tx?: ITransaction
+  ): Promise<User>;
 }
