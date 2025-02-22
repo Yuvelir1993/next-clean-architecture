@@ -4,18 +4,38 @@ import { User, SignUpUser } from "@/src/business/entities/models/user";
 import {
   CognitoIdentityProviderClient,
   AdminCreateUserCommand,
+  ListUsersCommand,
+  UserType,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 
 export class UsersRepository implements IUsersRepository {
-  getUserByEmail(email: string): Promise<User | undefined> {
+  async getUsersByEmail(email: string): Promise<Array<User> | undefined> {
     console.log("Getting user with email " + email);
-    return Promise.resolve({
-      id: "12345678910",
-      username: "Mock username",
-      email: "email@gmail.com",
-      password: "JustAPassword11++",
+
+    const client = new CognitoIdentityProviderClient();
+
+    const comm = new ListUsersCommand({
+      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
+      Filter: `email = "${email}"`,
     });
+
+    const { Users } = await client.send(comm);
+
+    if (!Users || Users.length === 0) {
+      return undefined;
+    }
+
+    const mappedUsers: User[] = Users.map((user: UserType) => ({
+      id: user.Username!,
+      email:
+        user.Attributes?.find((attr) => attr.Name === "email")?.Value || "",
+      username:
+        user.Attributes?.find((attr) => attr.Name === "name")?.Value || "",
+      password: "",
+    }));
+
+    return mappedUsers;
   }
   getUserById(id: string): Promise<User | undefined> {
     console.log("Getting user with id " + id);
@@ -41,6 +61,20 @@ export class UsersRepository implements IUsersRepository {
       );
 
       const client = new CognitoIdentityProviderClient();
+
+      const comm = new ListUsersCommand({
+        UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
+        Filter: `email = "${userInput.email}"`,
+      });
+
+      const { Users } = await client.send(comm);
+
+      if (Users && Users.length > 0) {
+        throw new AuthenticationError(
+          `Email '${userInput.email}' is already in use`
+        );
+      }
+
       const command = new AdminCreateUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
         Username: userInput.username,
@@ -52,6 +86,10 @@ export class UsersRepository implements IUsersRepository {
           {
             Name: "email",
             Value: userInput.email,
+          },
+          {
+            Name: "email_verified",
+            Value: "true",
           },
         ],
         TemporaryPassword: process.env.AWS_COGNITO_USER_TEMP_PASSWORD!,

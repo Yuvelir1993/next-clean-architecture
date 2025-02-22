@@ -1,6 +1,25 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "clean-architecture-next-user-pool"
-  #   not setting password_policy because it will then be synchronized with app schemas validations. for now it's not needed
+
+  schema {
+    name                = "email"
+    attribute_data_type = "String"
+    required            = true
+    mutable             = false
+  }
+
+  schema {
+    name                = "name"
+    attribute_data_type = "String"
+    required            = true
+    mutable             = true
+  }
+
+  auto_verified_attributes = ["email"]
+
+  username_configuration {
+    case_sensitive = false
+  }
 }
 
 resource "aws_cognito_user_pool_client" "client" {
