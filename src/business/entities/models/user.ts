@@ -11,12 +11,22 @@ export type User = z.infer<typeof userSchema>;
 
 export const signUpUserSchema = userSchema
   .pick({ username: true, email: true })
-  .merge(z.object({ password: z.string().min(6).max(255) }));
+  .merge(
+    z.object({
+      password: z.string().min(6).max(255),
+      type: z.literal("signup"),
+    })
+  );
 
 export type SignUpUser = z.infer<typeof signUpUserSchema>;
 
 export const signInUserSchema = userSchema
   .pick({ username: true, email: true })
-  .merge(z.object({ password: z.string().min(6).max(255) }));
+  .merge(
+    z.object({
+      password: z.string().min(6).max(255),
+      type: z.literal("signin"),
+    })
+  );
 
 export type SignInUser = z.infer<typeof signUpUserSchema>;
