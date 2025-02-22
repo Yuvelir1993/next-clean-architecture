@@ -166,7 +166,7 @@ export class AuthenticationService implements IAuthenticationService {
       const respondCommand = new AdminRespondToAuthChallengeCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
         ClientId: process.env.AWS_COGNITO_USER_POOL_CLIENT_ID!,
-        ChallengeName: "NEW_PASSWORD_REQUIRED",
+        ChallengeName: authResponse.ChallengeName,
         Session: authResponse.Session,
         ChallengeResponses: {
           USERNAME: userInput.username,
