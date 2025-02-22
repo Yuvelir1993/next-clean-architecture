@@ -151,6 +151,7 @@ function validateFormInput(formData: FormData, type: string) {
     }
   } else if (type === "sign-up") {
     validatedFields = SignUpFormSchema.safeParse({
+      name: formData.get("username"),
       email: formData.get("email"),
       password: formData.get("password"),
     });

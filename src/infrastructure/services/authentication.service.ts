@@ -57,7 +57,7 @@ export class AuthenticationService implements IAuthenticationService {
   async createSession(
     userInput: User
   ): Promise<{ session: Session; cookie: Cookie }> {
-    console.log("Creating session for logged in user");
+    console.log("Creating session for logged in user " + userInput);
 
     const client = new CognitoIdentityProviderClient();
     let IdToken: string | undefined;
