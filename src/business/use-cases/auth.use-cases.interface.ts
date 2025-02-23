@@ -9,10 +9,11 @@ export interface IAuthenticationUseCases {
    * @param input - An object containing the user's email and password.
    * @returns A Promise resolving to an object with a session and cookie.
    */
-  signIn(input: {
-    email: string;
-    password: string;
-  }): Promise<{ session: Session; cookie: Cookie }>;
+  signIn(input: { email: string; password: string }): Promise<{
+    user: Pick<User, "id" | "email" | "username">;
+    session: Session;
+    cookie: Cookie;
+  }>;
 
   /**
    * Sign out a user by invalidating their session.
@@ -29,8 +30,8 @@ export interface IAuthenticationUseCases {
    * @returns A Promise resolving to an object with a session, cookie, and a user object containing only safe info without any passwords.
    */
   signUp(input: { username: string; password: string }): Promise<{
+    user: Pick<User, "id" | "email" | "username">;
     session: Session;
     cookie: Cookie;
-    user: Pick<User, "id" | "email" | "username">;
   }>;
 }

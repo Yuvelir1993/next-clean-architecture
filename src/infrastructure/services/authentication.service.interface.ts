@@ -1,6 +1,10 @@
 import { Cookie } from "@/src/business/entities/models/cookie";
 import { Session } from "@/src/business/entities/models/session";
-import { User } from "@/src/business/entities/models/user";
+import {
+  SignInUser,
+  SignUpUser,
+  User,
+} from "@/src/business/entities/models/user";
 
 export interface IAuthenticationService {
   validateSession(sessionId: Session["id"]): Promise<boolean>;
@@ -13,5 +17,11 @@ export interface IAuthenticationService {
    * Authenticating a user and creating an active session.
    * @param user - user schema for authentication and obtaining a session data
    */
-  createSession(input: User): Promise<{ session: Session; cookie: Cookie }>;
+  createSession(
+    input: SignUpUser | SignInUser
+  ): Promise<{
+    user: Pick<User, "id" | "email" | "username">;
+    session: Session;
+    cookie: Cookie;
+  }>;
 }

@@ -4,12 +4,17 @@ import type { IAuthenticationUseCases } from "./auth.use-cases.interface";
 import type { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 
-import { User } from "@/src/business/entities/models/user";
+import {
+  SignInUser,
+  SignUpUser,
+  User,
+  USER_TYPE_SIGN_IN,
+  USER_TYPE_SIGN_UP,
+} from "@/src/business/entities/models/user";
 import { Cookie } from "@/src/business/entities/models/cookie";
 import { Session } from "@/src/business/entities/models/session";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { DI_SYMBOLS } from "@/di/types";
-
 @injectable()
 export class AuthenticationUseCases implements IAuthenticationUseCases {
   constructor(
@@ -49,14 +54,19 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       throw new AuthenticationError(`Email '${input.email}' is already in use`);
     }
 
-    const newUser = await this._usersRepository.createUser({
+    const newUser: User = await this._usersRepository.createUser({
       email: input.email,
       username: input.username,
       password: input.password,
     });
 
+    const newSignUpUser: SignUpUser = {
+      ...newUser,
+      type: USER_TYPE_SIGN_UP,
+    };
+
     const { cookie, session } = await this._authenticationService.createSession(
-      newUser
+      newSignUpUser
     );
 
     const isSessionValid = await this._authenticationService.validateSession(
@@ -76,19 +86,22 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }
 
   // Sign-In business logic
-  public async signIn(input: {
-    email: string;
-    password: string;
-  }): Promise<{ session: Session; cookie: Cookie }> {
+  public async signIn(input: { email: string; password: string }): Promise<{
+    user: Pick<User, "id" | "email" | "username">;
+    session: Session;
+    cookie: Cookie;
+  }> {
     console.log("Executing sign-in use case...");
 
+    const newSignInUser: SignInUser = {
+      type: USER_TYPE_SIGN_IN,
+      email: input.email,
+      password: input.password,
+    };
+
     console.log("Sign-in use case: start preparing user session...");
-    const { cookie, session } = await this._authenticationService.createSession(
-      {
-        email: input.email,
-        password: input.password,
-      }
-    );
+    const { user, cookie, session } =
+      await this._authenticationService.createSession(newSignInUser);
 
     const isSessionValid = await this._authenticationService.validateSession(
       session.id
@@ -96,13 +109,9 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     console.log(`Validated session: ${isSessionValid}`);
 
     return {
+      user,
       cookie,
       session,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-      },
     };
   }
 

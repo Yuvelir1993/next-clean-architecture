@@ -44,7 +44,12 @@ export class AuthenticationController implements IAuthenticationController {
       });
     }
     // Call the aggregated signIn use case and return the cookie from the result
-    const { cookie } = await this._authUseCases.signIn(validationResult.data);
+    const { user, session, cookie } = await this._authUseCases.signIn(
+      validationResult.data
+    );
+
+    console.log(`Logged in successfully with user '${user}'`);
+    console.log(`Acquired session '${session}'`);
     return cookie;
   }
 
@@ -52,9 +57,8 @@ export class AuthenticationController implements IAuthenticationController {
     if (!sessionId) {
       throw new InputParseError("Must provide a session ID");
     }
-    // Validate the session before signing out
-    const { session } = await this._authService.validateSession(sessionId);
-    const { blankCookie } = await this._authUseCases.signOut(session.id);
+    await this._authService.validateSession(sessionId);
+    const { blankCookie } = await this._authUseCases.signOut(sessionId);
     return blankCookie;
   }
 

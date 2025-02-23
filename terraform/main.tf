@@ -20,6 +20,8 @@ resource "aws_cognito_user_pool" "pool" {
   username_configuration {
     case_sensitive = false
   }
+
+  username_attributes = ["email"]
 }
 
 resource "aws_cognito_user_pool_client" "client" {

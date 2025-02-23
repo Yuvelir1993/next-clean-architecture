@@ -37,6 +37,22 @@ export class UsersRepository implements IUsersRepository {
 
     return mappedUsers;
   }
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const users: Array<User> | undefined = await this.getUsersByEmail(email);
+
+    if (users && users.length > 1) {
+      throw new AuthenticationError(
+        `More than one user registered with the provided email '${email}'! Please contact your administrator!`
+      );
+    }
+
+    if (!users || !users.length || users.length === 0) {
+      console.error(`No user found with email '${email}'`);
+      return undefined;
+    }
+
+    return users[0];
+  }
   getUserById(id: string): Promise<User | undefined> {
     console.log("Getting user with id " + id);
     throw new Error("Method not implemented.");
@@ -76,7 +92,7 @@ export class UsersRepository implements IUsersRepository {
 
       const command = new AdminCreateUserCommand({
         UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!,
-        Username: userInput.username,
+        Username: userInput.email,
         UserAttributes: [
           {
             Name: "name",
@@ -116,7 +132,7 @@ export class UsersRepository implements IUsersRepository {
       return Promise.resolve({
         id: userSub,
         email: userInput.email,
-        username: userResponse.User.Username,
+        username: userInput.username,
         password: userInput.password,
       });
     } catch (error) {
