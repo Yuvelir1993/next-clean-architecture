@@ -53,12 +53,12 @@ export class AuthenticationController implements IAuthenticationController {
     return cookie;
   }
 
-  public async signOut(sessionId: string | undefined): Promise<Cookie> {
-    if (!sessionId) {
-      throw new InputParseError("Must provide a session ID");
+  public async signOut(sessionToken: string | undefined): Promise<Cookie> {
+    if (!sessionToken) {
+      throw new InputParseError("Must provide a session token");
     }
-    await this._authService.validateSession(sessionId);
-    const { blankCookie } = await this._authUseCases.signOut(sessionId);
+    await this._authService.validateSession(sessionToken);
+    const { blankCookie } = await this._authUseCases.signOut(sessionToken);
     return blankCookie;
   }
 

@@ -1,5 +1,4 @@
 import { compare } from "bcrypt-ts";
-
 import { type IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import { Session, sessionSchema } from "@/src/business/entities/models/session";
@@ -17,6 +16,7 @@ import { DI_SYMBOLS } from "@/di/types";
 import {
   AdminInitiateAuthCommand,
   AdminRespondToAuthChallengeCommand,
+  AdminUserGlobalSignOutCommand,
   CognitoIdentityProviderClient,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
@@ -29,6 +29,37 @@ export class AuthenticationService implements IAuthenticationService {
     private readonly _usersRepository: IUsersRepository
   ) {
     console.log("Called AuthenticationService");
+  }
+  async signOut(sessionToken: string): Promise<boolean> {
+    const decodedToken = jwtDecode<{ email: string }>(sessionToken);
+    const username = decodedToken["email"];
+
+    if (!username) {
+      console.warn("No username found in session token.");
+      throw new AuthenticationError(
+        `Could not get username '${username}' from session token '${sessionToken}'`
+      );
+    }
+
+    console.log(
+      `Extracted data from the current cookies: username '${username}'`
+    );
+
+    const client = new CognitoIdentityProviderClient();
+    const input = {
+      // AdminUserGlobalSignOutRequest
+      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID!, // required
+      Username: username, // required
+    };
+    const command = new AdminUserGlobalSignOutCommand(input);
+    const response = await client.send(command);
+    console.log(
+      `Response from AWS Cognito AdminUserGlobalSignOutCommand '${JSON.stringify(
+        response
+      )}'`
+    );
+
+    return true;
   }
 
   validatePasswords(

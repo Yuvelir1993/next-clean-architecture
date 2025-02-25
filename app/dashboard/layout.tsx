@@ -4,6 +4,11 @@ import Link from "next/link";
 import { signOutAction } from "@/app/dashboard/actions";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const handleSignOut = async () => {
+    await signOutAction(); // Wait for the sign-out process to complete
+    window.location.href = "/"; // Then redirect
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* ✅ Header (Shared Across All Pages) */}
@@ -29,19 +34,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
 
-        {/* ✅ Logout Button (Right Side) */}
         <button
           className="px-4 py-2 rounded-md bg-red-950 text-white hover:bg-red-700 transition"
-          onClick={() => {
-            signOutAction();
-            window.location.href = "/";
-          }}
+          onClick={handleSignOut}
         >
           Log Out
         </button>
       </header>
 
-      {/* ✅ Page Content */}
       <main className="flex-1 p-6">{children}</main>
     </div>
   );

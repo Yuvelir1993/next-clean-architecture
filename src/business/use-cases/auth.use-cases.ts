@@ -116,7 +116,12 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
   }
 
   // Sign-Out business logic
-  public async signOut(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    return await this._authenticationService.invalidateSession(sessionId);
+  public async signOut(sessionToken: string): Promise<{ blankCookie: Cookie }> {
+    const isSignedOut = this._authenticationService.signOut(sessionToken);
+
+    if (!isSignedOut) {
+      throw new AuthenticationError("Could not sign out user");
+    }
+    return await this._authenticationService.invalidateSession(sessionToken);
   }
 }

@@ -24,10 +24,10 @@ export interface IAuthenticationController {
   /**
    * Handles user sign out.
    *
-   * @param sessionId - The session ID to be validated and invalidated.
+   * @param sessionToken - The session token to be decoded, validated and invalidated.
    * @returns A promise that resolves to a Cookie.
    */
-  signOut(sessionId: string | undefined): Promise<Cookie>;
+  signOut(sessionToken: string | undefined): Promise<Cookie>;
 
   /**
    * Handles user sign up.
