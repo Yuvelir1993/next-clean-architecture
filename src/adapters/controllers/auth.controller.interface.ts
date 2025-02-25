@@ -19,7 +19,11 @@ export interface IAuthenticationController {
    * @param input - A partial object matching the sign-in schema.
    * @returns A promise that resolves to a Cookie.
    */
-  signIn(input: Partial<z.infer<typeof signInInputSchema>>): Promise<Cookie>;
+  signIn(input: Partial<z.infer<typeof signInInputSchema>>): Promise<{
+    session: Session;
+    cookie: Cookie;
+    user: Pick<User, "id" | "username">;
+  }>;
 
   /**
    * Handles user sign out.

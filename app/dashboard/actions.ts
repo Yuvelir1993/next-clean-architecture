@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { getInjection } from "@/di/container";
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
+import { redirect } from "next/navigation";
 
 export async function signOutAction() {
   console.log("Signing out...");
@@ -26,5 +27,13 @@ export async function signOutAction() {
     console.log(
       `Obtained session after signing out: ${JSON.stringify(sessionCookie)}`
     );
+
+    (await cookies()).set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    redirect("/");
   } catch {}
 }

@@ -31,7 +31,11 @@ export class AuthenticationController implements IAuthenticationController {
 
   public async signIn(
     input: Partial<z.infer<typeof signInInputSchema>>
-  ): Promise<Cookie> {
+  ): Promise<{
+    session: Session;
+    cookie: Cookie;
+    user: Pick<User, "id" | "username">;
+  }> {
     console.log("Entered sign-in controller...");
     const validationResult = signInInputSchema.safeParse(input);
     if (!validationResult.success) {
@@ -43,23 +47,8 @@ export class AuthenticationController implements IAuthenticationController {
         cause: validationResult.error,
       });
     }
-    // Call the aggregated signIn use case and return the cookie from the result
-    const { user, session, cookie } = await this._authUseCases.signIn(
-      validationResult.data
-    );
 
-    console.log(`Logged in successfully with user '${user}'`);
-    console.log(`Acquired session '${session}'`);
-    return cookie;
-  }
-
-  public async signOut(sessionToken: string | undefined): Promise<Cookie> {
-    if (!sessionToken) {
-      throw new InputParseError("Must provide a session token");
-    }
-    await this._authService.validateSession(sessionToken);
-    const { blankCookie } = await this._authUseCases.signOut(sessionToken);
-    return blankCookie;
+    return await this._authUseCases.signIn(validationResult.data);
   }
 
   public async signUp(
@@ -76,5 +65,14 @@ export class AuthenticationController implements IAuthenticationController {
       throw new InputParseError("Invalid data", { cause: result.error });
     }
     return await this._authUseCases.signUp(result.data);
+  }
+
+  public async signOut(sessionToken: string | undefined): Promise<Cookie> {
+    if (!sessionToken) {
+      throw new InputParseError("Must provide a session token");
+    }
+    await this._authService.validateSession(sessionToken);
+    const { blankCookie } = await this._authUseCases.signOut(sessionToken);
+    return blankCookie;
   }
 }

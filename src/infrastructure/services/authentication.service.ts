@@ -139,6 +139,7 @@ export class AuthenticationService implements IAuthenticationService {
       const oneHour = new Date(Date.now() + 60 * 60 * 1000);
       const session = sessionSchema.parse({
         id: IdToken,
+        sessionName: "AwsCognitoSession",
         userId: returnUser.id,
         userName: returnUser.username,
         expiresAt: oneHour,
@@ -147,8 +148,8 @@ export class AuthenticationService implements IAuthenticationService {
       console.log("Session data validation successful");
 
       const cookie: Cookie = {
-        name: "AwsCognitoSession",
-        value: IdToken,
+        name: session.sessionName,
+        value: session.id,
         attributes: {
           secure: false,
           path: "/",
@@ -168,11 +169,13 @@ export class AuthenticationService implements IAuthenticationService {
     }
   }
 
-  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
+  async invalidateSession(
+    sessionId: Session["id"]
+  ): Promise<{ blankCookie: Cookie }> {
     console.log("Invalidating session " + sessionId);
     const blankCookie: Cookie = {
-      name: "session",
-      value: "mock-cookie-value",
+      name: "AwsCognitoSession",
+      value: JSON.stringify({ session: null, userId: null }),
       attributes: {
         secure: true,
         path: "/",

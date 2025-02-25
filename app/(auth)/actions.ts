@@ -1,8 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { getInjection } from "@/di/container";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import {
@@ -10,12 +8,12 @@ import {
   SignInFormSchema,
   SignupFormSchema as SignUpFormSchema,
   AuthSchema,
-} from "../lib/definitions";
+} from "@/app/lib/definitions";
 
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { InputParseError } from "@/src/business/entities/errors/common";
-import { Cookie } from "@/src/business/entities/models/cookie";
+import setBrowserCookies from "@/app/lib/cookies";
 
 export async function signUpAction(
   prevState: FormState,
@@ -40,7 +38,7 @@ export async function signUpAction(
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );
-    const { cookie, user } = await authController.signUp({
+    const { cookie, session, user } = await authController.signUp({
       email,
       username,
       password,
@@ -50,21 +48,7 @@ export async function signUpAction(
     console.log("Session cookie to be set:");
     console.log(cookie);
 
-    const sessionCookie: Cookie = cookie;
-
-    const cookieStore = await cookies();
-
-    cookieStore.set(
-      "session",
-      JSON.stringify({ session: sessionCookie.value, userId: user.id }),
-      {
-        httpOnly: true, // Prevents JavaScript access (protects against XSS)
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        path: "/",
-        maxAge: 3600, // 1 hour
-      }
-    );
+    await setBrowserCookies(cookie, session, user);
   } catch (err) {
     if (err instanceof InputParseError) {
       return {
@@ -87,7 +71,6 @@ export async function signUpAction(
       ],
     };
   }
-
   redirect("/dashboard");
 }
 
@@ -99,7 +82,6 @@ export async function signInAction(
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
 
-  let sessionCookie: Cookie;
   try {
     const validationError = validateFormInput(formData, "sign-in");
     if (validationError) {
@@ -111,7 +93,13 @@ export async function signInAction(
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );
-    sessionCookie = await authController.signIn({ email, password });
+    const { cookie, session, user } = await authController.signIn({
+      email,
+      password,
+    });
+
+    await setBrowserCookies(cookie, session, user);
+    console.log(`Session cookies has been set`);
   } catch (err) {
     if (err instanceof InputParseError || err instanceof AuthenticationError) {
       return {
@@ -124,13 +112,6 @@ export async function signInAction(
       ],
     };
   }
-
-  (await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-
   redirect("/dashboard");
 }
 

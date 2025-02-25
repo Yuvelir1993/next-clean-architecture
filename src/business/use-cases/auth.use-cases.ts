@@ -65,31 +65,28 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
       type: USER_TYPE_SIGN_UP,
     };
 
-    const { cookie, session } = await this._authenticationService.createSession(
-      newSignUpUser
-    );
+    const { user, cookie, session } =
+      await this._authenticationService.createSession(newSignUpUser);
 
     const isSessionValid = await this._authenticationService.validateSession(
       session.id
     );
-    console.log(`Validated session: ${isSessionValid}`);
+    console.log(
+      `Validated session on Sign Up ${session.sessionName}: ${isSessionValid}`
+    );
 
     return {
+      user,
       cookie,
       session,
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        username: newUser.username,
-      },
     };
   }
 
   // Sign-In business logic
   public async signIn(input: { email: string; password: string }): Promise<{
-    user: Pick<User, "id" | "email" | "username">;
     session: Session;
     cookie: Cookie;
+    user: Pick<User, "id" | "email" | "username">;
   }> {
     console.log("Executing sign-in use case...");
 
@@ -106,7 +103,9 @@ export class AuthenticationUseCases implements IAuthenticationUseCases {
     const isSessionValid = await this._authenticationService.validateSession(
       session.id
     );
-    console.log(`Validated session: ${isSessionValid}`);
+    console.log(
+      `Validated session on Sign In ${session.sessionName}: ${isSessionValid}`
+    );
 
     return {
       user,
