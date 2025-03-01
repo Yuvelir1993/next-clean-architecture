@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ProjectCard, { Project } from "@/app/dashboard/_components/projectCard";
+import ProjectCard, { Project } from "@/app/dashboard/_components/ProjectCard";
 
 export default function Dashboard() {
   const dummyProjects: Project[] = [
@@ -36,7 +36,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-[80vh] p-6">
+    <div className="min-h-[80vh] p-6 ">
       <div className="flex flex-wrap gap-4">
         {dummyProjects.map((project) => (
           <ProjectCard key={project.projectId} project={project} />

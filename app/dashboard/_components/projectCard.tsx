@@ -16,7 +16,7 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
-    <div className="bg-slate-100 rounded-lg shadow-md p-6 max-w-sm">
+    <div className="bg-stone-200 rounded-lg shadow-md p-6 max-w-sm">
       <h2 className="text-emerald-700 text-2xl font-semibold mb-2">
         {project.projectName}
       </h2>

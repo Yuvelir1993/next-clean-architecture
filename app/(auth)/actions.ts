@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getInjection } from "@/di/container";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import {
-  FormState,
+  AuthFormState,
   SignInFormSchema,
   SignupFormSchema as SignUpFormSchema,
   AuthSchema,
@@ -16,9 +16,9 @@ import { InputParseError } from "@/src/business/entities/errors/common";
 import setBrowserCookies from "@/app/lib/cookies";
 
 export async function signUpAction(
-  prevState: FormState,
+  prevState: AuthFormState,
   formData: FormData
-): Promise<FormState> {
+): Promise<AuthFormState> {
   console.log(`Action previous state is ${prevState}`);
   try {
     const validationError = validateFormInput(formData, "sign-up");
@@ -75,9 +75,9 @@ export async function signUpAction(
 }
 
 export async function signInAction(
-  prevState: FormState,
+  prevState: AuthFormState,
   formData: FormData
-): Promise<FormState> {
+): Promise<AuthFormState> {
   console.log("Sign-in action (UI)");
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();

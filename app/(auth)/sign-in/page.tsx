@@ -3,7 +3,7 @@
 import { Input } from "@/app/(auth)/_components/input";
 import { useActionState } from "react";
 import { signInAction } from "@/app/(auth)/actions";
-import UIError from "@/app/(auth)/_components/UIErrors";
+import UIErrorAuth from "@/app/(auth)/_components/errors/UIErrorsAuth";
 
 export default function SignInForm() {
   const [state, formAction, pending] = useActionState(signInAction, undefined);
@@ -26,7 +26,7 @@ export default function SignInForm() {
             <Input id="password" type="password" name="password" required />
           </label>
 
-          {state?.errors && <UIError errors={state.errors} />}
+          {state?.errors && <UIErrorAuth errors={state.errors} />}
 
           <button
             disabled={pending}

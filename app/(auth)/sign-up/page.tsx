@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { signUpAction } from "@/app/(auth)/actions";
 import { Input } from "@/app/(auth)/_components/input";
-import UIError from "@/app/(auth)/_components/UIErrors";
+import UIErrorAuth from "@/app/(auth)/_components/errors/UIErrorsAuth";
 
 export default function SignUpForm() {
   const [state, formAction, pending] = useActionState(signUpAction, undefined);
@@ -47,7 +47,7 @@ export default function SignUpForm() {
             />
           </label>
 
-          {state?.errors && <UIError errors={state.errors} />}
+          {state?.errors && <UIErrorAuth errors={state.errors} />}
 
           <button
             disabled={pending}

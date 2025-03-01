@@ -1,16 +1,16 @@
-import { FormErrors } from "@/app/lib/definitions";
+import { AuthFormErrors } from "@/app/lib/definitions";
 
 interface UIErrorProps {
-  errors: FormErrors;
+  errors: AuthFormErrors;
 }
 
 function isErrorObject(
-  errors: FormErrors
+  errors: AuthFormErrors
 ): errors is { name?: string[]; email?: string[]; password?: string[] } {
   return !Array.isArray(errors);
 }
 
-const UIError: React.FC<UIErrorProps> = ({ errors }) => {
+const UIErrorAuth: React.FC<UIErrorProps> = ({ errors }) => {
   if (
     Array.isArray(errors) &&
     errors.every((error) => typeof error === "string")
@@ -45,4 +45,4 @@ const UIError: React.FC<UIErrorProps> = ({ errors }) => {
   return null;
 };
 
-export default UIError;
+export default UIErrorAuth;

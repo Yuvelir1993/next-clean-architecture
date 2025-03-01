@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+/**
+ * Auth
+ */
+
 export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
@@ -24,13 +28,33 @@ export const SignupFormSchema = AuthSchema.extend({
     .trim(),
 });
 
-export type FormErrors =
+export type AuthFormErrors =
   | { name?: string[]; email?: string[]; password?: string[] }
   | string[];
 
-export type FormState =
+export type AuthFormState =
   | {
-      errors?: FormErrors;
+      errors?: AuthFormErrors;
+      message?: string;
+    }
+  | undefined;
+
+/**
+ * Projects
+ */
+export const CreateProjectSchema = z.object({
+  projectName: z.string().min(1, { message: "Project name is required." }),
+  repoLink: z.string().url({ message: "Please enter a valid URL." }),
+  description: z.string().optional(),
+});
+
+export type CreateProjectFormErrors =
+  | { projectName?: string[]; repoLink?: string[]; description?: string[] }
+  | string[];
+
+export type CreateProjectFormState =
+  | {
+      errors?: CreateProjectFormErrors;
       message?: string;
     }
   | undefined;

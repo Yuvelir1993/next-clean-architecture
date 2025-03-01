@@ -1,26 +1,37 @@
 "use client";
 
-import Link from "next/link";
+import React, { useState } from "react";
 import { signOutAction } from "@/app/dashboard/actions";
 import { redirect } from "next/navigation";
+import CreateProject from "@/app/dashboard/_components/CreateProject"; // Adjust the path if necessary
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const [showCreateProject, setShowCreateProject] = useState(false);
+
   const handleSignOut = async () => {
     await signOutAction();
     redirect("/");
   };
 
+  const openCreateProject = () => {
+    setShowCreateProject(true);
+  };
+
+  const closeCreateProject = () => {
+    setShowCreateProject(false);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-950">
       {/* ✅ Header (Shared Across All Pages) */}
       <header className="flex justify-between items-center bg-black shadow-md px-6 py-4">
         <div className="flex gap-4">
-          <Link
-            href="/dashboard"
+          <button
+            onClick={openCreateProject}
             className="px-4 py-2 rounded-md bg-emerald-950 hover:bg-emerald-700 transition"
           >
             Create Project
-          </Link>
+          </button>
         </div>
 
         <button
@@ -32,6 +43,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="flex-1 p-6">{children}</main>
+
+      {showCreateProject && <CreateProject onClose={closeCreateProject} />}
     </div>
   );
 }
