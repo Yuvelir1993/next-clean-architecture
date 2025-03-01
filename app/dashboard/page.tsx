@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ProjectCard, { Project } from "@/app/dashboard/_components/ProjectCard";
+import ProjectCard, { Project } from "@/app/dashboard/_components/projectCard";
 
 export default function Dashboard() {
   const dummyProjects: Project[] = [
