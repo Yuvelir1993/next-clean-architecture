@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { signOutAction } from "@/app/dashboard/actions";
+import { redirect } from "next/navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const handleSignOut = async () => {
-    await signOutAction(); // Wait for the sign-out process to complete
-    window.location.href = "/"; // Then redirect
+    await signOutAction();
+    redirect("/");
   };
 
   return (
@@ -16,21 +17,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex gap-4">
           <Link
             href="/dashboard"
-            className="px-4 py-2 rounded-md bg-gray-800 hover:bg-gray-500 transition"
+            className="px-4 py-2 rounded-md bg-emerald-950 hover:bg-emerald-700 transition"
           >
-            Dashboard
-          </Link>
-          <Link
-            href="/analytics"
-            className="px-4 py-2 rounded-md bg-gray-800 hover:bg-gray-500 transition"
-          >
-            Analytics
-          </Link>
-          <Link
-            href="/settings"
-            className="px-4 py-2 rounded-md bg-gray-800 hover:bg-gray-500 transition"
-          >
-            Settings
+            Create Project
           </Link>
         </div>
 
