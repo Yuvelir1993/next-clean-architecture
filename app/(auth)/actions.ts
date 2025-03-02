@@ -13,7 +13,7 @@ import {
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { InputParseError } from "@/src/business/entities/errors/common";
-import setBrowserCookies from "@/app/lib/cookies";
+import setBrowserCookies from "@/shared/cookie/cookie.service";
 
 export async function signUpAction(
   prevState: AuthFormState,

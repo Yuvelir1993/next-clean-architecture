@@ -1,8 +1,8 @@
 import { compare } from "bcrypt-ts";
 import { type IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
-import { Session, sessionSchema } from "@/src/business/entities/models/session";
-import { Cookie } from "@/src/business/entities/models/cookie";
+import { Session, sessionSchema } from "@/shared/session/session.schema";
+import { Cookie } from "@/shared/cookie/cookie.schema";
 import {
   SignUpUser,
   SignInUser,
@@ -21,6 +21,8 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { jwtDecode } from "jwt-decode";
+import { AWS_COGNITO_SESSION_COOKIE_NAME } from "@/shared/constants";
+import { getEmptySessionCookie } from "@/shared/cookie/cookie.service";
 
 @injectable()
 export class AuthenticationService implements IAuthenticationService {
@@ -139,7 +141,7 @@ export class AuthenticationService implements IAuthenticationService {
       const oneHour = new Date(Date.now() + 60 * 60 * 1000);
       const session = sessionSchema.parse({
         id: IdToken,
-        sessionName: "AwsCognitoSession",
+        sessionName: AWS_COGNITO_SESSION_COOKIE_NAME,
         userId: returnUser.id,
         userName: returnUser.username,
         expiresAt: oneHour,
@@ -169,22 +171,9 @@ export class AuthenticationService implements IAuthenticationService {
     }
   }
 
-  async invalidateSession(
-    sessionId: Session["id"]
-  ): Promise<{ blankCookie: Cookie }> {
+  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
     console.log("Invalidating session " + sessionId);
-    const blankCookie: Cookie = {
-      name: "AwsCognitoSession",
-      value: JSON.stringify({ session: null, userId: null }),
-      attributes: {
-        secure: true,
-        path: "/",
-        sameSite: "strict",
-        httpOnly: true,
-        maxAge: 3600,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
-      },
-    };
+    const blankCookie = getEmptySessionCookie();
     return { blankCookie };
   }
 

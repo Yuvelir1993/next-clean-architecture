@@ -1,0 +1,1 @@
+Here are all shared logic/ and constants used in UI, backend and middleware.

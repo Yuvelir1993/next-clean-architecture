@@ -1,42 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
+import { getSessionFromCookies } from "@/shared/session/session.service";
 
 const protectedRoutes = ["/dashboard"];
 const publicRoutes = ["/sign-in", "/sign-up", "/"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const extractedCookies = await cookies();
-
-  console.log(`Obtained cookies ${extractedCookies}`);
-  const sessionCookie = extractedCookies.get("AwsCognitoSession")?.value;
-
-  console.log(`Obtained session value ${sessionCookie}`);
-
-  if (!sessionCookie) {
-    return NextResponse.next();
-  }
-
-  if (protectedRoutes.includes(path) && !sessionCookie) {
-    return NextResponse.redirect(new URL("/sign-in", req.nextUrl));
-  }
-
-  let parsedSession;
+  let sessionData;
   try {
-    parsedSession = JSON.parse(sessionCookie);
+    sessionData = await getSessionFromCookies();
   } catch (error) {
-    console.error("Failed to parse session cookie", error);
+    console.error("Session extraction error:", error);
     return NextResponse.next();
   }
 
-  if (!parsedSession.session) {
-    console.error("No valid session token available");
-    return NextResponse.next();
-  }
-
-  const jwtToken = parsedSession.session;
-  const userId = parsedSession.userId;
+  const jwtToken = sessionData.session;
+  const userId = sessionData.userId;
 
   let decodedToken;
   try {
@@ -54,10 +34,9 @@ export default async function middleware(req: NextRequest) {
     `Middleware - token expires at '${expDate}' (current time: '${currentDate}')`
   );
 
-  // For public routes: if user is logged in, valid, and not expired, redirect to dashboard.
   if (
     publicRoutes.includes(path) &&
-    sessionCookie &&
+    sessionCookieValue &&
     userId &&
     currentDate < expDate
   ) {

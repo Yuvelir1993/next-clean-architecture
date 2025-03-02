@@ -7,13 +7,14 @@ import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { redirect } from "next/navigation";
 import { CreateProjectFormState } from "@/app/lib/definitions";
+import { AWS_COGNITO_SESSION_COOKIE_NAME } from "@/shared/constants";
 
 export async function signOutAction() {
   console.log("Signing out...");
 
   try {
     const cookieStore = cookies();
-    const sessionToken = (await cookieStore).get("AwsCognitoSession")?.value;
+    const sessionToken = (await cookieStore).get(AWS_COGNITO_SESSION_COOKIE_NAME)?.value;
 
     if (!sessionToken) {
       console.warn("No session token found.");
@@ -47,6 +48,16 @@ export async function createProjectAction(
   console.log(
     `Action previous state is ${prevState}. Form data is ${formData}`
   );
+
+  const cookieStore = cookies();
+  const sessionToken = (await cookieStore).get(AWS_COGNITO_SESSION_COOKIE_NAME)?.value;
+
+  if (!sessionToken) {
+    console.error(
+      "No session token found during project creation. Necessary to get the project owner!"
+    );
+    return;
+  }
 
   // Extract values from formData
   const projectName = formData.get("projectName") as string;
