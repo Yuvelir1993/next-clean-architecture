@@ -34,12 +34,7 @@ export default async function middleware(req: NextRequest) {
     `Middleware - token expires at '${expDate}' (current time: '${currentDate}')`
   );
 
-  if (
-    publicRoutes.includes(path) &&
-    sessionCookieValue &&
-    userId &&
-    currentDate < expDate
-  ) {
+  if (publicRoutes.includes(path) && userId && currentDate < expDate) {
     console.log(`Current session is valid for the user '${userId}'.`);
     if (!req.nextUrl.pathname.startsWith("/dashboard")) {
       console.log("Redirecting to the dashboard...");
