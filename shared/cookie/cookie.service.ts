@@ -35,7 +35,7 @@ export default async function setBrowserCookies(
 
 /**
  * Returns a Cookie representing an empty/invalidated session.
- * This function produces a value that conforms to your CookieSession type,
+ * This function produces a value that conforms to your Session type,
  * for example, using empty strings instead of nulls.
  */
 export function getEmptySessionCookie(): Cookie {

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtDecode } from "jwt-decode";
 import { getSessionFromCookies } from "@/shared/session/session.service";
 
 const protectedRoutes = ["/dashboard"];
@@ -15,20 +14,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const jwtToken = sessionData.session;
   const userId = sessionData.userId;
-
-  let decodedToken;
-  try {
-    decodedToken = jwtDecode(jwtToken);
-    console.debug("Successfully decoded token");
-  } catch (error) {
-    console.error("Failed to decode JWT", error);
-    return NextResponse.next();
-  }
-
-  const exp = decodedToken.exp;
-  const expDate = new Date(exp! * 1000);
+  const expDate = sessionData.expiresAt;
   const currentDate = new Date();
   console.log(
     `Middleware - token expires at '${expDate}' (current time: '${currentDate}')`
