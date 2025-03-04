@@ -106,37 +106,4 @@ export async function getProjects(): Promise<ProjectDTO[]> {
     }
     return [];
   }
-
-  // const dummyProjects: Project[] = [
-  //   {
-  //     id: "project-123",
-  //     name: "My Awesome Project",
-  //     owner: "Me",
-  //     description: "This is a description of my awesome project.",
-  //     repoLink: "https://github.com/username/my-awesome-project",
-  //   },
-  //   {
-  //     id: "project-124",
-  //     name: "Second Project",
-  //     owner: "You",
-  //     description: "This is a description of the second project.",
-  //     repoLink: "https://github.com/username/second-project",
-  //   },
-  //   {
-  //     id: "project-125",
-  //     name: "Third Project",
-  //     owner: "Us",
-  //     description: "This is a description of the third project.",
-  //     repoLink: "https://github.com/username/third-project",
-  //   },
-  //   {
-  //     id: "project-126",
-  //     name: "Fourth Project",
-  //     owner: "Them",
-  //     description: "This is a description of the fourth project.",
-  //     repoLink: "https://github.com/username/fourth-project",
-  //   },
-  // ];
-
-  // return dummyProjects;
 }
