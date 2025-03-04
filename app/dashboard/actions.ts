@@ -8,7 +8,6 @@ import { IAuthenticationController } from "@/src/adapters/controllers/auth.contr
 import { redirect } from "next/navigation";
 import { CreateProjectFormState } from "@/app/lib/definitions";
 import { AWS_COGNITO_SESSION_COOKIE_NAME } from "@/shared/constants";
-import { Project } from "@/src/business/aggregates/project";
 import { getSessionFromCookies } from "@/shared/session/session.service";
 import { SessionValidationError } from "@/shared/session/session.errors";
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
