@@ -3,7 +3,7 @@
 import { Input } from "@/app/(auth)/_components/input";
 import { useActionState } from "react";
 import { signInAction } from "@/app/(auth)/actions";
-import UIErrorAuth from "@/app/(auth)/_components/errors/UIErrorsAuth";
+import UIErrorAuth from "@/app/(auth)/_components/errors/ErrorsAuth";
 
 export default function SignInForm() {
   const [state, formAction, pending] = useActionState(signInAction, undefined);

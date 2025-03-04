@@ -1,0 +1,2 @@
+Here are DTOs for all business-level aggregates, entities and value objects.
+The value of it is changing anything in the business model will not propagate this change to all UI components where it's used (such errors sometimes is extremely tricky to catch and very easy to overlook!)

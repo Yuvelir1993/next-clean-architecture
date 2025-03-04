@@ -40,9 +40,9 @@ type ProjectInput = z.infer<typeof projectInputSchema>;
  * by using value objects and its own methods.
  */
 export class Project {
-  public readonly projectId: string;
-  public readonly owner: User;
+  public readonly id: string;
   public readonly name: string;
+  public readonly owner: User;
   public readonly description?: string;
   public readonly githubRepo: GitHubRepo;
   public version: number;
@@ -50,18 +50,18 @@ export class Project {
   public updatedAt: Date;
 
   private constructor(props: {
-    projectId: string;
-    owner: User;
+    id: string;
     name: string;
+    owner: User;
     description?: string;
     githubRepo: GitHubRepo;
     version: number;
     createdAt: Date;
     updatedAt: Date;
   }) {
-    this.projectId = props.projectId;
-    this.owner = props.owner;
+    this.id = props.id;
     this.name = props.name;
+    this.owner = props.owner;
     this.description = props.description;
     this.githubRepo = props.githubRepo;
     this.version = props.version;
@@ -80,11 +80,37 @@ export class Project {
     const now = new Date();
 
     return new Project({
-      projectId: uuidv4(),
-      owner: validatedInput.owner,
+      id: uuidv4(),
       name: validatedInput.name,
+      owner: validatedInput.owner,
       description: validatedInput.description,
       githubRepo,
+      version: 1,
+      createdAt: now,
+      updatedAt: now,
+    });
+  }
+
+  /**
+   * Factory method to create an empty/dummy Project.
+   */
+  public static createEmpty(): Project {
+    const now = new Date();
+    const dummyUser: User = {
+      id: "dummy-id",
+      email: "dummy@example.com",
+      username: "dummyUser",
+      password: "dummyPassword",
+    };
+    return new Project({
+      id: uuidv4(),
+      name: "Dummy",
+      owner: dummyUser,
+      description: "Dummy project description",
+      // Use a valid placeholder URL for the GitHub repository.
+      githubRepo: GitHubRepo.create(
+        "https://github.com/placeholder/placeholder"
+      ),
       version: 1,
       createdAt: now,
       updatedAt: now,
