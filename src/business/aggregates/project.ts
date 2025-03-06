@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { User, userSchema } from "@/src/business/entities/models/user";
-import { GitHubRepo } from "@/src/business/value-objects/gitHubRepo";
+import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
 
 /**
  * Zod schema for raw project input.
@@ -25,7 +25,7 @@ export class Project {
   public readonly name: string;
   public readonly owner: User;
   public readonly description?: string;
-  public readonly githubRepo: GitHubRepo;
+  public readonly githubRepo: GitHubRepoURL;
   public version: number;
   public createdAt: Date;
   public updatedAt: Date;
@@ -35,7 +35,7 @@ export class Project {
     name: string;
     owner: User;
     description?: string;
-    githubRepo: GitHubRepo;
+    githubRepo: GitHubRepoURL;
     version: number;
     createdAt: Date;
     updatedAt: Date;
@@ -57,7 +57,7 @@ export class Project {
    */
   public static create(input: ProjectInput): Project {
     const validatedInput = projectInputSchema.parse(input);
-    const githubRepo = GitHubRepo.create(validatedInput.repoLink);
+    const githubRepo = GitHubRepoURL.create(validatedInput.repoLink);
     const now = new Date();
 
     return new Project({
@@ -89,7 +89,7 @@ export class Project {
       owner: dummyUser,
       description: "Dummy project description",
       // Use a valid placeholder URL for the GitHub repository.
-      githubRepo: GitHubRepo.create(
+      githubRepo: GitHubRepoURL.create(
         "https://github.com/placeholder/placeholder"
       ),
       version: 1,
