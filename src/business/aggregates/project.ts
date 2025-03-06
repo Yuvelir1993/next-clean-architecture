@@ -1,26 +1,7 @@
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { User, userSchema } from "../entities/models/user";
-import { ProjectCreationError } from "./errors/project";
-
-/**
- * Value Object for GitHub repository URL.
- */
-class GitHubRepo {
-  private constructor(private readonly url: string) {}
-
-  public static create(url: string): GitHubRepo {
-    const regex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
-    if (!regex.test(url)) {
-      throw new ProjectCreationError("Invalid GitHub repository URL");
-    }
-    return new GitHubRepo(url);
-  }
-
-  public get value(): string {
-    return this.url;
-  }
-}
+import { User, userSchema } from "@/src/business/entities/models/user";
+import { GitHubRepo } from "@/src/business/value-objects/gitHubRepo";
 
 /**
  * Zod schema for raw project input.

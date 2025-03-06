@@ -1,6 +1,6 @@
 "use client";
 
-import { ProjectDTO } from "@/dto/aggregates/project.dto";
+import { ProjectDTO } from "@/app/lib/dto/aggregates/project.dto";
 import React from "react";
 
 interface ProjectCardProps {

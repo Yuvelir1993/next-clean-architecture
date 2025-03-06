@@ -10,4 +10,6 @@ export interface IProjectRepository {
    * @returns list of projects or 'undefined' in case of any error.
    */
   getProjectsOfUser(userId: string): Promise<Project[] | undefined>;
+
+  createProject(userId: string, projectId: string): Promise<boolean>;
 }

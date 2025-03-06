@@ -12,7 +12,7 @@ import { getSessionFromCookies } from "@/shared/session/session.service";
 import { SessionValidationError } from "@/shared/session/session.errors";
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
 import { ProjectError } from "@/src/business/entities/errors/common";
-import { mapProjectToDTO, ProjectDTO } from "@/dto/aggregates/project.dto";
+import { mapProjectToDTO, ProjectDTO } from "@/app/lib/dto/aggregates/project.dto";
 
 export async function signOutAction() {
   console.log("Signing out...");
