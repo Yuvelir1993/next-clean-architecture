@@ -1,4 +1,5 @@
 import { Project } from "@/src/business/aggregates/project";
+import { ProjectInfraDTO } from "@/src/infrastructure/dto/project.dto";
 
 /**
  * Interface for getting projects functionality from the external databases.
@@ -11,5 +12,9 @@ export interface IProjectRepository {
    */
   getProjectsOfUser(userId: string): Promise<Project[] | undefined>;
 
-  createProject(userId: string, projectId: string): Promise<boolean>;
+  /**
+   * Creating a project.
+   * @param project - project DTO which keeps project-related data necessary for it's creation
+   */
+  createProjectOfUser(userId: string, project: ProjectInfraDTO): Promise<boolean>;
 }

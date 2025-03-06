@@ -1,13 +1,13 @@
 import { Project } from "@/src/business/aggregates/project";
 
-export interface ProjectDTO {
+export interface ProjectUiDTO {
   id: string;
   name: string;
   description?: string;
   githubRepoUrl: string;
 }
 
-export function mapProjectToDTO(project: Project): ProjectDTO {
+export function mapProjectToUiDTO(project: Project): ProjectUiDTO {
   return {
     id: project.id,
     name: project.name,

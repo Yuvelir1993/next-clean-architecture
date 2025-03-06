@@ -12,5 +12,5 @@ export interface IProjectController {
    * @param user - The user for whom projects should be retrieved.
    * @returns A promise that resolves to an array of Project objects.
    */
-  getProjects(user: Pick<User, "id">): Promise<Project[]>;
+  getProjects(userId: Pick<User, "id">): Promise<Project[]>;
 }

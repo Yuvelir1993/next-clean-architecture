@@ -1,10 +1,10 @@
 "use client";
 
-import { ProjectDTO } from "@/app/lib/dto/aggregates/project.dto";
+import { ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
 import React from "react";
 
 interface ProjectCardProps {
-  project: ProjectDTO;
+  project: ProjectUiDTO;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {

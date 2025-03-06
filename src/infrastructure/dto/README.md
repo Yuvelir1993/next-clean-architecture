@@ -1,0 +1,2 @@
+Here are DTOs for all business-level aggregates, entities and value objects passed to infrastructure layer.
+The value of it is to keep the data related to any business parts cohesive but flat with only bare-minimum info while passing it to services or repositories.

@@ -12,7 +12,7 @@ import { getSessionFromCookies } from "@/shared/session/session.service";
 import { SessionValidationError } from "@/shared/session/session.errors";
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
 import { ProjectError } from "@/src/business/entities/errors/common";
-import { mapProjectToDTO, ProjectDTO } from "@/app/lib/dto/aggregates/project.dto";
+import { mapProjectToUiDTO, ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
 
 export async function signOutAction() {
   console.log("Signing out...");
@@ -79,7 +79,7 @@ export async function createProjectAction(
   };
 }
 
-export async function getProjects(): Promise<ProjectDTO[]> {
+export async function getProjects(): Promise<ProjectUiDTO[]> {
   console.log("Getting projects...");
 
   try {
@@ -91,7 +91,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
     const businessProjects = projectController.getProjects({
       id: sessionData.userId,
     });
-    return (await businessProjects).map(mapProjectToDTO);
+    return (await businessProjects).map(mapProjectToUiDTO);
   } catch (error) {
     if (error instanceof SessionValidationError) {
       console.error(
