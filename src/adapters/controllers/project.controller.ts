@@ -37,8 +37,8 @@ export class ProjectController implements IProjectController {
       return {
         success: true,
         project: await this._projectUseCases.createProject({
-          name: input.name,
           owner: input.owner,
+          name: input.name,
           description: input.description,
           url: input.gitHubRepoUrl,
         }),

@@ -20,9 +20,9 @@ export class ProjectUseCases implements IProjectUseCases {
   }
 
   async createProject(input: {
+    owner: string;
     name: string;
     description: string;
-    owner: string;
     url: string;
   }): Promise<Project> {
     const projectData = {
