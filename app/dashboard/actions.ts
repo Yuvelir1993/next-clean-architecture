@@ -1,18 +1,25 @@
 "use server";
 
 import { cookies } from "next/headers";
-
-import { getInjection } from "@/di/container";
-import { DI_SYMBOLS } from "@/di/types";
-import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { redirect } from "next/navigation";
-import { CreateProjectFormState } from "@/app/lib/definitions";
+
 import { AWS_COGNITO_SESSION_COOKIE_NAME } from "@/shared/constants";
 import { getSessionFromCookies } from "@/shared/session/session.service";
 import { SessionValidationError } from "@/shared/session/session.errors";
-import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
+
+import { CreateProjectFormState } from "@/app/lib/definitions";
+
+import { getInjection } from "@/di/container";
+import { DI_SYMBOLS } from "@/di/types";
+
 import { ProjectError } from "@/src/business/entities/errors/common";
-import { mapProjectToUiDTO, ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
+
+import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
+import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
+import {
+  mapProjectToUiDTO,
+  ProjectUiDTO,
+} from "@/src/adapters/dto/aggregates/project.dto";
 
 export async function signOutAction() {
   console.log("Signing out...");
