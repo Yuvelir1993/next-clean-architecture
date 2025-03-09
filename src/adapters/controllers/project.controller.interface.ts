@@ -1,5 +1,17 @@
 import { Project } from "@/src/business/aggregates/project";
-import { User } from "@/src/business/entities/models/user";
+
+import {
+  CreateProjectInput,
+  GetProjectsInput,
+} from "@/src/adapters/controllers/project.controller.inputSchemas";
+
+export type GetProjectsResult =
+  | { success: true; projects: Project[] }
+  | { success: false; errors: string[] };
+
+export type CreateProjectResult =
+  | { success: true; project: Project }
+  | { success: false; errors: string[] };
 
 /**
  * Interface for the Project Controller.
@@ -9,8 +21,18 @@ export interface IProjectController {
   /**
    * Retrieves a list of projects for the given user.
    *
-   * @param user - The user for whom projects should be retrieved.
-   * @returns A promise that resolves to an array of Project objects.
+   * @param userId - The user for whom projects should be retrieved.
+   * @returns A promise that resolves to a GetProjectsResult, indicating success with an array of Project objects,
+   * or failure with an array of error messages.
    */
-  getProjects(userId: Pick<User, "id">): Promise<Project[]>;
+  getProjects(input: GetProjectsInput): Promise<GetProjectsResult>;
+
+  /**
+   * Creates a new project.
+   *
+   * @param input - Partial input based on the createProjectInputSchema.
+   * @returns A promise that resolves to a CreateProjectResult, indicating success with the created project,
+   * or failure with an array of error messages.
+   */
+  createProject(input: CreateProjectInput): Promise<CreateProjectResult>;
 }

@@ -7,7 +7,10 @@ import { AWS_COGNITO_SESSION_COOKIE_NAME } from "@/shared/constants";
 import { getSessionFromCookies } from "@/shared/session/session.service";
 import { SessionValidationError } from "@/shared/session/session.errors";
 
-import { CreateProjectFormState } from "@/app/lib/definitions";
+import {
+  CreateProjectFormState,
+  CreateProjectSchema,
+} from "@/app/lib/definitions";
 
 import { getInjection } from "@/di/container";
 import { DI_SYMBOLS } from "@/di/types";
@@ -25,8 +28,8 @@ export async function signOutAction() {
   console.log("Signing out...");
 
   try {
-    const cookieStore = cookies();
-    const sessionToken = (await cookieStore).get(
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get(
       AWS_COGNITO_SESSION_COOKIE_NAME
     )?.value;
 
@@ -63,10 +66,8 @@ export async function createProjectAction(
     `Action previous state is ${prevState}. Form data is ${formData}`
   );
 
-  const cookieStore = cookies();
-  const sessionToken = (await cookieStore).get(
-    AWS_COGNITO_SESSION_COOKIE_NAME
-  )?.value;
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get(AWS_COGNITO_SESSION_COOKIE_NAME)?.value;
 
   if (!sessionToken) {
     console.error(
@@ -75,12 +76,25 @@ export async function createProjectAction(
     return;
   }
 
-  // Extract values from formData
   const projectName = formData.get("projectName") as string;
   const description = formData.get("description") as string;
   const repoLink = formData.get("repoLink") as string;
+
+  const validatedFields = CreateProjectSchema.safeParse({
+    projectName,
+    repoLink,
+    description,
+  });
+
+  if (!validatedFields.success) {
+    console.error("Error validating fields");
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
   console.log(`Creating project: ${projectName}, ${description}, ${repoLink}`);
-  // Return dummy data to simulate a successful creation.
+
   return {
     message: "Project created successfully",
   };
@@ -94,11 +108,25 @@ export async function getProjects(): Promise<ProjectUiDTO[]> {
     const projectController = getInjection<IProjectController>(
       DI_SYMBOLS.IProjectController
     );
+    const userId = sessionData.userId;
 
-    const businessProjects = projectController.getProjects({
-      id: sessionData.userId,
+    const businessProjects = await projectController.getProjects({
+      userId: userId,
     });
-    return (await businessProjects).map(mapProjectToUiDTO);
+
+    if (businessProjects.success) {
+      return businessProjects.projects.map(mapProjectToUiDTO);
+    } else if (businessProjects.errors) {
+      console.error(
+        `Errors during getting projects for user '${userId}'. Errors: '${businessProjects.errors}'`
+      );
+      return [];
+    } else {
+      console.error(
+        `Unhandled error during getting projects for user '${userId}'`
+      );
+      return [];
+    }
   } catch (error) {
     if (error instanceof SessionValidationError) {
       console.error(
