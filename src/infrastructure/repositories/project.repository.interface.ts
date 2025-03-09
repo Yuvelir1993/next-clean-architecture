@@ -1,20 +1,36 @@
 import { Project } from "@/src/business/aggregates/project";
-import { ProjectInfraDTO } from "@/src/infrastructure/dto/project.dto";
 
 /**
- * Interface for getting projects functionality from the external databases.
+ * Interface for managing projects in the external database.
  */
 export interface IProjectRepository {
   /**
-   * Getting all projects belonging to this user.
-   * @param userId - user id which owns projects to be retrieved.
-   * @returns list of projects or 'undefined' in case of any error.
+   * Retrieves all projects belonging to a specific user.
+   *
+   * @param userData - An object containing the user's details.
+   * @param userData.userId - The unique identifier of the user whose projects should be retrieved.
+   * @returns A promise that resolves to an array of `Project` objects if successful,
+   *          or `undefined` if an error occurs.
+   * @throws Error if the retrieval operation encounters unexpected issues.
    */
-  getProjectsOfUser(userId: string): Promise<Project[] | undefined>;
+  getProjectsOfUser(userData: {
+    userId: string;
+  }): Promise<Project[] | undefined>;
 
   /**
-   * Creating a project.
-   * @param project - project DTO which keeps project-related data necessary for it's creation
+   * Creates a new project for a specific user.
+   *
+   * @param projectData - An object containing project details.
+   * @param projectData.name - The name of the project.
+   * @param projectData.description - A brief description of the project (optional).
+   * @param projectData.url - The GitHub repository URL associated with the project.
+   * @param userData - An object containing the user's details.
+   * @param userData.userId - The unique identifier of the user who owns the project.
+   * @returns A promise that resolves to the created `Project` instance if successful.
+   * @throws Error if project creation fails due to invalid input, insufficient permissions, or system errors.
    */
-  createProjectOfUser(userId: string, project: ProjectInfraDTO): Promise<boolean>;
+  createProjectOfUser(
+    projectData: { name: string; description: string; url: string },
+    userData: { userId: string }
+  ): Promise<Project>;
 }

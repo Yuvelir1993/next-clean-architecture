@@ -12,11 +12,11 @@ import {
   IProjectController,
 } from "@/src/adapters/controllers/project.controller.interface";
 import {
-  InputParseError,
   NotFoundError,
   ProjectError,
 } from "@/src/business/entities/errors/common";
 import { NoProjectsFoundError } from "@/src/business/entities/errors/project";
+import { ProjectCreationError } from "@/src/business/aggregates/errors/project";
 
 /**
  * ProjectController is a business-relevant entry point to execute projects use cases and services.
@@ -28,7 +28,30 @@ export class ProjectController implements IProjectController {
     private readonly _projectUseCases: IProjectUseCases
   ) {}
 
-  createProject(input: CreateProjectInput): Promise<CreateProjectResult> {}
+  public async createProject(
+    input: CreateProjectInput
+  ): Promise<CreateProjectResult> {
+    console.log(`Creating new project '${input.name}' for '${input.owner}'`);
+
+    try {
+      return {
+        success: true,
+        project: await this._projectUseCases.createProject({
+          name: input.name,
+          owner: input.owner,
+          description: input.description,
+          url: input.gitHubRepoUrl,
+        }),
+      };
+    } catch (error) {
+      if (error instanceof ProjectCreationError) {
+        throw new ProjectError(`Could not create project for '${input.owner}'`);
+      }
+      throw new ProjectError(
+        `Unexpected error when trying to create project '${input.name}' for user '${input.owner}'`
+      );
+    }
+  }
 
   public async getProjects(
     input: GetProjectsInput

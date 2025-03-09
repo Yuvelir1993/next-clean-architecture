@@ -8,4 +8,22 @@ export interface IProjectUseCases {
    * @returns A Promise resolving to a Project aggregate.
    */
   getProjects(input: { userId: string }): Promise<Project[]>;
+
+  /**
+   * Creates a new project with the given details.
+   *
+   * @param input - The data object required to create a project.
+   * @param input.name - The name of the project.
+   * @param input.description - A brief description of the project.
+   * @param input.owner - The project's owner identity.
+   * @param input.url - The repository URL associated with the project.
+   * @returns A promise that resolves to the created Project instance.
+   * @throws Error if the project creation fails due to invalid data or system issues.
+   */
+  createProject(input: {
+    name: string;
+    description: string;
+    owner: string;
+    url: string;
+  }): Promise<Project>;
 }

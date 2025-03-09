@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createProjectInputSchema = z.object({
   name: z.string().min(1, { message: "Project name is required." }),
-  description: z.string().optional(),
+  description: z.string(),
   owner: z.string().min(1, { message: "Project owner is required." }),
   gitHubRepoUrl: z
     .string()
