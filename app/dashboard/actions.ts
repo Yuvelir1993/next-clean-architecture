@@ -100,7 +100,7 @@ export async function createProjectAction(
   };
 }
 
-export async function getProjects(): Promise<ProjectUiDTO[]> {
+export async function getProjectsAction(): Promise<ProjectUiDTO[]> {
   console.log("Getting projects...");
 
   try {

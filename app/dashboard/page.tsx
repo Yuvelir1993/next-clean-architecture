@@ -1,10 +1,10 @@
 import React from "react";
 import ProjectCard from "@/app/dashboard/_components/projectCard";
-import { getProjects } from "@/app/dashboard/actions";
+import { getProjectsAction } from "@/app/dashboard/actions";
 import ErrorRetrieveProjects from "@/app/dashboard/_components/errors/ErrorRetrieveProjects";
 
 export default async function Dashboard() {
-  const projects = await getProjects();
+  const projects = await getProjectsAction();
 
   if (projects.length === 0) {
     return <ErrorRetrieveProjects />;
