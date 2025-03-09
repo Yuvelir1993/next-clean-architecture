@@ -6,7 +6,7 @@ export class ProjectRepository implements IProjectRepository {
     projectData: { name: string; description: string; url: string },
     userData: { userId: string }
   ): Promise<Project> {
-    console.log(`Creating project '${projectData}F' in AWS DynamoDB for user '${userData}'`);
+    console.log(`Creating project '${projectData}' in AWS DynamoDB for user '${userData}'`);
     throw new Error("Method not implemented.");
   }
 

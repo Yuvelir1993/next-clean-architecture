@@ -24,26 +24,39 @@ import { ProjectCreationError } from "@/src/business/aggregates/errors/project";
 @injectable()
 export class ProjectController implements IProjectController {
   constructor(
-    @inject(DI_SYMBOLS.IAuthenticationUseCases)
+    @inject(DI_SYMBOLS.IProjectUseCases)
     private readonly _projectUseCases: IProjectUseCases
   ) {}
 
   public async createProject(
     input: CreateProjectInput
   ): Promise<CreateProjectResult> {
-    console.log(`Creating new project '${input.name}' for '${input.owner}'`);
+    console.log(
+      `Controller -> Creating new project '${input.name}' for '${input.owner}'`
+    );
 
     try {
-      return {
-        success: true,
-        project: await this._projectUseCases.createProject({
+      const createdProjectBusinessEntity =
+        await this._projectUseCases.createProject({
           owner: input.owner,
           name: input.name,
           description: input.description,
           url: input.gitHubRepoUrl,
-        }),
+        });
+
+      return {
+        success: true,
+        project: createdProjectBusinessEntity,
       };
     } catch (error) {
+      console.error(
+        `Controller -> Error while creating project: ${JSON.stringify(
+          input,
+          null,
+          2
+        )}`
+      );
+
       if (error instanceof ProjectCreationError) {
         throw new ProjectError(`Could not create project for '${input.owner}'`);
       }
@@ -56,7 +69,7 @@ export class ProjectController implements IProjectController {
   public async getProjects(
     input: GetProjectsInput
   ): Promise<GetProjectsResult> {
-    console.log(`Retrieving all projects for ${input.userId}`);
+    console.log(`Controller -> Retrieving all projects for ${input.userId}`);
     const userId = input.userId;
 
     try {

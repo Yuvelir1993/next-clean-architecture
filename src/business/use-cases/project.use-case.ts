@@ -13,18 +13,20 @@ import {
 @injectable()
 export class ProjectUseCases implements IProjectUseCases {
   constructor(
-    @inject(DI_SYMBOLS.IUsersRepository)
+    @inject(DI_SYMBOLS.IProjectRepository)
     private readonly _projectRepository: IProjectRepository
   ) {
     console.log("Instantiated 'AuthenticationUseCases'");
   }
 
-  async createProject(input: {
+  public async createProject(input: {
     owner: string;
     name: string;
     description: string;
     url: string;
   }): Promise<Project> {
+    console.log(`Use Case -> Creating new project '${input}'`);
+
     const projectData = {
       name: input.name,
       description: input.description,
@@ -44,7 +46,9 @@ export class ProjectUseCases implements IProjectUseCases {
     return project;
   }
 
-  async getProjects(input: { userId: string }): Promise<Project[]> {
+  public async getProjects(input: { userId: string }): Promise<Project[]> {
+    console.log(`Use Case -> Getting existing project for '${input}'`);
+
     const projects = await this._projectRepository.getProjectsOfUser({
       userId: input.userId,
     });
