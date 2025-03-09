@@ -6,7 +6,7 @@ import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import {
   AuthFormState,
   SignInFormSchema,
-  SignupFormSchema as SignUpFormSchema,
+  SignUpFormSchema as SignUpFormSchema,
   AuthSchema,
 } from "@/app/lib/definitions";
 

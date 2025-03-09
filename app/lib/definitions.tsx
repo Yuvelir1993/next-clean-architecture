@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 /**
- * Auth
+ * --------------------------------------------------------
+ * ------------------------- Auth -------------------------
+ * --------------------------------------------------------
  */
 
 export const AuthSchema = z.object({
@@ -17,11 +19,9 @@ export const AuthSchema = z.object({
     .trim(),
 });
 
-// Sign-in schema (same as AuthSchema)
 export const SignInFormSchema = AuthSchema;
 
-// Sign-up schema (extends AuthSchema with name field)
-export const SignupFormSchema = AuthSchema.extend({
+export const SignUpFormSchema = AuthSchema.extend({
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long." })
@@ -40,7 +40,9 @@ export type AuthFormState =
   | undefined;
 
 /**
- * Projects
+ * --------------------------------------------------------
+ * ----------------------- Projects -----------------------
+ * --------------------------------------------------------
  */
 export const CreateProjectSchema = z.object({
   projectName: z.string().min(1, { message: "Project name is required." }),
