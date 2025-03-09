@@ -85,12 +85,16 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
               Cancel
             </button>
             <button
-              type={state?.message ? "button" : "submit"}
+              type={state?.project?.name ? "button" : "submit"}
               className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
               disabled={pending}
-              onClick={state?.message ? onClose : undefined}
+              onClick={state?.project?.name ? onClose : undefined}
             >
-              {pending ? "Creating..." : state?.message ? "Created!" : "Create"}
+              {pending
+                ? "Creating..."
+                : state?.project?.name
+                ? "Created!"
+                : "Create"}
             </button>
           </div>
         </form>

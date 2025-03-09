@@ -1,11 +1,12 @@
 import { z } from "zod";
 
+import { ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
+
 /**
  * --------------------------------------------------------
  * ------------------------- Auth -------------------------
  * --------------------------------------------------------
  */
-
 export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
@@ -57,6 +58,6 @@ export type CreateProjectFormErrors =
 export type CreateProjectFormState =
   | {
       errors?: CreateProjectFormErrors;
-      message?: string;
+      project?: ProjectUiDTO;
     }
   | undefined;

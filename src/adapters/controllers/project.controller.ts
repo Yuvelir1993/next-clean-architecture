@@ -2,9 +2,15 @@ import { injectable, inject } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 import type { IProjectUseCases } from "@/src/business/use-cases/project.use-cases.interface";
 
-import { User } from "@/src/business/entities/models/user";
-import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
-import { Project } from "@/src/business/aggregates/project";
+import {
+  CreateProjectInput,
+  GetProjectsInput,
+} from "@/src/adapters/controllers/project.controller.inputSchemas";
+import {
+  CreateProjectResult,
+  GetProjectsResult,
+  IProjectController,
+} from "@/src/adapters/controllers/project.controller.interface";
 import {
   InputParseError,
   NotFoundError,
@@ -22,17 +28,19 @@ export class ProjectController implements IProjectController {
     private readonly _projectUseCases: IProjectUseCases
   ) {}
 
-  public async getProjects(user: Pick<User, "id">): Promise<Project[]> {
-    console.log(`Retrieving all projects for ${user}`);
-    const userId = user.id;
-    if (!userId) {
-      throw new InputParseError("Invalid data", {
-        cause: "User id is empty",
-      });
-    }
+  createProject(input: CreateProjectInput): Promise<CreateProjectResult> {}
+
+  public async getProjects(
+    input: GetProjectsInput
+  ): Promise<GetProjectsResult> {
+    console.log(`Retrieving all projects for ${input.userId}`);
+    const userId = input.userId;
 
     try {
-      return await this._projectUseCases.getProjects({ userId });
+      return {
+        success: true,
+        projects: await this._projectUseCases.getProjects({ userId }),
+      };
     } catch (error) {
       if (error instanceof NoProjectsFoundError) {
         throw new NotFoundError("No projects has been found.");

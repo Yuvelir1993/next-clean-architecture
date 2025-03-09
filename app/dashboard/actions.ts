@@ -93,11 +93,38 @@ export async function createProjectAction(
     };
   }
 
-  console.log(`Creating project: ${projectName}, ${description}, ${repoLink}`);
+  try {
+    console.log(
+      `Creating project: ${projectName}, ${description}, ${repoLink}`
+    );
+    const sessionData = await getSessionFromCookies();
+    const projectController = getInjection<IProjectController>(
+      DI_SYMBOLS.IProjectController
+    );
+    const userId = sessionData.userId;
+    const createdProject = await projectController.createProject({
+      name: projectName,
+      description: description,
+      owner: userId,
+      gitHubRepoUrl: repoLink,
+    });
 
-  return {
-    message: "Project created successfully",
-  };
+    if (createdProject.success) {
+      return { project: mapProjectToUiDTO(createdProject.project) };
+    }
+  } catch (error) {
+    if (error instanceof SessionValidationError) {
+      console.error(
+        `Was not able to parse current user's session! Error: '${error.message}', Cause: '${error.cause}'`
+      );
+    } else if (error instanceof ProjectError) {
+      console.error(
+        `Was not able to retrieve user's projects! Error: '${error.message}', Cause: '${error.cause}'`
+      );
+    } else {
+      console.error("Unhandled session extraction error:", error);
+    }
+  }
 }
 
 export async function getProjectsAction(): Promise<ProjectUiDTO[]> {
