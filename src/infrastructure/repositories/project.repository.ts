@@ -18,7 +18,7 @@ export class ProjectRepository implements IProjectRepository {
     );
     const client = new DynamoDBClient({});
     const docClient = DynamoDBDocumentClient.from(client);
-    const newProject = Project.create({
+    const newProjectBusinessEntity = Project.create({
       name: projectData.name,
       description: projectData.description,
       repoLink: projectData.url,
@@ -29,25 +29,34 @@ export class ProjectRepository implements IProjectRepository {
       },
     });
 
-    console.log(`Defined business object Project '${newProject}'`);
+    console.log(
+      `Defined business object Project '${newProjectBusinessEntity}'`
+    );
+
+    const PK = `USER#${newProjectBusinessEntity.owner.id}`;
+    const SK = `PROJECT#${newProjectBusinessEntity.id}`;
 
     const putCommand = new PutCommand({
       TableName: "Projects",
       Item: {
-        // In 'client-dynamodb', the AttributeValue would be required (`year: { N: 1981 }`)
-        // 'lib-dynamodb' simplifies the usage ( `year: 1981` )
-        year: 1981,
-        // The preceding KeySchema defines 'title' as our sort (RANGE) key, so 'title'
-        // is required.
-        title: "The Evil Dead",
-        // Every other attribute is optional.
-        info: {
-          genres: ["Horror"],
-        },
+        PK,
+        SK,
+        projectId: newProjectBusinessEntity.id,
+        name: newProjectBusinessEntity.name,
+        description: newProjectBusinessEntity.description,
+        gitHubRepoUrl: newProjectBusinessEntity.githubRepo.value,
+        version: newProjectBusinessEntity.version,
+        createdAt: newProjectBusinessEntity.createdAt.toISOString(),
+        updatedAt: newProjectBusinessEntity.updatedAt.toISOString(),
       },
     });
     await docClient.send(putCommand);
-    return Project.createEmpty();
+
+    console.log(
+      `Project '${SK}' of owner '${PK}' successfully persisted in DynamoDB.`
+    );
+
+    return newProjectBusinessEntity;
   }
 
   async getProjectsOfUser(userData: {
