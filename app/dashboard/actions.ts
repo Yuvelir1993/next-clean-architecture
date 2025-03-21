@@ -101,11 +101,14 @@ export async function createProjectAction(
     const projectController = getInjection<IProjectController>(
       DI_SYMBOLS.IProjectController
     );
-    const userId = sessionData.userId;
     const createdProject = await projectController.createProject({
       name: projectName,
       description: description,
-      owner: userId,
+      owner: {
+        id: sessionData.userId,
+        username: sessionData.userName,
+        email: "randomEmail@gmail.com",
+      },
       gitHubRepoUrl: repoLink,
     });
 

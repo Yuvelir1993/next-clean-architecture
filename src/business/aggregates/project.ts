@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { User, userSchema } from "@/src/business/entities/models/user";
+import {
+  ProjectOwner,
+  User,
+  projectOwnerSchema,
+} from "@/src/business/entities/models/user";
 import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
 
 /**
@@ -11,7 +15,7 @@ const projectInputSchema = z.object({
   name: z.string().min(1, { message: "Project name is required" }),
   description: z.string().optional(),
   repoLink: z.string().url(),
-  owner: userSchema, // including the full User entity
+  owner: projectOwnerSchema,
 });
 type ProjectInput = z.infer<typeof projectInputSchema>;
 
@@ -23,7 +27,7 @@ type ProjectInput = z.infer<typeof projectInputSchema>;
 export class Project {
   public readonly id: string;
   public readonly name: string;
-  public readonly owner: User;
+  public readonly owner: ProjectOwner;
   public readonly description?: string;
   public readonly githubRepo: GitHubRepoURL;
   public version: number;
@@ -33,7 +37,7 @@ export class Project {
   private constructor(props: {
     id: string;
     name: string;
-    owner: User;
+    owner: ProjectOwner;
     description?: string;
     githubRepo: GitHubRepoURL;
     version: number;

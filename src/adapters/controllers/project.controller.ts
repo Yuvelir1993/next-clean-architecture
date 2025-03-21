@@ -38,7 +38,11 @@ export class ProjectController implements IProjectController {
     try {
       const createdProjectBusinessEntity =
         await this._projectUseCases.createProject({
-          owner: input.owner,
+          owner: {
+            userId: input.owner.id,
+            userName: input.owner.username,
+            userEmail: input.owner.email,
+          },
           name: input.name,
           description: input.description,
           url: input.gitHubRepoUrl,

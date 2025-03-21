@@ -24,13 +24,13 @@ export interface IProjectRepository {
    * @param projectData.name - The name of the project.
    * @param projectData.description - A brief description of the project (optional).
    * @param projectData.url - The GitHub repository URL associated with the project.
-   * @param userData - An object containing the user's details.
+   * @param projectOwner - An object containing the user's details.
    * @param userData.userId - The unique identifier of the user who owns the project.
    * @returns A promise that resolves to the created `Project` instance if successful.
    * @throws Error if project creation fails due to invalid input, insufficient permissions, or system errors.
    */
   createProjectOfUser(
     projectData: { name: string; description: string; url: string },
-    userData: { userId: string }
+    projectOwner: { userId: string; userEmail: string; userName: string }
   ): Promise<Project>;
 }

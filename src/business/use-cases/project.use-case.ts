@@ -20,7 +20,7 @@ export class ProjectUseCases implements IProjectUseCases {
   }
 
   public async createProject(input: {
-    owner: string;
+    owner: { userId: string; userEmail: string; userName: string };
     name: string;
     description: string;
     url: string;
@@ -32,11 +32,10 @@ export class ProjectUseCases implements IProjectUseCases {
       description: input.description,
       url: input.url,
     };
-    const userData = { userId: input.owner };
 
     const project = await this._projectRepository.createProjectOfUser(
       projectData,
-      userData
+      input.owner
     );
     if (!project) {
       throw new ProjectCreationError(

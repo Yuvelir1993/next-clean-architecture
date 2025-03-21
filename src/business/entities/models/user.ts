@@ -31,3 +31,6 @@ export const signInUserSchema = userSchema.pick({ email: true }).merge(
 );
 
 export type SignInUser = z.infer<typeof signInUserSchema>;
+
+export const projectOwnerSchema = userSchema.omit({ password: true });
+export type ProjectOwner = z.infer<typeof projectOwnerSchema>;

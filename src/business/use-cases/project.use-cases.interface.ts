@@ -21,7 +21,7 @@ export interface IProjectUseCases {
    * @throws Error if the project creation fails due to invalid data or system issues.
    */
   createProject(input: {
-    owner: string;
+    owner: { userId: string; userEmail: string; userName: string };
     name: string;
     description: string;
     url: string;
