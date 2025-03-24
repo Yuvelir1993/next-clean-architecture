@@ -1,15 +1,22 @@
 "use client";
 
-import React, { useState, useActionState } from "react";
+import React, { useState, useActionState, useEffect } from "react";
 
-import { createProjectAction } from "@/app/dashboard/actions";
 import UIErrorCreateProject from "@/app/dashboard/_components/errors/ErrorCreateProject";
+import { CreateProjectFormState } from "@/app/lib/definitions";
 
 interface CreateProjectProps {
   onClose: () => void;
+  createProjectAction: (
+    prevState: CreateProjectFormState,
+    formData: FormData
+  ) => Promise<CreateProjectFormState>;
 }
 
-const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
+const CreateProject: React.FC<CreateProjectProps> = ({
+  onClose,
+  createProjectAction,
+}) => {
   const [state, formAction, pending] = useActionState(
     createProjectAction,
     undefined
@@ -17,6 +24,12 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [repoLink, setRepoLink] = useState("");
+
+  useEffect(() => {
+    if (state?.project?.name) {
+      onClose();
+    }
+  }, [state?.project?.name, onClose]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
