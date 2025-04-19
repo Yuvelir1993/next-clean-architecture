@@ -1,14 +1,23 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import ProjectCard from "@/app/dashboard/_components/projectCard";
-import { getProjectsAction } from "@/app/dashboard/actions";
 import ErrorRetrieveProjects from "@/app/dashboard/_components/errors/ErrorRetrieveProjects";
+import { getProjects } from "@/app/state/projectsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/state/hooks";
 
-export default async function Dashboard() {
-  const projects = await getProjectsAction();
+export default function Dashboard() {
+  const dispatch = useAppDispatch();
+  const { projects, loading, error } = useAppSelector(
+    (state) => state.projects
+  );
 
-  if (projects.length === 0) {
-    return <ErrorRetrieveProjects />;
-  }
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
+
+  if (loading) return <div>Loading projects...</div>;
+  if (error) return <ErrorRetrieveProjects />;
 
   return (
     <div className="min-h-[80vh] p-6 ">

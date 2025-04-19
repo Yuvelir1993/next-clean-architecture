@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromCookies } from "@/shared/session/session.service";
+import { SessionValidationError } from "@/shared/session/session.errors";
 
 const protectedRoutes = ["/dashboard"];
 const publicRoutes = ["/sign-in", "/sign-up", "/"];
@@ -10,7 +11,13 @@ export default async function middleware(req: NextRequest) {
   try {
     sessionData = await getSessionFromCookies();
   } catch (error) {
-    console.error("Session extraction error:", error);
+    if (error instanceof SessionValidationError) {
+      console.error(
+        `Was not able to parse current user's session! Error: '${error.message}'`
+      );
+    } else {
+      console.error("Session extraction error:", error);
+    }
     return NextResponse.next();
   }
 

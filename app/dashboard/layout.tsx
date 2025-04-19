@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import CreateProject from "@/app/dashboard/_components/CreateProject";
 import { createProjectAction } from "@/app/dashboard/actions";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [showCreateProject, setShowCreateProject] = useState(false);
 
   const handleSignOut = async () => {

@@ -101,4 +101,21 @@ export class Project {
       updatedAt: now,
     });
   }
+
+  /**
+   * Rebuilds a Project from persistence without applying factory validation.
+   * Use this when you already trust the stored data.
+   */
+  public static fromPersistence(props: {
+    id: string;
+    name: string;
+    owner: ProjectOwner;
+    description?: string;
+    githubRepo: GitHubRepoURL;
+    version: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }): Project {
+    return new Project(props);
+  }
 }

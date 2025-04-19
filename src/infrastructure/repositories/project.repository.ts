@@ -1,8 +1,14 @@
 import { Project } from "@/src/business/aggregates/project";
+import { ProjectOwner } from "@/src/business/entities/models/user";
+import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
-import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+} from "@aws-sdk/lib-dynamodb";
 
 /**
  * TODO: should return business object? or just true/false or void with exception thrown?
@@ -59,10 +65,68 @@ export class ProjectRepository implements IProjectRepository {
     return newProjectBusinessEntity;
   }
 
+  /**
+   * Retrieves all projects belonging to this user from DynamoDB,
+   * and rehydrates them into Project aggregates.
+   *
+   * @param userData.userId - The unique identifier of the user.
+   * @returns An array of Project instances, or `undefined` if an error occurs.
+   * @throws Error for unexpected failures.
+   */
   async getProjectsOfUser(userData: {
     userId: string;
   }): Promise<Project[] | undefined> {
-    console.log(`Retrieving projects from AWS DynamoDB for user '${userData}'`);
-    throw new Error("Method not implemented.");
+    const client = new DynamoDBClient({});
+    const docClient = DynamoDBDocumentClient.from(client);
+
+    const PK = `USER#${userData.userId}`;
+
+    try {
+      const responseFromDynamoDb = await docClient.send(
+        new QueryCommand({
+          TableName: "Projects",
+          KeyConditionExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
+          ExpressionAttributeValues: {
+            ":pk": PK,
+            ":skPrefix": "PROJECT#",
+          },
+        })
+      );
+
+      const retrievedProjects = responseFromDynamoDb.Items;
+      if (!retrievedProjects || retrievedProjects.length === 0) {
+        return [];
+      }
+
+      console.log("Retrieved project from DynamoDB");
+      console.log(responseFromDynamoDb);
+
+      // Manual hydration into Project aggregates
+      const projects = retrievedProjects.map((item) => {
+        const owner: ProjectOwner = {
+          id: userData.userId,
+          email: "",
+          username: "",
+        };
+        return Project.fromPersistence({
+          id: item.projectId as string,
+          name: item.name as string,
+          owner,
+          description: item.description as string | undefined,
+          githubRepo: GitHubRepoURL.create(item.gitHubRepoUrl as string),
+          version: Number(item.version),
+          createdAt: new Date(item.createdAt as string),
+          updatedAt: new Date(item.updatedAt as string),
+        });
+      });
+
+      return projects;
+    } catch (error) {
+      console.error(
+        `Error retrieving projects for user '${userData.userId}':`,
+        error
+      );
+      return undefined;
+    }
   }
 }

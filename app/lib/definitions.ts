@@ -61,3 +61,9 @@ export type CreateProjectFormState =
       project?: ProjectUiDTO;
     }
   | undefined;
+
+export interface ProjectsState {
+  projects: ProjectUiDTO[];
+  loading: boolean;
+  error: string | null;
+}
