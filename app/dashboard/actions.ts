@@ -58,13 +58,9 @@ export async function signOutAction() {
 }
 
 export async function createProjectAction(
-  prevState: CreateProjectFormState,
   formData: FormData
 ): Promise<CreateProjectFormState> {
   console.log("Creating new project...");
-  console.log(
-    `Action previous state is ${prevState}. Form data is ${formData}`
-  );
 
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get(AWS_COGNITO_SESSION_COOKIE_NAME)?.value;

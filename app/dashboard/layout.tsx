@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { signOutAction } from "@/app/dashboard/actions";
 import { redirect } from "next/navigation";
 import CreateProject from "@/app/dashboard/_components/CreateProject";
-import { createProjectAction } from "@/app/dashboard/actions";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [showCreateProject, setShowCreateProject] = useState(false);
@@ -48,7 +47,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {showCreateProject && (
         <CreateProject
           onClose={closeCreateProject}
-          createProjectAction={createProjectAction}
         />
       )}
     </div>
