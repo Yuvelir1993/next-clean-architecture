@@ -58,4 +58,15 @@ export class ProjectUseCases implements IProjectUseCases {
     }
     return projects;
   }
+
+  public async deleteProject(input: {
+    projectId: string;
+    userId: string;
+  }): Promise<unknown> {
+    console.log(`Use Case -> Deleting new project '${input}'`);
+    await this._projectRepository.deleteProjectOfUser({
+      projectId: input.projectId,
+      userId: input.userId,
+    });
+  }
 }

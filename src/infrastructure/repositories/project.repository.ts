@@ -5,6 +5,7 @@ import { IProjectRepository } from "@/src/infrastructure/repositories/project.re
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 import {
+  DeleteCommand,
   DynamoDBDocumentClient,
   PutCommand,
   QueryCommand,
@@ -127,6 +128,48 @@ export class ProjectRepository implements IProjectRepository {
         error
       );
       return undefined;
+    }
+  }
+
+  /**
+   * Deletes a project for a given user from the "Projects" DynamoDB table.
+   *
+   * @param input.projectId - The ID of the project to delete.
+   * @param input.userId    - The ID of the user who owns the project.
+   * @returns A promise that resolves to { success: true } on success.
+   * @throws {Error} If the project does not exist for that user, or if the delete operation fails.
+   */
+  async deleteProjectOfUser(input: {
+    projectId: string;
+    userId: string;
+  }): Promise<unknown> {
+    const { projectId, userId } = input;
+    const PK = `USER#${userId}`;
+    const SK = `PROJECT#${projectId}`;
+
+    const client = new DynamoDBClient({});
+    const docClient = DynamoDBDocumentClient.from(client);
+
+    const command = new DeleteCommand({
+      TableName: "Projects",
+      Key: { PK, SK },
+      ConditionExpression: "PK = :pk AND SK = :sk",
+      ExpressionAttributeValues: {
+        ":pk": PK,
+        ":sk": SK,
+      },
+    });
+
+    try {
+      await docClient.send(command);
+      return { success: true };
+    } catch (err: any) {
+      if (err.name === "ConditionalCheckFailedException") {
+        throw new Error(
+          `Project "${projectId}" not found for user "${userId}".`
+        );
+      }
+      throw new Error(`Failed to delete project: ${err.message}`);
     }
   }
 }

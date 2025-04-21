@@ -19,3 +19,10 @@ export const getProjectsInputSchema = z.object({
 });
 
 export type GetProjectsInput = z.infer<typeof getProjectsInputSchema>;
+
+export const deleteProjectInputSchema = z.object({
+  userId: z.string().min(1, { message: "User id is required." }),
+  projectId: z.string().min(1, { message: "Project id is required." }),
+});
+
+export type DeleteProjectInput = z.infer<typeof deleteProjectInputSchema>;

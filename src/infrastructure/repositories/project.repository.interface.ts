@@ -33,4 +33,17 @@ export interface IProjectRepository {
     projectData: { name: string; description: string; url: string },
     projectOwner: { userId: string; userEmail: string; userName: string }
   ): Promise<Project>;
+
+  /**
+   * Retrieves all projects belonging to a specific user.
+   *
+   * @param userData - An object containing the user's details.
+   * @param userData.projectId - The unique identifier of the project to be deleted.
+   * @param userData.userId - The unique identifier of the user whose project should be deleted.
+   * @throws Error if the deletion operation encounters unexpected issues.
+   */
+  deleteProjectOfUser(input: {
+    projectId: string;
+    userId: string;
+  }): Promise<unknown>;
 }

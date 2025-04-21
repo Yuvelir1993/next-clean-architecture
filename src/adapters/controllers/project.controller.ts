@@ -4,6 +4,7 @@ import type { IProjectUseCases } from "@/src/business/use-cases/project.use-case
 
 import {
   CreateProjectInput,
+  DeleteProjectInput,
   GetProjectsInput,
 } from "@/src/adapters/controllers/project.controller.inputSchemas";
 import {
@@ -89,5 +90,20 @@ export class ProjectController implements IProjectController {
         `Unexpected error when trying handle projects for user '${userId}'`
       );
     }
+  }
+
+  public async deleteProject(input: DeleteProjectInput): Promise<unknown> {
+    console.log(`Deleting project ${input.projectId} of user ${input.userId}`);
+    try {
+      await this._projectUseCases.deleteProject({
+        projectId: input.projectId,
+        userId: input.userId,
+      });
+    } catch (error) {
+      throw new ProjectError(
+        `Unexpected error when trying delete project ${input.projectId} for user '${input.userId}'`
+      );
+    }
+    throw new Error("Method not implemented.");
   }
 }

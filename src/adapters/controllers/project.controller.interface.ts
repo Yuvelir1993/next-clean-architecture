@@ -2,6 +2,7 @@ import { Project } from "@/src/business/aggregates/project";
 
 import {
   CreateProjectInput,
+  DeleteProjectInput,
   GetProjectsInput,
 } from "@/src/adapters/controllers/project.controller.inputSchemas";
 
@@ -35,4 +36,12 @@ export interface IProjectController {
    * or failure with an array of error messages.
    */
   createProject(input: CreateProjectInput): Promise<CreateProjectResult>;
+
+  /**
+   * Deletes a project for the given user.
+   *
+   * @param userId - The user for whom projects should be retrieved.
+   * @param projectId - The project to be deleted.
+   */
+  deleteProject(input: DeleteProjectInput): unknown;
 }

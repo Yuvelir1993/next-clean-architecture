@@ -168,3 +168,17 @@ export async function getProjectsAction(): Promise<ProjectUiDTO[]> {
     return [];
   }
 }
+
+export async function deleteProjectAction(projectId: string) {
+  console.log(`Deleting project with id ${projectId}`);
+
+  try {
+    const sessionData = await getSessionFromCookies();
+    const projectController = getInjection<IProjectController>(
+      DI_SYMBOLS.IProjectController
+    );
+    const userId = sessionData.userId;
+
+    await projectController.deleteProject({ userId, projectId });
+  } catch (error) {}
+}

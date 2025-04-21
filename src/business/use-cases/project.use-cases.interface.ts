@@ -26,4 +26,13 @@ export interface IProjectUseCases {
     description: string;
     url: string;
   }): Promise<Project>;
+
+  /**
+   * Deleting existing projects for the user.
+   *
+   * @param input - An object containing data.
+   * @param input.projectId - The project to be deleted.
+   * @param input.userId - The owner of the project to be deleted.
+   */
+  deleteProject(input: { projectId: string; userId: string }): Promise<unknown>;
 }
