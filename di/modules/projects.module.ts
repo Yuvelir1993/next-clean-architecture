@@ -11,8 +11,15 @@ import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
 
 const initializeModule = (bind: interfaces.Bind) => {
-  bind<IProjectController>(DI_SYMBOLS.IProjectController).to(ProjectController);
-  bind<IProjectRepository>(DI_SYMBOLS.IProjectRepository).to(ProjectRepository);
-  bind<IProjectUseCases>(DI_SYMBOLS.IProjectUseCases).to(ProjectUseCases);
+  if (process.env.NODE_ENV === "test") {
+  } else {
+    bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
+      ProjectController
+    );
+    bind<IProjectRepository>(DI_SYMBOLS.IProjectRepository).to(
+      ProjectRepository
+    );
+    bind<IProjectUseCases>(DI_SYMBOLS.IProjectUseCases).to(ProjectUseCases);
+  }
 };
 export const ProjectsModule = new ContainerModule(initializeModule);

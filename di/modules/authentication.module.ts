@@ -10,15 +10,20 @@ import { IAuthenticationController } from "@/src/adapters/controllers/auth.contr
 import { AuthenticationController } from "@/src/adapters/controllers/auth.controller";
 
 const initializeModule = (bind: interfaces.Bind) => {
-  bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
-    AuthenticationUseCases
-  );
-  bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
-    AuthenticationService
-  );
-  bind<IAuthenticationController>(DI_SYMBOLS.IAuthenticationController).to(
-    AuthenticationController
-  );
+  if (process.env.NODE_ENV === 'test') {
+  }
+  else
+  {
+    bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
+      AuthenticationUseCases
+    );
+    bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
+      AuthenticationService
+    );
+    bind<IAuthenticationController>(DI_SYMBOLS.IAuthenticationController).to(
+      AuthenticationController
+    );
+  }  
 };
 
 export const AuthenticationModule = new ContainerModule(initializeModule);

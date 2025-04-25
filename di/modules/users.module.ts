@@ -5,6 +5,9 @@ import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
 
 const initializeModule = (bind: interfaces.Bind) => {
-  bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository).to(UsersRepository);
+  if (process.env.NODE_ENV === "test") {
+  } else {
+    bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository).to(UsersRepository);
+  }
 };
 export const UsersModule = new ContainerModule(initializeModule);
