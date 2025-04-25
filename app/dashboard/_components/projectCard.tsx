@@ -1,23 +1,37 @@
+"use client";
+
 import { ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
 import React from "react";
 import { Delete } from "lucide-react";
-import { deleteProjectAction } from "@/app/dashboard/actions";
+import { useAppDispatch, useAppSelector } from "@/app/state/hooks";
+import { deleteProject } from "@/app/state/projectsSlice";
 
 interface ProjectCardProps {
   project: ProjectUiDTO;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const handleDelete = async () => {
-    await deleteProjectAction(project.id);
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((s) => s.projects);
+
+  const handleDelete = () => {
+    dispatch(deleteProject(project.id));
   };
 
   return (
     <div className="relative bg-stone-200 rounded-lg shadow-md p-6 max-w-sm">
+      {/* show any deletion error */}
+      {error && (
+        <div className="absolute top-2 left-2 text-red-600 text-sm">
+          {error}
+        </div>
+      )}
+
       <button
         onClick={handleDelete}
         aria-label="Delete project"
         className="absolute top-2 right-2 p-1 text-gray-500 hover:text-red-600 transition-colors"
+        disabled={loading}
       >
         <Delete size={20} color="red" />
       </button>
