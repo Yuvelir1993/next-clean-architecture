@@ -5,6 +5,7 @@ import ProjectCard from "@/app/dashboard/_components/projectCard";
 import ErrorRetrieveProjects from "@/app/dashboard/_components/errors/ErrorRetrieveProjects";
 import { getProjects } from "@/app/state/projectsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/state/hooks";
+import Spinner from "@/app/dashboard/_components/Spinner";
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -16,7 +17,14 @@ export default function Dashboard() {
     dispatch(getProjects());
   }, [dispatch]);
 
-  if (loading) return <div>Loading projects...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Spinner label="Loading projects…" />
+      </div>
+    );
+  }
+
   if (error) return <ErrorRetrieveProjects />;
 
   return (
