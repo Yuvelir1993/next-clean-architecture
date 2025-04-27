@@ -3,6 +3,7 @@ import { ProjectController } from "@/src/adapters/controllers/project.controller
 
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 import { ProjectRepository } from "@/src/infrastructure/repositories/project.repository";
+import { ProjectRepositoryMock } from "@/src/infrastructure/repositories/project.repository.mock";
 
 import { IProjectUseCases } from "@/src/business/use-cases/project.use-cases.interface";
 import { ProjectUseCases } from "@/src/business/use-cases/project.use-case";
@@ -12,6 +13,9 @@ import { ContainerModule, interfaces } from "inversify";
 
 const initializeModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
+    bind<IProjectRepository>(DI_SYMBOLS.IProjectRepository).to(
+      ProjectRepositoryMock
+    );
   } else {
     bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
       ProjectController
