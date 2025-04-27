@@ -3,6 +3,7 @@ import { AuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases"
 
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import { AuthenticationService } from "@/src/infrastructure/services/authentication.service";
+import { AuthenticationServiceMock } from "@/src/infrastructure/services/authentication.service.mock";
 
 import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
@@ -10,10 +11,11 @@ import { IAuthenticationController } from "@/src/adapters/controllers/auth.contr
 import { AuthenticationController } from "@/src/adapters/controllers/auth.controller";
 
 const initializeModule = (bind: interfaces.Bind) => {
-  if (process.env.NODE_ENV === 'test') {
-  }
-  else
-  {
+  if (process.env.NODE_ENV === "test") {
+    bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
+      AuthenticationServiceMock
+    );
+  } else {
     bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
       AuthenticationUseCases
     );
@@ -23,7 +25,7 @@ const initializeModule = (bind: interfaces.Bind) => {
     bind<IAuthenticationController>(DI_SYMBOLS.IAuthenticationController).to(
       AuthenticationController
     );
-  }  
+  }
 };
 
 export const AuthenticationModule = new ContainerModule(initializeModule);
