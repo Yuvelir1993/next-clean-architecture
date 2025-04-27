@@ -1,8 +1,8 @@
 import { getInjection } from "@/di/container";
+import { DI_SYMBOLS } from "@/di/types";
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
-import { DI_SYMBOLS } from "@/di/types";
 
 let usersRepo: IUsersRepository;
 
