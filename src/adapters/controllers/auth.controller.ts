@@ -1,10 +1,11 @@
-import { z } from "zod";
 import { injectable, inject } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import {
+  SignInInput,
   signInInputSchema,
+  SignUpInput,
   signUpInputSchema,
 } from "./auth.controller.inputSchemas";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
@@ -29,9 +30,7 @@ export class AuthenticationController implements IAuthenticationController {
     private readonly _authService: IAuthenticationService
   ) {}
 
-  public async signIn(
-    input: Partial<z.infer<typeof signInInputSchema>>
-  ): Promise<{
+  public async signIn(input: SignInInput): Promise<{
     session: Session;
     cookie: Cookie;
     user: Pick<User, "id" | "username">;
@@ -51,9 +50,7 @@ export class AuthenticationController implements IAuthenticationController {
     return await this._authUseCases.signIn(validationResult.data);
   }
 
-  public async signUp(
-    input: Partial<z.infer<typeof signUpInputSchema>>
-  ): Promise<{
+  public async signUp(input: SignUpInput): Promise<{
     session: Session;
     cookie: Cookie;
     user: Pick<User, "id" | "email" | "username">;
