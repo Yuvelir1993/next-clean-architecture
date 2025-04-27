@@ -1,7 +1,8 @@
 import { getInjection } from "@/di/container";
+import { DI_SYMBOLS } from "@/di/types";
+
 import { describe, it, expect, beforeEach } from "vitest";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
-import { DI_SYMBOLS } from "@/di/types";
 
 let projectsRepo: IProjectRepository;
 
