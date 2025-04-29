@@ -12,7 +12,7 @@ import { ProjectUseCases } from "@/src/business/use-cases/project.use-case";
 import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
 
-const initializeModule = (bind: interfaces.Bind) => {
+const initializeProjectsModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
     bind<IProjectRepository>(DI_SYMBOLS.IProjectRepository).to(
       ProjectRepositoryMock
@@ -30,4 +30,4 @@ const initializeModule = (bind: interfaces.Bind) => {
     bind<IProjectUseCases>(DI_SYMBOLS.IProjectUseCases).to(ProjectUseCases);
   }
 };
-export const ProjectsModule = new ContainerModule(initializeModule);
+export const ProjectsModule = new ContainerModule(initializeProjectsModule);

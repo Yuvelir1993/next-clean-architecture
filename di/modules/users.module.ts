@@ -5,11 +5,11 @@ import { UsersRepositoryMock } from "@/src/infrastructure/repositories/users.rep
 import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";
 
-const initializeModule = (bind: interfaces.Bind) => {
+const initializeUsersModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
     bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository).to(UsersRepositoryMock);
   } else {
     bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository).to(UsersRepository);
   }
 };
-export const UsersModule = new ContainerModule(initializeModule);
+export const UsersModule = new ContainerModule(initializeUsersModule);

@@ -11,7 +11,7 @@ import { IAuthenticationController } from "@/src/adapters/controllers/auth.contr
 import { AuthenticationController } from "@/src/adapters/controllers/auth.controller";
 import { AuthenticationControllerMock } from "@/src/adapters/controllers/auth.controller.mock";
 
-const initializeModule = (bind: interfaces.Bind) => {
+const initializeAuthenticationModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
     bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
       AuthenticationServiceMock
@@ -32,4 +32,6 @@ const initializeModule = (bind: interfaces.Bind) => {
   }
 };
 
-export const AuthenticationModule = new ContainerModule(initializeModule);
+export const AuthenticationModule = new ContainerModule(
+  initializeAuthenticationModule
+);
