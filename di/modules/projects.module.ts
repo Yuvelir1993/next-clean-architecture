@@ -20,6 +20,7 @@ const initializeProjectsModule = (bind: interfaces.Bind) => {
     bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
       ProjectControllerMock
     );
+    bind<IProjectUseCases>(DI_SYMBOLS.IProjectUseCases).to(ProjectUseCases);
   } else {
     bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
       ProjectController
