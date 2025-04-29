@@ -5,7 +5,11 @@ import {
   User,
   projectOwnerSchema,
 } from "@/src/business/entities/models/user";
-import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
+import {
+  GitHubRepoURL,
+  GitHubRepoURLError,
+} from "@/src/business/value-objects/gitHubRepo";
+import { ProjectCreationError } from "@/src/business/errors";
 
 /**
  * Zod schema for raw project input.
@@ -79,7 +83,7 @@ export class Project {
   /**
    * Factory method to create an empty/dummy Project.
    */
-  public static createEmpty(): Project {
+  public static createEmpty(): Project | undefined {
     const now = new Date();
     const dummyUser: User = {
       id: "dummy-id",
@@ -87,19 +91,25 @@ export class Project {
       username: "dummyUser",
       password: "dummyPassword",
     };
-    return new Project({
-      id: uuidv4(),
-      name: "Dummy",
-      owner: dummyUser,
-      description: "Dummy project description",
-      // Use a valid placeholder URL for the GitHub repository.
-      githubRepo: GitHubRepoURL.create(
-        "https://github.com/placeholder/placeholder"
-      ),
-      version: 1,
-      createdAt: now,
-      updatedAt: now,
-    });
+    try {
+      return new Project({
+        id: uuidv4(),
+        name: "Dummy",
+        owner: dummyUser,
+        description: "Dummy project description",
+        // Use a valid placeholder URL for the GitHub repository.
+        githubRepo: GitHubRepoURL.create(
+          "https://github.com/placeholder/placeholder"
+        ),
+        version: 1,
+        createdAt: now,
+        updatedAt: now,
+      });
+    } catch (error) {
+      if (error instanceof GitHubRepoURLError) {
+        throw new ProjectCreationError("Failed on GitHub URL validation.");
+      }
+    }
   }
 
   /**
@@ -116,6 +126,14 @@ export class Project {
     createdAt: Date;
     updatedAt: Date;
   }): Project {
-    return new Project(props);
+    try {
+      return new Project(props);
+    } catch (error) {
+      if (error instanceof GitHubRepoURLError) {
+        throw new ProjectCreationError("Failed on GitHub URL validation.");
+      } else {
+        throw error;
+      }
+    }
   }
 }

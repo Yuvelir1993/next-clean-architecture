@@ -1,8 +1,12 @@
+import { ProjectCreationError } from "@/src/business/errors";
 import { Project } from "@/src/business/aggregates/project";
 import { ProjectOwner } from "@/src/business/entities/models/user";
 import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  ConditionalCheckFailedException,
+  DynamoDBClient,
+} from "@aws-sdk/client-dynamodb";
 
 import {
   DeleteCommand,
@@ -122,12 +126,16 @@ export class ProjectRepository implements IProjectRepository {
       });
 
       return projects;
-    } catch (error) {
+    } catch (err) {
       console.error(
-        `Error retrieving projects for user '${userData.userId}':`,
-        error
+        `Failed retrieving projects for user ${userData.userId}:`,
+        err
       );
-      return undefined;
+
+      throw new ProjectCreationError(
+        `Could not retrieve projects for user ${userData.userId}`,
+        { cause: err }
+      );
     }
   }
 
@@ -163,13 +171,15 @@ export class ProjectRepository implements IProjectRepository {
     try {
       await docClient.send(command);
       return { success: true };
-    } catch (err: any) {
-      if (err.name === "ConditionalCheckFailedException") {
+    } catch (err) {
+      if (err instanceof ConditionalCheckFailedException) {
         throw new Error(
-          `Project "${projectId}" not found for user "${userId}".`
+          `Project "${projectId}" not found for user "${userId}".`,
+          err
         );
+      } else {
+        throw new Error(`Failed to delete project. Exception: ${err}`);
       }
-      throw new Error(`Failed to delete project: ${err.message}`);
     }
   }
 }

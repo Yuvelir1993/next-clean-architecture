@@ -17,7 +17,7 @@ import {
   ProjectError,
 } from "@/src/business/entities/errors/common";
 import { NoProjectsFoundError } from "@/src/business/entities/errors/project";
-import { ProjectCreationError } from "@/src/business/aggregates/errors/project";
+import { ProjectCreationError } from "@/src/business/errors";
 
 /**
  * ProjectController is a business-relevant entry point to execute projects use cases and services.
@@ -92,7 +92,7 @@ export class ProjectController implements IProjectController {
     }
   }
 
-  public async deleteProject(input: DeleteProjectInput): Promise<unknown> {
+  public async deleteProject(input: DeleteProjectInput): Promise<void> {
     console.log(`Deleting project ${input.projectId} of user ${input.userId}`);
     try {
       await this._projectUseCases.deleteProject({
@@ -101,9 +101,8 @@ export class ProjectController implements IProjectController {
       });
     } catch (error) {
       throw new ProjectError(
-        `Unexpected error when trying delete project ${input.projectId} for user '${input.userId}'`
+        `Unexpected error when trying delete project ${input.projectId} for user '${input.userId}'. Error: ${error}`
       );
     }
-    throw new Error("Method not implemented.");
   }
 }

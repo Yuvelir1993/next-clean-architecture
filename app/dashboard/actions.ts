@@ -180,5 +180,13 @@ export async function deleteProjectAction(projectId: string) {
     const userId = sessionData.userId;
 
     await projectController.deleteProject({ userId, projectId });
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof ProjectError) {
+      console.error(
+        `Was not able to delete project with id '${projectId}'! Error: '${error.message}', Cause: '${error.cause}'`
+      );
+    } else {
+      console.error("Unhandled session extraction error:", error);
+    }
+  }
 }

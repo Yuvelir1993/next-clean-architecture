@@ -7,8 +7,8 @@ import { DI_SYMBOLS } from "@/di/types";
 import { Project } from "@/src/business/aggregates/project";
 import {
   NoProjectsFoundError,
-  ProjectCreationError,
 } from "@/src/business/entities/errors/project";
+import { ProjectCreationError } from "@/src/business/errors";
 
 @injectable()
 export class ProjectUseCases implements IProjectUseCases {
@@ -62,7 +62,7 @@ export class ProjectUseCases implements IProjectUseCases {
   public async deleteProject(input: {
     projectId: string;
     userId: string;
-  }): Promise<unknown> {
+  }): Promise<void> {
     console.log(`Use Case -> Deleting new project '${input}'`);
     await this._projectRepository.deleteProjectOfUser({
       projectId: input.projectId,
