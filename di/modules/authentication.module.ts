@@ -13,6 +13,9 @@ import { AuthenticationControllerMock } from "@/src/adapters/controllers/auth.co
 
 const initializeAuthenticationModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
+    bind<IAuthenticationUseCases>(DI_SYMBOLS.IAuthenticationUseCases).to(
+      AuthenticationUseCases
+    );
     bind<IAuthenticationService>(DI_SYMBOLS.IAuthenticationService).to(
       AuthenticationServiceMock
     );
