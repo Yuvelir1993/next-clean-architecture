@@ -7,7 +7,7 @@ import {
   signInInputSchema,
   SignUpInput,
   signUpInputSchema,
-} from "./auth.controller.inputSchemas";
+} from "@/src/adapters/controllers/auth.controller.inputSchemas";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import type { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
 
