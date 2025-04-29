@@ -12,7 +12,7 @@ import {
   GetProjectsResult,
   IProjectController,
 } from "@/src/adapters/controllers/project.controller.interface";
-import { ProjectError } from "@/src/business/entities/errors/common";
+import { ProjectError } from "@/src/business/errors";
 import {
   NoProjectsFoundError,
   ProjectCreationError,

@@ -15,7 +15,7 @@ import {
 import { getInjection } from "@/di/container";
 import { DI_SYMBOLS } from "@/di/types";
 
-import { ProjectError } from "@/src/business/entities/errors/common";
+import { ProjectError } from "@/src/business/errors";
 
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";

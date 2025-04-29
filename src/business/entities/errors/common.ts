@@ -4,8 +4,4 @@ export class InputParseError extends Error {
   }
 }
 
-export class ProjectError extends Error {
-  constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
-  }
-}
+
