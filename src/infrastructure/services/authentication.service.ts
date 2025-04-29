@@ -10,7 +10,7 @@ import {
   USER_TYPE_SIGN_IN,
   User,
 } from "@/src/business/entities/models/user";
-import { AuthenticationError } from "@/src/business/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/errors";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
 import {

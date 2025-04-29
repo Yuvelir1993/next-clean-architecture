@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getInjection } from "@/di/container";
-import { AuthenticationError } from "@/src/business/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/errors";
 import {
   AuthFormState,
   SignInFormSchema,

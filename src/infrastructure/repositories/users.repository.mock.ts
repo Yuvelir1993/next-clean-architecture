@@ -1,7 +1,7 @@
 import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
 import { ITransaction } from "@/src/business/entities/models/transaction.interface";
 import { User, SignUpUser } from "@/src/business/entities/models/user";
-import { AuthenticationError } from "@/src/business/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/errors";
 
 export class UsersRepositoryMock implements IUsersRepository {
   private users: User[] = [

@@ -9,3 +9,9 @@ export class NoProjectsFoundError extends Error {
     super(message, options);
   }
 }
+export class AuthenticationError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+  }
+}
+

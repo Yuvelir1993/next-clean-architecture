@@ -7,7 +7,7 @@ import {
   ListUsersCommand,
   UserType,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { AuthenticationError } from "@/src/business/entities/errors/auth";
+import { AuthenticationError } from "@/src/business/errors";
 
 export class UsersRepository implements IUsersRepository {
   async getUsersByEmail(email: string): Promise<Array<User> | undefined> {
