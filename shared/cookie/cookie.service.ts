@@ -1,11 +1,9 @@
 import { Cookie } from "@/shared/cookie/cookie.schema";
-import { Session } from "@/shared/session/session.schema";
 import { cookies } from "next/headers";
 import { AWS_COGNITO_SESSION_COOKIE_NAME } from "../constants";
 
 export default async function setBrowserCookies(
   cookie: Cookie,
-  session: Session,
   user: Pick<
     { email: string; password: string; username: string; id: string },
     "username" | "id"

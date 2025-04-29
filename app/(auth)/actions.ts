@@ -38,7 +38,7 @@ export async function signUpAction(
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );
-    const { cookie, session, user } = await authController.signUp({
+    const { cookie, user } = await authController.signUp({
       email,
       username,
       password,
@@ -48,7 +48,7 @@ export async function signUpAction(
     console.log("Session cookie to be set:");
     console.log(cookie);
 
-    await setBrowserCookies(cookie, session, user);
+    await setBrowserCookies(cookie, user);
   } catch (err) {
     if (err instanceof InputParseError) {
       return {
@@ -93,12 +93,12 @@ export async function signInAction(
     const authController = getInjection<IAuthenticationController>(
       DI_SYMBOLS.IAuthenticationController
     );
-    const { cookie, session, user } = await authController.signIn({
+    const { cookie, user } = await authController.signIn({
       email,
       password,
     });
 
-    await setBrowserCookies(cookie, session, user);
+    await setBrowserCookies(cookie, user);
     console.log(`Session cookies has been set`);
   } catch (err) {
     if (err instanceof InputParseError || err instanceof AuthenticationError) {
