@@ -16,8 +16,10 @@ import {
   NotFoundError,
   ProjectError,
 } from "@/src/business/entities/errors/common";
-import { NoProjectsFoundError } from "@/src/business/entities/errors/project";
-import { ProjectCreationError } from "@/src/business/errors";
+import {
+  NoProjectsFoundError,
+  ProjectCreationError,
+} from "@/src/business/errors";
 
 /**
  * ProjectController is a business-relevant entry point to execute projects use cases and services.

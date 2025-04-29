@@ -3,3 +3,9 @@ export class ProjectCreationError extends Error {
       super(message, options);
     }
   }
+
+export class NoProjectsFoundError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+  }
+}

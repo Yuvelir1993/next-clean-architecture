@@ -6,9 +6,9 @@ import type { IProjectRepository } from "@/src/infrastructure/repositories/proje
 import { DI_SYMBOLS } from "@/di/types";
 import { Project } from "@/src/business/aggregates/project";
 import {
+  ProjectCreationError,
   NoProjectsFoundError,
-} from "@/src/business/entities/errors/project";
-import { ProjectCreationError } from "@/src/business/errors";
+} from "@/src/business/errors";
 
 @injectable()
 export class ProjectUseCases implements IProjectUseCases {
