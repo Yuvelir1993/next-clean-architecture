@@ -27,10 +27,20 @@ To learn more about Next.js, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You can check out [**the** Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
 ## Logic Flow
 
 1. **app** calls **src** through the **di**
 2. controller calls use case
 3. use case calls services
+
+## Dev
+To check cross-module dependencies use one of next commands:
+```bash
+# Report about broken dependencies rules in CLI
+npm run lint:deps
+
+# Generate SVG report
+npx depcruise --config .dependency-cruiser.js src app di shared public tests --output-type dot --validate | dot -T svg > dependency-graph.svg
+```
