@@ -2,7 +2,6 @@
 
 import { redirect } from "next/navigation";
 import { getInjection } from "@/di/container";
-import { AuthenticationError } from "@/src/business/errors";
 import {
   AuthFormState,
   SignInFormSchema,
@@ -57,12 +56,6 @@ export async function signUpAction(
         ],
       };
     }
-    if (err instanceof AuthenticationError) {
-      console.error(`Failed authenticate user!`);
-      return {
-        errors: [err.message],
-      };
-    }
 
     return {
       errors: [
@@ -101,7 +94,7 @@ export async function signInAction(
     await setBrowserCookies(cookie, user);
     console.log(`Session cookies has been set`);
   } catch (err) {
-    if (err instanceof InputParseError || err instanceof AuthenticationError) {
+    if (err instanceof InputParseError) {
       return {
         errors: ["Incorrect username or password"],
       };

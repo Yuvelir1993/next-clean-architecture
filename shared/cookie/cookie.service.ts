@@ -1,5 +1,5 @@
-import { Cookie } from "@/shared/cookie/cookie.schema";
 import { cookies } from "next/headers";
+import { Cookie } from "@/shared/cookie/cookie.schema";
 import { AWS_COGNITO_SESSION_COOKIE_NAME } from "../constants";
 
 export default async function setBrowserCookies(

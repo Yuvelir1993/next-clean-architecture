@@ -13,7 +13,7 @@ import {
 } from "@/src/business/entities/models/user";
 import { Cookie } from "@/shared/cookie/cookie.schema";
 import { Session } from "@/shared/session/session.schema";
-import { AuthenticationError } from "../errors";
+import { AuthenticationError } from "@/src/business/errors";
 import { DI_SYMBOLS } from "@/di/types";
 @injectable()
 export class AuthenticationUseCases implements IAuthenticationUseCases {
