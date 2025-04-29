@@ -12,7 +12,7 @@ import { Project } from "@/src/business/aggregates/project";
 
 export class ProjectControllerMock implements IProjectController {
   async createProject(input: CreateProjectInput): Promise<CreateProjectResult> {
-    console.log("Mock: Creating project", input);
+    console.log("[mock] Creating project", input);
 
     const project = Project.create({
       name: input.name,
@@ -28,7 +28,7 @@ export class ProjectControllerMock implements IProjectController {
   }
 
   async getProjects(input: GetProjectsInput): Promise<GetProjectsResult> {
-    console.log("Mock: Getting projects for user", input.userId);
+    console.log("[mock] Getting projects for user", input.userId);
 
     const project = Project.create({
       name: "Mock Project",
@@ -49,7 +49,7 @@ export class ProjectControllerMock implements IProjectController {
 
   async deleteProject(input: DeleteProjectInput): Promise<unknown> {
     console.log(
-      "Mock: Deleting project",
+      "[mock] Deleting project",
       input.projectId,
       "for user",
       input.userId

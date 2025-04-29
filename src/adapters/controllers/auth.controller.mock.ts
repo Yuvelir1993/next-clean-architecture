@@ -13,7 +13,7 @@ export class AuthenticationControllerMock implements IAuthenticationController {
     cookie: Cookie;
     user: Pick<User, "id" | "username">;
   }> {
-    console.log("Mock: Signing in with input", input);
+    console.log("[mock] Signing in with input", input);
 
     const oneHourLater = new Date(Date.now() + 60 * 60 * 1000);
 
@@ -49,7 +49,7 @@ export class AuthenticationControllerMock implements IAuthenticationController {
     cookie: Cookie;
     user: Pick<User, "id" | "email" | "username">;
   }> {
-    console.log("Mock: Signing up with input", input);
+    console.log("[mock] Signing up with input", input);
 
     const oneHourLater = new Date(Date.now() + 60 * 60 * 1000);
 
@@ -82,7 +82,7 @@ export class AuthenticationControllerMock implements IAuthenticationController {
   }
 
   async signOut(sessionToken: string | undefined): Promise<Cookie> {
-    console.log("Mock: Signing out session token", sessionToken);
+    console.log("[mock] Signing out session token", sessionToken);
 
     return {
       name: "mockSessionName",

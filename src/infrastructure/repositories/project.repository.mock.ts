@@ -13,7 +13,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
     projectOwner: { userId: string; userEmail: string; userName: string }
   ): Promise<Project> {
     console.log(
-      `Mock: Creating project '${projectData.name}' for user '${projectOwner.userId}'`
+      `[mock] Creating project '${projectData.name}' for user '${projectOwner.userId}'`
     );
 
     const newProject = Project.create({
@@ -35,7 +35,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
   async getProjectsOfUser(userData: {
     userId: string;
   }): Promise<Project[] | undefined> {
-    console.log(`Mock: Getting projects for user '${userData.userId}'`);
+    console.log(`[mock] Getting projects for user '${userData.userId}'`);
 
     const userProjects = this.projects.filter(
       (project) => project.owner.id === userData.userId
@@ -49,7 +49,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
     userId: string;
   }): Promise<unknown> {
     console.log(
-      `Mock: Deleting project '${input.projectId}' for user '${input.userId}'`
+      `[mock] Deleting project '${input.projectId}' for user '${input.userId}'`
     );
 
     const initialLength = this.projects.length;

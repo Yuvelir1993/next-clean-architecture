@@ -12,7 +12,7 @@ import { getEmptySessionCookie } from "@/shared/cookie/cookie.service";
 
 export class AuthenticationServiceMock implements IAuthenticationService {
   async signOut(sessionToken: string): Promise<boolean> {
-    console.log(`Mock: Signing out session '${sessionToken}'`);
+    console.log(`[mock] Signing out session '${sessionToken}'`);
     return true;
   }
 
@@ -20,12 +20,12 @@ export class AuthenticationServiceMock implements IAuthenticationService {
     inputPassword: string,
     usersHashedPassword: string
   ): Promise<boolean> {
-    console.log(`Mock: Validating passwords`);
+    console.log(`[mock] Validating passwords`);
     return Promise.resolve(inputPassword === usersHashedPassword);
   }
 
   async validateSession(sessionId: string): Promise<boolean> {
-    console.log(`Mock: Validating session '${sessionId}'`);
+    console.log(`[mock] Validating session '${sessionId}'`);
     return sessionId === "valid-session";
   }
 
@@ -34,7 +34,7 @@ export class AuthenticationServiceMock implements IAuthenticationService {
     session: Session;
     cookie: Cookie;
   }> {
-    console.log(`Mock: Creating session for user '${userInput.email}'`);
+    console.log(`[mock] Creating session for user '${userInput.email}'`);
 
     const oneHourLater = new Date(Date.now() + 60 * 60 * 1000);
 
@@ -80,7 +80,7 @@ export class AuthenticationServiceMock implements IAuthenticationService {
   }
 
   async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    console.log(`Mock: Invalidating session '${sessionId}'`);
+    console.log(`[mock] Invalidating session '${sessionId}'`);
     return { blankCookie: getEmptySessionCookie() };
   }
 
