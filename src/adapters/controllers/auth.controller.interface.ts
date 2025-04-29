@@ -1,10 +1,9 @@
-import { z } from "zod";
-import { Cookie } from "@/src/business/entities/models/cookie";
-import { Session } from "@/src/business/entities/models/session";
+import { Cookie } from "@/shared/cookie/cookie.schema";
+import { Session } from "@/shared/session/session.schema";
 import { User } from "@/src/business/entities/models/user";
 import {
-  signInInputSchema,
-  signUpInputSchema,
+  SignInInput,
+  SignUpInput,
 } from "@/src/adapters/controllers/auth.controller.inputSchemas";
 
 /**
@@ -19,7 +18,7 @@ export interface IAuthenticationController {
    * @param input - A partial object matching the sign-in schema.
    * @returns A promise that resolves to a Cookie.
    */
-  signIn(input: Partial<z.infer<typeof signInInputSchema>>): Promise<{
+  signIn(input: SignInInput): Promise<{
     session: Session;
     cookie: Cookie;
     user: Pick<User, "id" | "username">;
@@ -39,7 +38,7 @@ export interface IAuthenticationController {
    * @param input - A partial object matching the sign-up schema.
    * @returns A promise that resolves to an object containing a session, cookie, and user (with id and username).
    */
-  signUp(input: Partial<z.infer<typeof signUpInputSchema>>): Promise<{
+  signUp(input: SignUpInput): Promise<{
     session: Session;
     cookie: Cookie;
     user: Pick<User, "id" | "username">;

@@ -12,6 +12,7 @@ export const signInInputSchema = z.object({
     })
     .trim(),
 });
+export type SignInInput = z.infer<typeof signInInputSchema>;
 
 export const signUpInputSchema = z
   .object({
@@ -34,3 +35,4 @@ export const signUpInputSchema = z
       });
     }
   });
+export type SignUpInput = z.infer<typeof signUpInputSchema>;

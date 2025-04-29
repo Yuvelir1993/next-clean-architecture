@@ -1,26 +1,11 @@
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { User, userSchema } from "../entities/models/user";
-import { ProjectCreationError } from "./errors/project";
-
-/**
- * Value Object for GitHub repository URL.
- */
-class GitHubRepo {
-  private constructor(private readonly url: string) {}
-
-  public static create(url: string): GitHubRepo {
-    const regex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
-    if (!regex.test(url)) {
-      throw new ProjectCreationError("Invalid GitHub repository URL");
-    }
-    return new GitHubRepo(url);
-  }
-
-  public get value(): string {
-    return this.url;
-  }
-}
+import {
+  ProjectOwner,
+  User,
+  projectOwnerSchema,
+} from "@/src/business/entities/models/user";
+import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
 
 /**
  * Zod schema for raw project input.
@@ -30,7 +15,7 @@ const projectInputSchema = z.object({
   name: z.string().min(1, { message: "Project name is required" }),
   description: z.string().optional(),
   repoLink: z.string().url(),
-  owner: userSchema, // including the full User entity
+  owner: projectOwnerSchema,
 });
 type ProjectInput = z.infer<typeof projectInputSchema>;
 
@@ -40,28 +25,28 @@ type ProjectInput = z.infer<typeof projectInputSchema>;
  * by using value objects and its own methods.
  */
 export class Project {
-  public readonly projectId: string;
-  public readonly owner: User;
+  public readonly id: string;
   public readonly name: string;
+  public readonly owner: ProjectOwner;
   public readonly description?: string;
-  public readonly githubRepo: GitHubRepo;
+  public readonly githubRepo: GitHubRepoURL;
   public version: number;
   public createdAt: Date;
   public updatedAt: Date;
 
   private constructor(props: {
-    projectId: string;
-    owner: User;
+    id: string;
     name: string;
+    owner: ProjectOwner;
     description?: string;
-    githubRepo: GitHubRepo;
+    githubRepo: GitHubRepoURL;
     version: number;
     createdAt: Date;
     updatedAt: Date;
   }) {
-    this.projectId = props.projectId;
-    this.owner = props.owner;
+    this.id = props.id;
     this.name = props.name;
+    this.owner = props.owner;
     this.description = props.description;
     this.githubRepo = props.githubRepo;
     this.version = props.version;
@@ -76,18 +61,61 @@ export class Project {
    */
   public static create(input: ProjectInput): Project {
     const validatedInput = projectInputSchema.parse(input);
-    const githubRepo = GitHubRepo.create(validatedInput.repoLink);
+    const githubRepo = GitHubRepoURL.create(validatedInput.repoLink);
     const now = new Date();
 
     return new Project({
-      projectId: uuidv4(),
-      owner: validatedInput.owner,
+      id: uuidv4(),
       name: validatedInput.name,
+      owner: validatedInput.owner,
       description: validatedInput.description,
       githubRepo,
       version: 1,
       createdAt: now,
       updatedAt: now,
     });
+  }
+
+  /**
+   * Factory method to create an empty/dummy Project.
+   */
+  public static createEmpty(): Project {
+    const now = new Date();
+    const dummyUser: User = {
+      id: "dummy-id",
+      email: "dummy@example.com",
+      username: "dummyUser",
+      password: "dummyPassword",
+    };
+    return new Project({
+      id: uuidv4(),
+      name: "Dummy",
+      owner: dummyUser,
+      description: "Dummy project description",
+      // Use a valid placeholder URL for the GitHub repository.
+      githubRepo: GitHubRepoURL.create(
+        "https://github.com/placeholder/placeholder"
+      ),
+      version: 1,
+      createdAt: now,
+      updatedAt: now,
+    });
+  }
+
+  /**
+   * Rebuilds a Project from persistence without applying factory validation.
+   * Use this when you already trust the stored data.
+   */
+  public static fromPersistence(props: {
+    id: string;
+    name: string;
+    owner: ProjectOwner;
+    description?: string;
+    githubRepo: GitHubRepoURL;
+    version: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }): Project {
+    return new Project(props);
   }
 }

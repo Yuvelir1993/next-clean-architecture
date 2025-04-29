@@ -1,45 +1,37 @@
 "use client";
 
-import React from "react";
-import ProjectCard, { Project } from "@/app/dashboard/_components/projectCard";
+import React, { useEffect } from "react";
+import ProjectCard from "@/app/dashboard/_components/projectCard";
+import ErrorRetrieveProjects from "@/app/dashboard/_components/errors/ErrorRetrieveProjects";
+import { getProjects } from "@/app/state/projectsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/state/hooks";
+import Spinner from "@/app/dashboard/_components/Spinner";
 
 export default function Dashboard() {
-  const dummyProjects: Project[] = [
-    {
-      projectId: "project-123",
-      projectName: "My Awesome Project",
-      projectOwner: "Me",
-      description: "This is a description of my awesome project.",
-      repoLink: "https://github.com/username/my-awesome-project",
-    },
-    {
-      projectId: "project-124",
-      projectName: "Second Project",
-      projectOwner: "You",
-      description: "This is a description of the second project.",
-      repoLink: "https://github.com/username/second-project",
-    },
-    {
-      projectId: "project-125",
-      projectName: "Third Project",
-      projectOwner: "Us",
-      description: "This is a description of the third project.",
-      repoLink: "https://github.com/username/third-project",
-    },
-    {
-      projectId: "project-126",
-      projectName: "Fourth Project",
-      projectOwner: "Them",
-      description: "This is a description of the fourth project.",
-      repoLink: "https://github.com/username/fourth-project",
-    },
-  ];
+  const dispatch = useAppDispatch();
+  const { projects, loading, error } = useAppSelector(
+    (state) => state.projects
+  );
+
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Spinner label="Loading projects…" />
+      </div>
+    );
+  }
+
+  if (error) return <ErrorRetrieveProjects />;
 
   return (
     <div className="min-h-[80vh] p-6 ">
       <div className="flex flex-wrap gap-4">
-        {dummyProjects.map((project) => (
-          <ProjectCard key={project.projectId} project={project} />
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
         ))}
       </div>
     </div>

@@ -11,8 +11,8 @@ import {
   USER_TYPE_SIGN_IN,
   USER_TYPE_SIGN_UP,
 } from "@/src/business/entities/models/user";
-import { Cookie } from "@/src/business/entities/models/cookie";
-import { Session } from "@/src/business/entities/models/session";
+import { Cookie } from "@/shared/cookie/cookie.schema";
+import { Session } from "@/shared/session/session.schema";
 import { AuthenticationError } from "@/src/business/entities/errors/auth";
 import { DI_SYMBOLS } from "@/di/types";
 @injectable()

@@ -1,5 +1,5 @@
-import { Session } from "@/src/business/entities/models/session";
-import { Cookie } from "@/src/business/entities/models/cookie";
+import { Session } from "@/shared/session/session.schema";
+import { Cookie } from "@/shared/cookie/cookie.schema";
 import { User } from "@/src/business/entities/models/user";
 
 export interface IAuthenticationUseCases {

@@ -9,3 +9,10 @@ export const sessionSchema = z.object({
 });
 
 export type Session = z.infer<typeof sessionSchema>;
+
+export type AwsCognitoSessionJwtPayload = {
+  sub: string;
+  "cognito:username": string;
+  name: string;
+  exp: number;
+};

@@ -1,9 +1,12 @@
 import { z } from "zod";
 
-/**
- * Auth
- */
+import { ProjectUiDTO } from "@/src/adapters/dto/aggregates/project.dto";
 
+/**
+ * --------------------------------------------------------
+ * ------------------------- Auth -------------------------
+ * --------------------------------------------------------
+ */
 export const AuthSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
@@ -17,11 +20,9 @@ export const AuthSchema = z.object({
     .trim(),
 });
 
-// Sign-in schema (same as AuthSchema)
 export const SignInFormSchema = AuthSchema;
 
-// Sign-up schema (extends AuthSchema with name field)
-export const SignupFormSchema = AuthSchema.extend({
+export const SignUpFormSchema = AuthSchema.extend({
   name: z
     .string()
     .min(2, { message: "Name must be at least 2 characters long." })
@@ -40,7 +41,9 @@ export type AuthFormState =
   | undefined;
 
 /**
- * Projects
+ * --------------------------------------------------------
+ * ----------------------- Projects -----------------------
+ * --------------------------------------------------------
  */
 export const CreateProjectSchema = z.object({
   projectName: z.string().min(1, { message: "Project name is required." }),
@@ -55,6 +58,12 @@ export type CreateProjectFormErrors =
 export type CreateProjectFormState =
   | {
       errors?: CreateProjectFormErrors;
-      message?: string;
+      project?: ProjectUiDTO;
     }
   | undefined;
+
+export interface ProjectsState {
+  projects: ProjectUiDTO[];
+  loading: boolean;
+  error: string | null;
+}

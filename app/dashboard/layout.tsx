@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { signOutAction } from "@/app/dashboard/actions";
 import { redirect } from "next/navigation";
-import CreateProject from "@/app/dashboard/_components/CreateProject"; // Adjust the path if necessary
+import CreateProject from "@/app/dashboard/_components/CreateProject";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [showCreateProject, setShowCreateProject] = useState(false);
 
   const handleSignOut = async () => {
@@ -44,7 +44,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1 p-6">{children}</main>
 
-      {showCreateProject && <CreateProject onClose={closeCreateProject} />}
+      {showCreateProject && (
+        <CreateProject
+          onClose={closeCreateProject}
+        />
+      )}
     </div>
   );
 }

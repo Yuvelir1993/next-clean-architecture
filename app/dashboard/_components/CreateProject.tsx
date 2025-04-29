@@ -1,22 +1,35 @@
 "use client";
 
 import React, { useState } from "react";
-import { useActionState } from "react"; // Adjust import if needed
-import { createProjectAction } from "@/app/dashboard/actions";
-import UIErrorCreateProject from "@/app/dashboard/_components/errors/UIErrorsCreateProject";
+import { useAppDispatch, useAppSelector } from "@/app/state/hooks";
+import { createProject } from "@/app/state/projectsSlice";
+import UIErrorCreateProject from "@/app/dashboard/_components/errors/ErrorCreateProject";
 
 interface CreateProjectProps {
   onClose: () => void;
 }
 
 const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
-  const [state, formAction, pending] = useActionState(
-    createProjectAction,
-    undefined
-  );
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((s) => s.projects);
+
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [repoLink, setRepoLink] = useState("");
+
+  const handleCreateProjectSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("projectName", projectName);
+    formData.append("description", description);
+    formData.append("repoLink", repoLink);
+
+    dispatch(createProject(formData))
+      .unwrap()
+      .then(() => onClose())
+      .catch(() => {});
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -24,8 +37,10 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
         <h2 className="text-slate-700 text-2xl font-bold mb-4">
           Create Project
         </h2>
-        {state?.errors && <UIErrorCreateProject errors={state.errors} />}
-        <form action={formAction}>
+
+        {error && <UIErrorCreateProject errors={[error]} />}
+
+        <form onSubmit={handleCreateProjectSubmit}>
           <div className="mb-4">
             <label
               htmlFor="projectName"
@@ -41,8 +56,10 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
+
           <div className="mb-4">
             <label
               htmlFor="description"
@@ -56,8 +73,10 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
               className="text-slate-700 w-full border rounded px-3 py-2"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              disabled={loading}
             />
           </div>
+
           <div className="mb-4">
             <label
               htmlFor="repoLink"
@@ -73,24 +92,25 @@ const CreateProject: React.FC<CreateProjectProps> = ({ onClose }) => {
               value={repoLink}
               onChange={(e) => setRepoLink(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
+
           <div className="text-slate-700 flex justify-end gap-4">
             <button
               type="button"
               className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
               onClick={onClose}
-              disabled={pending}
+              disabled={loading}
             >
               Cancel
             </button>
             <button
-              type={state?.message ? "button" : "submit"}
+              type="submit"
               className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700"
-              disabled={pending}
-              onClick={state?.message ? onClose : undefined}
+              disabled={loading}
             >
-              {pending ? "Creating..." : state?.message ? "Created!" : "Create"}
+              {loading ? "Creating..." : "Create"}
             </button>
           </div>
         </form>
