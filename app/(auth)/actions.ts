@@ -12,7 +12,7 @@ import {
 
 import { DI_SYMBOLS } from "@/di/types";
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
-import { InputParseError } from "@/src/business/entities/errors/common";
+import { InputParseError } from "@/src/adapters/errors";
 import setBrowserCookies from "@/shared/cookie/cookie.service";
 
 export async function signUpAction(

@@ -14,7 +14,7 @@ import type { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-
 import { User } from "@/src/business/entities/models/user";
 import { Cookie } from "@/shared/cookie/cookie.schema";
 import { Session } from "@/shared/session/session.schema";
-import { InputParseError } from "@/src/business/entities/errors/common";
+import { InputParseError } from "@/src/adapters/errors";
 
 /**
  * AuthController consolidates sign-in, sign-out, and sign-up controllers.
