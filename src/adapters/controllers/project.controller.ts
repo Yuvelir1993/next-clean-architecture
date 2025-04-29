@@ -12,10 +12,7 @@ import {
   GetProjectsResult,
   IProjectController,
 } from "@/src/adapters/controllers/project.controller.interface";
-import {
-  NotFoundError,
-  ProjectError,
-} from "@/src/business/entities/errors/common";
+import { ProjectError } from "@/src/business/entities/errors/common";
 import {
   NoProjectsFoundError,
   ProjectCreationError,
@@ -86,7 +83,9 @@ export class ProjectController implements IProjectController {
       };
     } catch (error) {
       if (error instanceof NoProjectsFoundError) {
-        throw new NotFoundError("No projects has been found.");
+        throw new ProjectError("No projects has been found.", {
+          cause: error.cause,
+        });
       }
       throw new ProjectError(
         `Unexpected error when trying handle projects for user '${userId}'`
