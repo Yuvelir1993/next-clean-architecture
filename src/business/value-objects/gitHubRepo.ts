@@ -1,11 +1,10 @@
-import { ProjectCreationError } from "../aggregates/errors/project";
-
+import { ProjectCreationError } from "@/src/business/aggregates/errors/project";
 
 /**
  * Value Object for GitHub repository URL.
  */
 export class GitHubRepoURL {
-  private constructor(private readonly url: string) { }
+  private constructor(private readonly url: string) {}
 
   public static create(url: string): GitHubRepoURL {
     const regex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
