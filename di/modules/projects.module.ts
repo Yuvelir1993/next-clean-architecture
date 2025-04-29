@@ -1,5 +1,6 @@
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
 import { ProjectController } from "@/src/adapters/controllers/project.controller";
+import { ProjectControllerMock } from "@/src/adapters/controllers/project.controller.mock";
 
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 import { ProjectRepository } from "@/src/infrastructure/repositories/project.repository";
@@ -15,6 +16,9 @@ const initializeModule = (bind: interfaces.Bind) => {
   if (process.env.NODE_ENV === "test") {
     bind<IProjectRepository>(DI_SYMBOLS.IProjectRepository).to(
       ProjectRepositoryMock
+    );
+    bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
+      ProjectControllerMock
     );
   } else {
     bind<IProjectController>(DI_SYMBOLS.IProjectController).to(
