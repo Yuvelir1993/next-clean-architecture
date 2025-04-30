@@ -1,8 +1,8 @@
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
 import { IProjectController } from "@/src/adapters/controllers/project.controller.interface";
 
-import { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
-import { IProjectUseCases } from "@/src/business/use-cases/project.use-cases.interface";
+import { IAuthenticationUseCases } from "@/src/business/application/use-cases/auth.use-cases.interface";
+import { IProjectUseCases } from "@/src/business/application/use-cases/project.use-cases.interface";
 
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 

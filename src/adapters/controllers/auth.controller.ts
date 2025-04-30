@@ -9,7 +9,7 @@ import {
   signUpInputSchema,
 } from "@/src/adapters/controllers/auth.controller.inputSchemas";
 import type { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
-import type { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
+import type { IAuthenticationUseCases } from "@/src/business/application/use-cases/auth.use-cases.interface";
 
 import { User } from "@/src/business/entities/models/user";
 import { Cookie } from "@/shared/cookie/cookie.schema";

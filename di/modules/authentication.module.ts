@@ -1,5 +1,5 @@
-import { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
-import { AuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases";
+import { IAuthenticationUseCases } from "@/src/business/application/use-cases/auth.use-cases.interface";
+import { AuthenticationUseCases } from "@/src/business/application/use-cases/auth.use-cases";
 
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 import { AuthenticationService } from "@/src/infrastructure/services/authentication.service";

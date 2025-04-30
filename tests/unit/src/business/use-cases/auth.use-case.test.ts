@@ -1,7 +1,7 @@
 import { getInjection } from "@/di/container";
 import { DI_SYMBOLS } from "@/di/types";
 import { describe, it, expect, beforeEach } from "vitest";
-import { IAuthenticationUseCases } from "@/src/business/use-cases/auth.use-cases.interface";
+import { IAuthenticationUseCases } from "@/src/business/application/use-cases/auth.use-cases.interface";
 import type { Session } from "@/shared/session/session.schema";
 import type { Cookie } from "@/shared/cookie/cookie.schema";
 import type { User } from "@/src/business/entities/models/user";

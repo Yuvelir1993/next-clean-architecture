@@ -6,8 +6,8 @@ import { IProjectRepository } from "@/src/infrastructure/repositories/project.re
 import { ProjectRepository } from "@/src/infrastructure/repositories/project.repository";
 import { ProjectRepositoryMock } from "@/src/infrastructure/repositories/project.repository.mock";
 
-import { IProjectUseCases } from "@/src/business/use-cases/project.use-cases.interface";
-import { ProjectUseCases } from "@/src/business/use-cases/project.use-case";
+import { IProjectUseCases } from "@/src/business/application/use-cases/project.use-cases.interface";
+import { ProjectUseCases } from "@/src/business/application/use-cases/project.use-case";
 
 import { DI_SYMBOLS } from "@/di/types";
 import { ContainerModule, interfaces } from "inversify";

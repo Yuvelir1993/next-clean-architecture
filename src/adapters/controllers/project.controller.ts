@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { DI_SYMBOLS } from "@/di/types";
-import type { IProjectUseCases } from "@/src/business/use-cases/project.use-cases.interface";
+import type { IProjectUseCases } from "@/src/business/application/use-cases/project.use-cases.interface";
 
 import {
   CreateProjectInput,
