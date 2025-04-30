@@ -1,42 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# General
+
+This is a Web Application built with [Next.js](https://nextjs.org) which uses AWS services like AWS Cognito and AWS DynamoDB.
+It's purpose to showcase the Clean Architecture pattern to be a good template or a knowledge reference.
 
 ## Getting Started
 
-First, run the development server:
+To have a fully functional application you will need at least AWS Free Tier account to be able to instantiate necessary AWS resources.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Set Up Infrastructure
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open 'terraform' folder and execute `terraform init` and then `terraform apply` to spin up AWS resources.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Set Up Application locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Execute `npm run dev` to have application up and running locally. URL to the UI will be available in the CLI console.
 
-## Learn More
+### Check dependencies between modules
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [**the** Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Logic Flow
-
-1. **app** calls **src** through the **di**
-2. controller calls use case
-3. use case calls services
-
-## Dev
 To check cross-module dependencies use one of next commands:
+
 ```bash
 # Report about broken dependencies rules in CLI
 npm run lint:deps
