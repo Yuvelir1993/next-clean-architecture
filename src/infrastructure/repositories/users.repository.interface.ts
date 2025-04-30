@@ -1,5 +1,5 @@
-import type { User, SignUpUser } from "@/src/business/domain/entities/models/user";
-import type { ITransaction } from "@/src/business/domain/entities/models/transaction.interface";
+import type { User, SignUpUser } from "@/src/business/domain/entities/user";
+import type { ITransaction } from "@/src/business/domain/entities/transaction.interface";
 
 export interface IUsersRepository {
   getUserById(id: string): Promise<User | undefined>;

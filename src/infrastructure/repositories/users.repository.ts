@@ -1,6 +1,6 @@
 import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
-import { ITransaction } from "@/src/business/domain/entities/models/transaction.interface";
-import { User, SignUpUser } from "@/src/business/domain/entities/models/user";
+import { ITransaction } from "@/src/business/domain/entities/transaction.interface";
+import { User, SignUpUser } from "@/src/business/domain/entities/user";
 import {
   CognitoIdentityProviderClient,
   AdminCreateUserCommand,

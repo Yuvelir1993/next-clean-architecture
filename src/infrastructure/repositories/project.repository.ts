@@ -1,6 +1,6 @@
 import { ProjectCreationError } from "@/src/business/errors";
 import { Project } from "@/src/business/domain/aggregates/project";
-import { ProjectOwner } from "@/src/business/domain/entities/models/user";
+import { ProjectOwner } from "@/src/business/domain/entities/user";
 import { GitHubRepoURL } from "@/src/business/domain/value-objects/gitHubRepo";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 import {

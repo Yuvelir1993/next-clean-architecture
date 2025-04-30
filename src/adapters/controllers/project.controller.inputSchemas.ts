@@ -1,4 +1,4 @@
-import { projectOwnerSchema } from "@/src/business/domain/entities/models/user";
+import { projectOwnerSchema } from "@/src/business/domain/entities/user";
 import { z } from "zod";
 
 export const createProjectInputSchema = z.object({

@@ -1,5 +1,5 @@
 import { IAuthenticationController } from "@/src/adapters/controllers/auth.controller.interface";
-import { User } from "@/src/business/domain/entities/models/user";
+import { User } from "@/src/business/domain/entities/user";
 import { Session } from "@/shared/session/session.schema";
 import { Cookie } from "@/shared/cookie/cookie.schema";
 import {

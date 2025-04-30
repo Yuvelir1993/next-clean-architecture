@@ -1,6 +1,6 @@
 import { Session } from "@/shared/session/session.schema";
 import { Cookie } from "@/shared/cookie/cookie.schema";
-import { User } from "@/src/business/domain/entities/models/user";
+import { User } from "@/src/business/domain/entities/user";
 
 export interface IAuthenticationUseCases {
   /**

@@ -4,7 +4,7 @@ import {
   ProjectOwner,
   User,
   projectOwnerSchema,
-} from "@/src/business/domain/entities/models/user";
+} from "@/src/business/domain/entities/user";
 import {
   GitHubRepoURL,
   GitHubRepoURLError,

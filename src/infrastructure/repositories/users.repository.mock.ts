@@ -1,6 +1,6 @@
 import { IUsersRepository } from "@/src/infrastructure/repositories/users.repository.interface";
-import { ITransaction } from "@/src/business/domain/entities/models/transaction.interface";
-import { User, SignUpUser } from "@/src/business/domain/entities/models/user";
+import { ITransaction } from "@/src/business/domain/entities/transaction.interface";
+import { User, SignUpUser } from "@/src/business/domain/entities/user";
 import { AuthenticationError } from "@/src/business/errors";
 
 export class UsersRepositoryMock implements IUsersRepository {
