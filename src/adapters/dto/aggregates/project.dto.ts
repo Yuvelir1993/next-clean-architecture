@@ -1,4 +1,4 @@
-import { Project } from "@/src/business/aggregates/project";
+import { Project } from "@/src/business/domain/aggregates/project";
 
 export interface ProjectUiDTO {
   id: string;

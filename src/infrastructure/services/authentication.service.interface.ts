@@ -4,7 +4,7 @@ import {
   SignInUser,
   SignUpUser,
   User,
-} from "@/src/business/entities/models/user";
+} from "@/src/business/domain/entities/models/user";
 
 export interface IAuthenticationService {
   validateSession(sessionId: Session["id"]): Promise<boolean>;

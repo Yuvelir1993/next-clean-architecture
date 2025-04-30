@@ -2,7 +2,7 @@ import { getInjection } from "@/di/container";
 import { DI_SYMBOLS } from "@/di/types";
 import { describe, it, expect, beforeEach } from "vitest";
 import { IProjectUseCases } from "@/src/business/application/use-cases/project.use-cases.interface";
-import { Project } from "@/src/business/aggregates/project";
+import { Project } from "@/src/business/domain/aggregates/project";
 
 let projectUseCases: IProjectUseCases;
 

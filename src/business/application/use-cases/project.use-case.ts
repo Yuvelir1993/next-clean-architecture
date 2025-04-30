@@ -4,7 +4,7 @@ import type { IProjectUseCases } from "@/src/business/application/use-cases/proj
 import type { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 
 import { DI_SYMBOLS } from "@/di/types";
-import { Project } from "@/src/business/aggregates/project";
+import { Project } from "@/src/business/domain/aggregates/project";
 import {
   ProjectCreationError,
   NoProjectsFoundError,

@@ -1,4 +1,4 @@
-import { Project } from "@/src/business/aggregates/project";
+import { Project } from "@/src/business/domain/aggregates/project";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 
 /**

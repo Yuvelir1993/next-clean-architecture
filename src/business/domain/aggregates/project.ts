@@ -4,11 +4,11 @@ import {
   ProjectOwner,
   User,
   projectOwnerSchema,
-} from "@/src/business/entities/models/user";
+} from "@/src/business/domain/entities/models/user";
 import {
   GitHubRepoURL,
   GitHubRepoURLError,
-} from "@/src/business/value-objects/gitHubRepo";
+} from "@/src/business/domain/value-objects/gitHubRepo";
 import { ProjectCreationError } from "@/src/business/errors";
 
 /**

@@ -8,7 +8,7 @@ import {
   CreateProjectResult,
   GetProjectsResult,
 } from "@/src/adapters/controllers/project.controller.interface";
-import { Project } from "@/src/business/aggregates/project";
+import { Project } from "@/src/business/domain/aggregates/project";
 
 export class ProjectControllerMock implements IProjectController {
   async createProject(input: CreateProjectInput): Promise<CreateProjectResult> {

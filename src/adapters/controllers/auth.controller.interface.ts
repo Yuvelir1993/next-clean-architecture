@@ -1,6 +1,6 @@
 import { Cookie } from "@/shared/cookie/cookie.schema";
 import { Session } from "@/shared/session/session.schema";
-import { User } from "@/src/business/entities/models/user";
+import { User } from "@/src/business/domain/entities/models/user";
 import {
   SignInInput,
   SignUpInput,

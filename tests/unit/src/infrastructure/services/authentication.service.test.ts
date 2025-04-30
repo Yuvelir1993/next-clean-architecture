@@ -5,7 +5,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import {
   USER_TYPE_SIGN_IN,
   USER_TYPE_SIGN_UP,
-} from "@/src/business/entities/models/user";
+} from "@/src/business/domain/entities/models/user";
 import { IAuthenticationService } from "@/src/infrastructure/services/authentication.service.interface";
 
 let authService: IAuthenticationService;

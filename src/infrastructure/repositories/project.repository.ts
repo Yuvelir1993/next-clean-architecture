@@ -1,7 +1,7 @@
 import { ProjectCreationError } from "@/src/business/errors";
-import { Project } from "@/src/business/aggregates/project";
-import { ProjectOwner } from "@/src/business/entities/models/user";
-import { GitHubRepoURL } from "@/src/business/value-objects/gitHubRepo";
+import { Project } from "@/src/business/domain/aggregates/project";
+import { ProjectOwner } from "@/src/business/domain/entities/models/user";
+import { GitHubRepoURL } from "@/src/business/domain/value-objects/gitHubRepo";
 import { IProjectRepository } from "@/src/infrastructure/repositories/project.repository.interface";
 import {
   ConditionalCheckFailedException,
