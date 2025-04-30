@@ -80,7 +80,7 @@ describe("ProjectRepositoryMock", () => {
       userId: "user-3",
     });
 
-    expect(result).toEqual({ success: true });
+    expect(result).toBeTruthy();
 
     const projectsAfterDeletion = await projectsRepo.getProjectsOfUser({
       userId: "user-3",

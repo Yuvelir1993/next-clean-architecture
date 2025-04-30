@@ -4,6 +4,12 @@ export class ProjectCreationError extends Error {
   }
 }
 
+export class ProjectDeletionError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+  }
+}
+
 export class NoProjectsFoundError extends Error {
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);

@@ -7,6 +7,7 @@ import { DI_SYMBOLS } from "@/di/types";
 import { Project } from "@/src/business/domain/aggregates/project";
 import {
   ProjectCreationError,
+  ProjectDeletionError,
   NoProjectsFoundError,
 } from "@/src/business/errors";
 
@@ -64,9 +65,13 @@ export class ProjectUseCases implements IProjectUseCases {
     userId: string;
   }): Promise<void> {
     console.log(`Use Case -> Deleting new project '${input}'`);
-    await this._projectRepository.deleteProjectOfUser({
+    const isProjectDeleted = await this._projectRepository.deleteProjectOfUser({
       projectId: input.projectId,
       userId: input.userId,
     });
+
+    if (!isProjectDeleted) {
+      throw new ProjectDeletionError(`Could not delete project '${input}'!`);
+    }
   }
 }

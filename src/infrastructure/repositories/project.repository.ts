@@ -148,7 +148,7 @@ export class ProjectRepository implements IProjectRepository {
   async deleteProjectOfUser(input: {
     projectId: string;
     userId: string;
-  }): Promise<unknown> {
+  }): Promise<boolean> {
     const { projectId, userId } = input;
     const PK = `USER#${userId}`;
     const SK = `PROJECT#${projectId}`;
@@ -168,7 +168,7 @@ export class ProjectRepository implements IProjectRepository {
 
     try {
       await docClient.send(command);
-      return { success: true };
+      return true;
     } catch (err) {
       if (err instanceof ConditionalCheckFailedException) {
         throw new Error(

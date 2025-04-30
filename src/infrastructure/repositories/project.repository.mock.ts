@@ -32,9 +32,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
     return newProject;
   }
 
-  async getProjectsOfUser(userData: {
-    userId: string;
-  }): Promise<Project[] | undefined> {
+  async getProjectsOfUser(userData: { userId: string }): Promise<Project[]> {
     console.log(`[mock] Getting projects for user '${userData.userId}'`);
 
     const userProjects = this.projects.filter(
@@ -47,7 +45,7 @@ export class ProjectRepositoryMock implements IProjectRepository {
   async deleteProjectOfUser(input: {
     projectId: string;
     userId: string;
-  }): Promise<unknown> {
+  }): Promise<boolean> {
     console.log(
       `[mock] Deleting project '${input.projectId}' for user '${input.userId}'`
     );
@@ -65,6 +63,6 @@ export class ProjectRepositoryMock implements IProjectRepository {
       );
     }
 
-    return { success: true };
+    return true;
   }
 }

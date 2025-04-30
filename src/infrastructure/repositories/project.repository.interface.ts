@@ -43,5 +43,5 @@ export interface IProjectRepository {
   deleteProjectOfUser(input: {
     projectId: string;
     userId: string;
-  }): Promise<unknown>;
+  }): Promise<boolean>;
 }
