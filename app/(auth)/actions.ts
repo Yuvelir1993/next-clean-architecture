@@ -27,9 +27,9 @@ export async function signUpAction(
       };
     }
 
-    const email = formData.get("email")?.toString();
-    const username = formData.get("username")?.toString();
-    const password = formData.get("password")?.toString();
+    const email = formData.get("email")!.toString();
+    const username = formData.get("username")!.toString();
+    const password = formData.get("password")!.toString();
     const confirmPassword = formData.get("confirm_password")?.toString();
     console.log("Sign-up action (UI)");
     console.log(formData);
@@ -72,8 +72,8 @@ export async function signInAction(
   formData: FormData
 ): Promise<AuthFormState> {
   console.log("Sign-in action (UI)");
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
+  const email = formData.get("email")!.toString();
+  const password = formData.get("password")!.toString();
 
   try {
     const validationError = validateFormInput(formData, "sign-in");
