@@ -13,6 +13,7 @@ Open 'terraform' folder and execute `terraform init` and then `terraform apply` 
 
 ### Set Up Application locally
 
+Create `.env` file in the root based on `template.env`.
 Execute `npm run dev` to have application up and running locally. URL to the UI will be available in the CLI console.
 
 ### Check dependencies between modules
