@@ -78,9 +78,7 @@ export class ProjectRepository implements IProjectRepository {
    * @returns An array of Project instances, or `undefined` if an error occurs.
    * @throws Error for unexpected failures.
    */
-  async getProjectsOfUser(userData: {
-    userId: string;
-  }): Promise<Project[] | undefined> {
+  async getProjectsOfUser(userData: { userId: string }): Promise<Project[]> {
     const client = new DynamoDBClient({});
     const docClient = DynamoDBDocumentClient.from(client);
 

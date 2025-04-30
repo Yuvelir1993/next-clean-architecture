@@ -13,9 +13,7 @@ export interface IProjectRepository {
    *          or `undefined` if an error occurs.
    * @throws Error if the retrieval operation encounters unexpected issues.
    */
-  getProjectsOfUser(userData: {
-    userId: string;
-  }): Promise<Project[] | undefined>;
+  getProjectsOfUser(userData: { userId: string }): Promise<Project[]>;
 
   /**
    * Creates a new project for a specific user.
