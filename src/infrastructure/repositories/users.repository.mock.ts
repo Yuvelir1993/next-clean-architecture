@@ -48,11 +48,6 @@ export class UsersRepositoryMock implements IUsersRepository {
     return users[0];
   }
 
-  getUserById(id: string): Promise<User | undefined> {
-    console.log("[mock] Getting user with id " + id);
-    throw new Error("Method not implemented.");
-  }
-
   getUserByUsername(username: string): Promise<User | undefined> {
     console.log("[mock] Getting user with username " + username);
     if (username === "exists") {

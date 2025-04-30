@@ -2,7 +2,6 @@ import type { User, SignUpUser } from "@/src/business/domain/entities/user";
 import type { ITransaction } from "@/src/business/domain/entities/transaction.interface";
 
 export interface IUsersRepository {
-  getUserById(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   getUsersByEmail(email: string): Promise<Array<User> | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
