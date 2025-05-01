@@ -25,5 +25,5 @@ To check cross-module dependencies use one of next commands:
 npm run lint:deps
 
 # Generate SVG report
-npx depcruise --config .dependency-cruiser.js src app di shared public tests --output-type dot --validate | dot -T svg > dependency-graph.svg
+npx depcruise --config .dependency-cruiser.js src app di shared tests --output-type dot --validate | dot -T svg > dependency-graph.svg
 ```
